@@ -40,7 +40,7 @@ void Ennemis::GoRight(float delta){
 		velocity_ += hAccel * delta;
 	}
 
-	velocity_.Truncate(-WALK_SPEED);
+	velocity_.Truncate(WALK_SPEED);
 
 	if (collision){
 		collision = false;
@@ -51,7 +51,7 @@ void Ennemis::GoRight(float delta){
 }
 
 void Ennemis::Jump(float delta){
-	bool onGround = (position_.y > 240);
+/*	bool onGround = (position_.y > 240);
 	int mass = 2;
 	Vector2 hGrav = { 0, GRAVITY*mass };
 
@@ -68,6 +68,7 @@ void Ennemis::Jump(float delta){
 		}
 		jump = false;
 	}
+*/
 }
 
 void Ennemis::Render() {
@@ -80,12 +81,13 @@ void Ennemis::Render() {
 }
 
 void Ennemis::Update(float delta, Keys k){
-
-	GoLeft(delta);
+	velocity_ = Vector2(-3, 0);
+	//GoLeft(delta);
 /*	int i = rand() % 100;
 *	if (i > 80){
 *		jump = true;
 *		Jump(delta);
 *	}
 */
+	position_ += velocity_;
 }
