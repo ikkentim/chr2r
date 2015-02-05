@@ -10,7 +10,6 @@ public:
 	~Ennemis();
 	void GoLeft(float);
 	void GoRight(float);
-	void Jump(float);
 	void Render();
 	void Update(float, Keys);
 	

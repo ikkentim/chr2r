@@ -16,7 +16,7 @@ void Player::Update(float delta, Keys keys) {
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };
 
-	bool onGround = (position_.y > 240); // if character is on ground, add collision stuff here, (pos y > 240) is a placeholder
+	onGround = (position_.y > 240); // if character is on ground, add collision stuff here, (pos y > 240) is a placeholder
 
     if (keys & KEY_RIGHT) {
         velocity_ += (hAccel * delta);
@@ -31,14 +31,11 @@ void Player::Update(float delta, Keys keys) {
 	}
 	if (keys & KEY_JUMP && onGround) { 
 		velocity_.y = JUMPPOW;
-	} else if (!onGround) {
-		velocity_ += (hGrav * delta);
-	} else if (onGround) {
-		if (velocity_.y > 2)
-			position_.y -= velocity_.y;
-		
-		velocity_.y -= velocity_.y;
 	}
+	else
+		Falling(hGrav, delta);
+
+
     velocity_.Truncate(WALK_SPEED);
 
     position_ += velocity_;

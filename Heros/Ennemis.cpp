@@ -1,75 +1,27 @@
 #include "Ennemis.h"
 
-#define WALK_SPEED  (3.0f)
-#define WALK_ACCEL  (3.0f)
+#define WALK_SPEED  (1.0f)
+#define WALK_ACCEL  (1.0f)
 #define GRAVITY     (9.81f)
 
-Ennemis::Ennemis(Vector2 pos) :Actor(pos){}
+Ennemis::Ennemis(Vector2 pos) :Actor(pos){
+	velocity_ = Vector2(WALK_SPEED, 0);
+}
 Ennemis :: ~Ennemis(){}
 
 void Ennemis::GoLeft(float delta){
 
 	Vector2 hAccel = { -WALK_ACCEL, 0 };
-
-	if (position_.x < 30){
-		collision = true;
-	}
-
-	if (!collision){
-		velocity_ += hAccel * delta;
-	}
-	velocity_.Truncate(WALK_SPEED);
-
-	if (collision){
-		collision = false;
-		velocity_.x = 0;
-		GoRight(delta);
-	}
-	position_ += velocity_;
+	velocity_ = hAccel;
 }
 
 void Ennemis::GoRight(float delta){
 
 	Vector2 hAccel = { WALK_ACCEL, 0 };
-
-	if (position_.x > 200){
-		collision = true;
-	}
-
-	if (!collision){
-		velocity_ += hAccel * delta;
-	}
-
-	velocity_.Truncate(WALK_SPEED);
-
-	if (collision){
-		collision = false;
-		velocity_.x = 0;
-		GoLeft(delta);
-	}
-	position_ += velocity_;
+	velocity_ = hAccel;
 }
 
-void Ennemis::Jump(float delta){
-/*	bool onGround = (position_.y > 240);
-	int mass = 2;
-	Vector2 hGrav = { 0, GRAVITY*mass };
 
-	if (jump){
-		if ( onGround) {
-			velocity_.y = -10;
-		}
-		else if (!onGround) {
-			velocity_ += (hGrav * delta);
-
-		}
-		else if (onGround) {
-			velocity_.y = 0;
-		}
-		jump = false;
-	}
-*/
-}
 
 void Ennemis::Render() {
 	Texture texture = {
@@ -81,13 +33,19 @@ void Ennemis::Render() {
 }
 
 void Ennemis::Update(float delta, Keys k){
-	velocity_ = Vector2(-3, 0);
-	//GoLeft(delta);
-/*	int i = rand() % 100;
-*	if (i > 80){
-*		jump = true;
-*		Jump(delta);
-*	}
-*/
+	Vector2 hGrav = { 0, GRAVITY };
+	onGround = (position_.y > 240);
+
+	if (position_.x > 200){
+		GoLeft(delta);
+	}
+	if (position_.x < 20){
+		GoRight(delta);
+	}
+
+
+	Falling(hGrav , delta);
+
+
 	position_ += velocity_;
 }
