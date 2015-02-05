@@ -18,7 +18,7 @@ GameWindow::GameWindow() {
 
     Texture grass_top = { 444, 253, 16, 16 };
     for (int x = 0; x < 15; x++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 64.0f}));
+        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 256.0f}));
     }
 
     level_->PlayableLayer()->push_back(player_);
@@ -34,12 +34,6 @@ GameWindow::~GameWindow() {
 void GameWindow::GameInit() {
     SetFPS(60);
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "terrain.bmp");
-
-	Texture testtex = { 0, 0, 200, 200 };
-	Vector2 testvec = { 10, 10 };
-	SpriteSheet::terrain->Draw(testtex, testvec);
-
-	InvalidateRect(hWnd_, 0, false);
 }
 
 void GameWindow::GameEnd() {

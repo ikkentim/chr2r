@@ -6,9 +6,10 @@
 class Window
 {
 private:
-	//HDC dc_;
-	//HBITMAP bitmap_;
-	//HBITMAP oldBitmap_;
+	HDC dc_;
+	HBITMAP bitmap_;
+	HANDLE oldHandle_;
+
 
 protected:
 	static HINSTANCE instance_;
