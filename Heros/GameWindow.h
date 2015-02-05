@@ -1,8 +1,6 @@
 #include "Window.h"
-#include "LevelManager.h"
-#include "Player.h"
 #include "Keys.h"
-#include "Ennemis.h"
+#include "Scene.h"
 
 #pragma once
 
@@ -11,6 +9,7 @@ public:
     GameWindow();
 	~GameWindow();
 
+    void UpdateScene(Scene *);
 	LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 
 protected:
@@ -19,10 +18,6 @@ protected:
     void GameEnd();
 
 private:
-    LevelManager *level_;
-    Player *player_;
-    Keys keys_;
-	Viewport viewport_;
-
-	Ennemis * ennemis_;
+    Scene *scene_ = NULL;
+    Keys keys_ = KEY_NONE;
 };

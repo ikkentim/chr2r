@@ -1,41 +1,29 @@
 #include "GameWindow.h"
 
-#include "Block.h"
 #include "SpriteSheet.h"
+#include "SplashScene.h"
 
 GameWindow::GameWindow() {
-    keys_ = KEY_NONE;
-	viewport_ = { 0, 0, 640, 480 };
-
-    /* push basic level */
-    level_ = new LevelManager();
-
-    Vector2 player_spawn = { 64, 48 };
-    player_ = new Player(player_spawn);
-
-
-	Vector2 Ennemis_spawn = {80, 50};
-	ennemis_ = new Ennemis{ Ennemis_spawn };
-
-    Texture grass_top = { 444, 253, 16, 16 };
-    for (int x = 0; x < 15; x++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 256.0f}));
-    }
-
-    level_->PlayableLayer()->push_back(player_);
-	level_->PlayableLayer()->push_back(ennemis_);
 }
 
 GameWindow::~GameWindow() {
-    delete level_;
-    delete player_;
-	delete ennemis_;
+    if (scene_)
+        delete scene_;
 }
 
+void GameWindow::UpdateScene(Scene *scene) {
+    if (scene_)
+        delete scene_;
+    
+    scene_ = scene;
+}
 
 void GameWindow::GameInit() {
     SetFPS(60);
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "terrain.bmp");
+    SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "splash.bmp");
+
+    scene_ = new SplashScene(this);
 }
 
 void GameWindow::GameEnd() {
@@ -58,42 +46,8 @@ void GameWindow::GameLoop(float delta) {
         if (::MessageBox(NULL, "Quit Game?", "Hero", MB_YESNO) == IDYES)
             ::exit(0);
 
-	
-    LevelLayer *layer = level_->PlayableLayer();
-
-    /* Update all layers */
-    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-        GameObject *object = *it;
-
-        object->Update(delta, keys_);
-    }
-
-    /* Render all layers */
-    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-        GameObject *object = *it;
-
-		const int borderOffset = 215;
-
-		int minx = viewport_.x + borderOffset;
-		int maxx = viewport_.x - borderOffset + viewport_.width;
-
-		int miny = viewport_.y + borderOffset;
-		int maxy = viewport_.y - borderOffset + viewport_.height;
-
-		auto pos = player_->Position();
-		int posx = (int)floor(pos.x);
-		int posy = (int)floor(pos.y);
-
-		if (posx < minx) viewport_.x += posx - minx;
-		else if (posx > maxx) viewport_.x += posx - maxx;
-
-		if (posy < miny) viewport_.y += posy - miny;
-		else if (posy > maxy) viewport_.y += posy - maxy;
-
-        object->Render(viewport_);
-    }
-	
-
+    if (scene_)
+        scene_->Update(delta, keys_);
 }
 
 LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {

@@ -3,6 +3,7 @@
 /* FIXME: Create some kind of spritesheet loading mechanism, 
  * instead of global vars */
 SpriteSheet *SpriteSheet::terrain;
+SpriteSheet *SpriteSheet::splash;
 
 SpriteSheet::SpriteSheet(HWND hWnd, HDC dcBuf,
     const char * file,
@@ -31,8 +32,10 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
 	if (offset.x < -texture.width || offset.y < -texture.height ||
 		offset.x > vp.width || offset.y > vp.height) return;
 
+    int x = (int)pos.x - vp.x;
+    int y = (int)pos.y - vp.y;
 	TransparentBlt(dcBuf,
-		(int)pos.x - vp.x, (int)pos.y - vp.y,
+		x, y,
 		texture.width, texture.height, dcImage,
 		texture.left, texture.top,
 		texture.width, texture.height, transCol);

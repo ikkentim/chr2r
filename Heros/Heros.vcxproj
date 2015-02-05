@@ -40,6 +40,7 @@
     <IntDir>Debug\</IntDir>
     <OutDir>Debug\</OutDir>
     <LinkIncremental>true</LinkIncremental>
+    <CustomBuildAfterTargets>ALink</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IntDir>Release\</IntDir>
@@ -64,15 +65,20 @@
       <IgnoreSpecificDefaultLibraries>libci.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;comctl32.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>mkdir $(OutDir)assets</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Ennemis.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SplashShene.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="main.cpp" />
@@ -82,11 +88,13 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="Ennemis.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />

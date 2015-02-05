@@ -21,7 +21,6 @@ Window::Window() {
 	this->hbrWindowColor_		= (HBRUSH)(COLOR_WINDOW+1);
 	this->hIcon_				= LoadIcon(instance_, (LPCTSTR)IDI_APPLICATION);
 	this->strWindowTitle_		= _T("Heros");
-	this->hMenu_				= NULL; 	
 
     ::QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
 
@@ -100,17 +99,22 @@ HRESULT Window::Create() {
 		monitor.rcMonitor.top,
 		monitor.rcMonitor.right - monitor.rcMonitor.left,
 		monitor.rcMonitor.bottom - monitor.rcMonitor.top,
-	  NULL, hMenu_, instance_, NULL);
+	  NULL, NULL, instance_, NULL);
 
 	window_width = monitor.rcMonitor.right - monitor.rcMonitor.left;
 	window_height = monitor.rcMonitor.bottom - monitor.rcMonitor.top;
 #else
-	hWnd_ = ::CreateWindowEx(0, _T("Skeleton"), strWindowTitle_, WS_OVERLAPPED,
+
+    RECT winSz = { 0, 0, window_width, window_height };
+    AdjustWindowRect(&winSz, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, false);
+
+    hWnd_ = ::CreateWindowEx(0, _T("Skeleton"), strWindowTitle_, 
+        WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX ^ WS_MINIMIZEBOX,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		window_width,
-		window_height,
-		NULL, hMenu_, instance_, NULL);
+        winSz.right - winSz.left,
+        winSz.bottom - winSz.top,
+		NULL, NULL, instance_, NULL);
 #endif /* FULLSCREEN_MODE */
 
     float hScale = (float)window_width / WINDOW_WIDTH;

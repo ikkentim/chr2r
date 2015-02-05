@@ -23,7 +23,6 @@ protected:
 	TCHAR *strWindowTitle_;
 	HBRUSH hbrWindowColor_;
 	HICON hIcon_;
-	HMENU hMenu_;
     HACCEL hAccelTable_;
     HDC graphics_;
 
