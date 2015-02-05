@@ -14,7 +14,7 @@ GameWindow::GameWindow() {
 
     Texture grass_top = { 444, 253, 16, 16 };
     for (int x = 0; x < 15; x++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 64.0f}));
+        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 256.0f}));
     }
 
     level_->PlayableLayer()->push_back(player_);
