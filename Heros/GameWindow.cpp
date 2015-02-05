@@ -29,12 +29,6 @@ GameWindow::~GameWindow() {
 void GameWindow::GameInit() {
     SetFPS(60);
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "terrain.bmp");
-
-	Texture testtex = { 0, 0, 200, 200 };
-	Vector2 testvec = { 10, 10 };
-	SpriteSheet::terrain->Draw(testtex, testvec);
-
-	InvalidateRect(hWnd_, 0, false);
 }
 
 void GameWindow::GameEnd() {
