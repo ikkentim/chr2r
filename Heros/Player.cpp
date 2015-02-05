@@ -6,6 +6,7 @@
 #define WALK_SPEED  (5.0f)
 #define GRAVITY     (9.81f)
 #define FRICTION	(5.0f)
+#define JUMPPOW		(-10.0f)
 
 Player::Player(Vector2 pos) :Actor(pos) {
 }
@@ -15,7 +16,7 @@ void Player::Update(float delta, Keys keys) {
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };
 
-	bool onGround = (position_.y > 240); // if character is on ground, add collision stuff here, pos y > 240 is a placeholder
+	bool onGround = (position_.y > 240); // if character is on ground, add collision stuff here, (pos y > 240) is a placeholder
 
     if (keys & KEY_RIGHT) {
         velocity_ += (hAccel * delta);
@@ -29,14 +30,12 @@ void Player::Update(float delta, Keys keys) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
 	}
 	if (keys & KEY_JUMP && onGround) { 
-		velocity_.y = -10;
-	}
-	else if (!onGround) {
+		velocity_.y = JUMPPOW;
+	} else if (!onGround) {
 		velocity_ += (hGrav * delta);
-
-	}
-	else if (onGround) {
-		velocity_.y = 0;
+	} else if (onGround) {
+		position_.y -= velocity_.y * delta;
+		velocity_.y -= velocity_.y;
 	}
     velocity_.Truncate(WALK_SPEED);
 
