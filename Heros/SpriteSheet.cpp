@@ -25,7 +25,7 @@ SpriteSheet::~SpriteSheet(void) {
 
 void SpriteSheet::Draw(Texture &texture, Vector2 &pos) {
 	TransparentBlt(dcBuf,
-		pos.x, pos.y,
+		(int)pos.x, (int)pos.y,
 		texture.width, texture.height, dcImage,
 
 		texture.left, texture.top,

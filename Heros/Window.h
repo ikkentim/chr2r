@@ -1,7 +1,6 @@
-#ifndef WINDOW_H
-#define WINDOW_H
-
 #include <windows.h>
+
+#pragma once
 
 class Window
 {
@@ -9,19 +8,13 @@ private:
 	HDC dc_;
 	HBITMAP bitmap_;
 	HANDLE oldHandle_;
-
+	RECT drawRect_;
 
 protected:
 	static HINSTANCE instance_;
 	HWND  hWnd_;
 
-	DWORD posX_;
-	DWORD posY_;
-	DWORD dwWindowStyle_;
-	DWORD dwExWindowStyle_;
  	DWORD dwCreationFlags_;
-	DWORD dwCreationHeight_;
-	DWORD dwCreationWidth_;
 	TCHAR *strWindowTitle_;
 	HBRUSH hbrWindowColor_;
 	HICON hIcon_;
@@ -47,5 +40,3 @@ protected:
      virtual void GameLoop(float) = 0;
      virtual void GameEnd() = 0;
 };
-
-#endif

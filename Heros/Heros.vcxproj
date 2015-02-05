@@ -53,6 +53,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <ProgramDatabaseFile>$(outdir)Heros.pdb</ProgramDatabaseFile>

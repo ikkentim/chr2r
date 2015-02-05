@@ -47,7 +47,7 @@ void GameWindow::GameLoop(float delta) {
 
 #undef MAP_KEY
 
-    if (::GetAsyncKeyState(VK_ESCAPE))
+    if (::GetAsyncKeyState(VK_ESCAPE) && !GetAsyncKeyState(VK_LSHIFT) && !GetAsyncKeyState(VK_LCONTROL))
         if (::MessageBox(NULL, "Quit Game?", "Hero", MB_YESNO) == IDYES)
             ::exit(0);
 
