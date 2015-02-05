@@ -3,7 +3,6 @@
 #define WALK_SPEED  (3.0f)
 #define WALK_ACCEL  (3.0f)
 #define GRAVITY     (9.81f)
-#define MASS		(60.0f)
 
 Ennemis::Ennemis(Vector2 pos) :Actor(pos){}
 Ennemis :: ~Ennemis(){}
@@ -12,7 +11,7 @@ void Ennemis::GoLeft(float delta){
 
 	Vector2 hAccel = { -WALK_ACCEL, 0 };
 
-	if (position_.x < 50){
+	if (position_.x < 30){
 		collision = true;
 	}
 
@@ -33,15 +32,15 @@ void Ennemis::GoRight(float delta){
 
 	Vector2 hAccel = { WALK_ACCEL, 0 };
 
-	if (position_.x > 150){
+	if (position_.x > 200){
 		collision = true;
 	}
 
 	if (!collision){
-		velocity_ += hAccel;
+		velocity_ += hAccel * delta;
 	}
 
-	velocity_.Truncate(WALK_SPEED);
+	velocity_.Truncate(-WALK_SPEED);
 
 	if (collision){
 		collision = false;
@@ -52,11 +51,22 @@ void Ennemis::GoRight(float delta){
 }
 
 void Ennemis::Jump(float delta){
-	//TODO Define the floor we can't jump if we don't touch the floor or if we don't are on a block
-	Vector2 hGravity = { 0, MASS*GRAVITY };
-	bool onBlock = true;
-	if (onBlock){
-		//TODO take the jumping method of Jurgen :D
+	bool onGround = (position_.y > 240);
+	int mass = 2;
+	Vector2 hGrav = { 0, GRAVITY*mass };
+
+	if (jump){
+		if ( onGround) {
+			velocity_.y = -10;
+		}
+		else if (!onGround) {
+			velocity_ += (hGrav * delta);
+
+		}
+		else if (onGround) {
+			velocity_.y = 0;
+		}
+		jump = false;
 	}
 }
 
@@ -72,4 +82,10 @@ void Ennemis::Render() {
 void Ennemis::Update(float delta, Keys k){
 
 	GoLeft(delta);
+/*	int i = rand() % 100;
+*	if (i > 80){
+*		jump = true;
+*		Jump(delta);
+*	}
+*/
 }

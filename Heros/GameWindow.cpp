@@ -28,6 +28,7 @@ GameWindow::GameWindow() {
 GameWindow::~GameWindow() {
     delete level_;
     delete player_;
+	delete ennemis_;
 }
 
 

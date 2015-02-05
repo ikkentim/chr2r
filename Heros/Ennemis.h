@@ -17,6 +17,7 @@ public:
 
 private: 
 	bool collision = false;
+	bool jump = true;
 
 	
 
