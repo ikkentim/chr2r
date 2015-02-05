@@ -55,17 +55,19 @@ int Window::Run()
             while (stop_ - start_ < freq_ / fps_)
                 ::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);
 
+			Rectangle(graphics_, 0, 0, 640, 480);
+
             GameLoop(1.0f / fps_);
 
-			//BitBlt(dc_, 0, 0, 800, 600, graphics_, 0, 0, SRCCOPY);
+			BitBlt(dc_, 0, 0, 640, 480, graphics_, 0, 0, SRCCOPY);
         }
     }
 
     GameEnd();
 
-	//SelectObject(graphics_, oldBitmap_);
-	//DeleteObject(bitmap_);
-	//DeleteDC(graphics_);
+	SelectObject(graphics_, oldHandle_);
+	DeleteObject(bitmap_);
+	DeleteDC(graphics_);
 
     return msg.wParam;
 }
@@ -101,13 +103,12 @@ HRESULT Window::Create()
 
 	if (!hWnd_) return false;
 
-    graphics_ = ::GetDC(hWnd_);
+	dc_ = ::GetDC(hWnd_);
 
-	//graphics_ = CreateCompatibleDC(dc_);
-	//bitmap_ = CreateBitmap(800, 600, 1, 24, NULL); // width, height, 1, bit_depth, NULL
-	//oldBitmap_ = (HBITMAP)SelectObject(graphics_, bitmap_);
+	graphics_ = CreateCompatibleDC(dc_);
+	bitmap_ = CreateCompatibleBitmap(dc_, 640, 480);
+	oldHandle_ = SelectObject(graphics_, bitmap_);
 
-	//Rectangle(graphics_, 100, 100, 100, 100);
     GameInit();
 
 	::ShowWindow(hWnd_, dwCreationFlags_);
