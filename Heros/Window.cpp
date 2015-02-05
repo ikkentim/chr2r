@@ -2,16 +2,17 @@
 #include <tchar.h>
 #include <math.h>
 
+#define WINDOW_WIDTH    (640)
+#define WINDOW_HEIGHT   (480)
+
 static Window *window = NULL;
 HINSTANCE Window::instance_ = GetModuleHandle(NULL);
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return window->MsgProc(hWnd, uMsg, wParam, lParam);
 }
 
-Window::Window()
-{
+Window::Window() {
 	window = this;
 
 	this->hWnd_					= NULL;
@@ -27,36 +28,31 @@ Window::Window()
     fps_ = (int)freq_;
 }
 
-Window::~Window()
-{
+Window::~Window() {
 }
 
-int Window::Run()
-{
+int Window::Run() {
     MSG msg = { 0 };
 
-    while (msg.message != WM_QUIT)
-    {
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
+    while (msg.message != WM_QUIT) {
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        else
-        {
+        else {
             ::QueryPerformanceCounter((LARGE_INTEGER*)&start_);
             stop_ = start_;
 
             while (stop_ - start_ < freq_ / fps_)
 				::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);
 
-			Rectangle(graphics_, 0, 0, 640, 480);
+            Rectangle(graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
             GameLoop(1.0f / fps_);
 
 			StretchBlt(dc_, drawRect_.left, drawRect_.top, 
 				drawRect_.right - drawRect_.left, 
-				drawRect_.bottom - drawRect_.top, graphics_, 0, 0, 640, 480, SRCCOPY);
+                drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
 	        }
     }
 
@@ -69,8 +65,7 @@ int Window::Run()
     return msg.wParam;
 }
 
-HRESULT Window::Create()
-{
+HRESULT Window::Create() {
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX); 
@@ -89,8 +84,9 @@ HRESULT Window::Create()
 
 	::RegisterClassEx(&wcex);
 
-	int window_width = 640;
-	int window_height = 480;
+    int window_width = WINDOW_WIDTH;
+    int window_height = WINDOW_HEIGHT;
+
 #ifdef FULLSCREEN_MODE
 	HMONITOR hmon = MonitorFromWindow(hWnd_,
 		MONITOR_DEFAULTTONEAREST);
@@ -115,10 +111,10 @@ HRESULT Window::Create()
 		window_width,
 		window_height,
 		NULL, hMenu_, instance_, NULL);
-#endif // FULLSCREEN_MODE
+#endif /* FULLSCREEN_MODE */
 
-	float hScale = (float)window_width / 640;
-	float vScale = (float)window_height / 480;
+    float hScale = (float)window_width / WINDOW_WIDTH;
+    float vScale = (float)window_height / WINDOW_HEIGHT;
 	float scale = hScale < vScale ? hScale : vScale;
 
 	int width = (int)floor(640.0f * scale);
@@ -138,7 +134,7 @@ HRESULT Window::Create()
 	dc_ = ::GetDC(hWnd_);
 
 	graphics_ = CreateCompatibleDC(dc_);
-	bitmap_ = CreateCompatibleBitmap(dc_, 640, 480);
+    bitmap_ = CreateCompatibleBitmap(dc_, WINDOW_WIDTH, WINDOW_HEIGHT);
 	oldHandle_ = SelectObject(graphics_, bitmap_);
 
 	/* Clear whitespace to black.
@@ -156,16 +152,13 @@ HRESULT Window::Create()
 	::UpdateWindow(hWnd_);
 
 	return true;
-
 }
 
-LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	if (!hWnd_)
 		hWnd_ = hWnd;
 
-	switch (uMsg) 
-	{
+	switch (uMsg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -175,8 +168,7 @@ LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
-void Window::SetFPS(int fps)
-{
+void Window::SetFPS(int fps) {
     if (fps > 0 && fps < freq_)
         this->fps_ = fps;
 }

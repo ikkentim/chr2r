@@ -6,8 +6,7 @@
 
 #pragma once
 
-class GameWindow : public Window
-{
+class GameWindow : public Window {
 public:
     GameWindow();
 	~GameWindow();

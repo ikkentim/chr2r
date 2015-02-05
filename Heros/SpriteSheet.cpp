@@ -1,5 +1,7 @@
 #include "SpriteSheet.h"
 
+/* FIXME: Create some kind of spritesheet loading mechanism, 
+ * instead of global vars */
 SpriteSheet *SpriteSheet::terrain;
 
 SpriteSheet::SpriteSheet(HWND hWnd, HDC dcBuf,

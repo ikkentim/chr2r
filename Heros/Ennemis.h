@@ -4,7 +4,7 @@
 
 #pragma once
 
-class Ennemis : public Actor{
+class Ennemis : public Actor {
 public:
 	Ennemis(Vector2);
 	~Ennemis();

@@ -4,6 +4,7 @@
 #pragma once
 
 typedef std::vector <GameObject *> LevelLayer;
+
 class LevelManager {
 public:
     LevelManager();
