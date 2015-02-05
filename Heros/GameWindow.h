@@ -2,6 +2,7 @@
 #include "LevelManager.h"
 #include "Player.h"
 #include "Keys.h"
+#include "Ennemis.h"
 
 #pragma once
 
@@ -23,4 +24,7 @@ private:
     LevelManager *level_;
     Player *player_;
     Keys keys_;
+
+
+	Ennemis * ennemis_;
 };
