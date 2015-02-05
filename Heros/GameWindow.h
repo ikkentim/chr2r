@@ -20,11 +20,10 @@ protected:
     void GameEnd();
 
 private:
-    HBITMAP *textureMap_;
     LevelManager *level_;
     Player *player_;
     Keys keys_;
-
+	Viewport viewport_;
 
 	Ennemis * ennemis_;
 };

@@ -7,7 +7,7 @@ public:
     Block(Texture);
     Block(Texture, Vector2);
     void Update(float, Keys);
-    void Render();
+    void Render(Viewport &);
 private:
     Texture texture_;
 };

@@ -5,6 +5,7 @@
 
 GameWindow::GameWindow() {
     keys_ = KEY_NONE;
+	viewport_ = { 0, 0, 640, 480 };
 
     /* push basic level */
     level_ = new LevelManager();
@@ -71,8 +72,25 @@ void GameWindow::GameLoop(float delta) {
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
         GameObject *object = *it;
 
-        /* TODO: Pass viewport to render() */
-        object->Render();
+		const int borderOffset = 215;
+
+		int minx = viewport_.x + borderOffset;
+		int maxx = viewport_.x - borderOffset + viewport_.width;
+
+		int miny = viewport_.y + borderOffset;
+		int maxy = viewport_.y - borderOffset + viewport_.height;
+
+		auto pos = player_->Position();
+		int posx = (int)floor(pos.x);
+		int posy = (int)floor(pos.y);
+
+		if (posx < minx) viewport_.x += posx - minx;
+		else if (posx > maxx) viewport_.x += posx - maxx;
+
+		if (posy < miny) viewport_.y += posy - miny;
+		else if (posy > maxy) viewport_.y += posy - maxy;
+
+        object->Render(viewport_);
     }
 	
 

@@ -11,7 +11,7 @@ public:
 	void GoLeft(float);
 	void GoRight(float);
 	void Jump(float);
-	void Render();
+	void Render(Viewport &);
 	void Update(float, Keys);
 	
 

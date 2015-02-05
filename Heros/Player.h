@@ -6,5 +6,5 @@ class Player : public Actor {
 public:
     Player(Vector2);
     void Update(float, Keys);
-    void Render();
+    void Render(Viewport &);
 };
