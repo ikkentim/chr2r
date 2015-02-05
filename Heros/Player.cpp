@@ -34,7 +34,9 @@ void Player::Update(float delta, Keys keys) {
 	} else if (!onGround) {
 		velocity_ += (hGrav * delta);
 	} else if (onGround) {
-		position_.y -= velocity_.y * delta;
+		if (velocity_.y > 2)
+			position_.y -= velocity_.y;
+		
 		velocity_.y -= velocity_.y;
 	}
     velocity_.Truncate(WALK_SPEED);
