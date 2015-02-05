@@ -15,6 +15,8 @@ void Player::Update(float delta, Keys keys) {
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };
 
+	bool onGround = (position_.y > 240); // if character is on ground, add collision stuff here, pos y > 240 is a placeholder
+
     if (keys & KEY_RIGHT) {
         velocity_ += (hAccel * delta);
 	} else if (velocity_.x > 0) {
@@ -26,14 +28,14 @@ void Player::Update(float delta, Keys keys) {
 	} else if (velocity_.x < 0) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
 	}
-	if (keys & KEY_JUMP && position_.y > 240) { //and ground under player
+	if (keys & KEY_JUMP && onGround) { 
 		velocity_.y = -10;
 	}
-	else if ( position_.y < 240) {
+	else if (!onGround) {
 		velocity_ += (hGrav * delta);
 
 	}
-	else if (position_.y > 240) {
+	else if (onGround) {
 		velocity_.y = 0;
 	}
     velocity_.Truncate(WALK_SPEED);
