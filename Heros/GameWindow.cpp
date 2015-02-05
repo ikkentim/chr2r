@@ -12,12 +12,17 @@ GameWindow::GameWindow() {
     Vector2 player_spawn = { 64, 48 };
     player_ = new Player(player_spawn);
 
+
+	Vector2 Ennemis_spawn = {80, 50};
+	ennemis_ = new Ennemis{ Ennemis_spawn };
+
     Texture grass_top = { 444, 253, 16, 16 };
     for (int x = 0; x < 15; x++) {
         level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 256.0f}));
     }
 
     level_->PlayableLayer()->push_back(player_);
+	level_->PlayableLayer()->push_back(ennemis_);
 }
 
 GameWindow::~GameWindow() {
