@@ -23,11 +23,15 @@ SpriteSheet::~SpriteSheet(void) {
     ::ReleaseDC(hWnd, dcImage);
 }
 
-void SpriteSheet::Draw(Texture &texture, Vector2 &pos) {
-	TransparentBlt(dcBuf,
-		(int)pos.x, (int)pos.y,
-		texture.width, texture.height, dcImage,
+void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
+	Vector2 offset = pos - vp.Position();
 
+	if (offset.x < -texture.width || offset.y < -texture.height ||
+		offset.x > vp.width || offset.y > vp.height) return;
+
+	TransparentBlt(dcBuf,
+		(int)pos.x - vp.x, (int)pos.y - vp.y,
+		texture.width, texture.height, dcImage,
 		texture.left, texture.top,
 		texture.width, texture.height, transCol);
 }

@@ -41,11 +41,11 @@ void Player::Update(float delta, Keys keys) {
     position_ += velocity_;
 }
 
-void Player::Render() {
+void Player::Render(Viewport &vp) {
     Texture texture = {
         257, 247,
         16, 16
     };
 
-    SpriteSheet::terrain->Draw(texture, position_);
+    SpriteSheet::terrain->Draw(texture, position_, vp);
 }

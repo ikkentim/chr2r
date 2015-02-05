@@ -23,13 +23,13 @@ void Ennemis::GoRight(float delta){
 
 
 
-void Ennemis::Render() {
+void Ennemis::Render(Viewport &vp) {
 	Texture texture = {
 		257, 247,
 		16, 16
 	};
 
-	SpriteSheet::terrain->Draw(texture, position_);
+	SpriteSheet::terrain->Draw(texture, position_, vp);
 }
 
 void Ennemis::Update(float delta, Keys k){

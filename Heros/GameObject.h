@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include "Viewport.h"
 #include "Keys.h"
 
 #pragma once
@@ -11,7 +12,7 @@ public:
         return position_;
     }
     virtual void Update(float, Keys) = 0;
-    virtual void Render() = 0;
+    virtual void Render(Viewport &) = 0;
 
 
 protected:
