@@ -6,7 +6,7 @@
 #define WALK_SPEED  (5.0f)
 #define GRAVITY     (9.81f)
 
-Player::Player(Vector2 pos) :Actor(pos) {
+Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
 }
 
 void Player::Update(float delta, Keys keys) {
@@ -32,4 +32,9 @@ void Player::Render() {
     };
 
     SpriteSheet::terrain->Draw(texture, position_);
+}
+
+void Player::EnteredCollision(GameObject *collider, Vector2 &overlapped)
+{
+	this->position_ += overlapped;
 }

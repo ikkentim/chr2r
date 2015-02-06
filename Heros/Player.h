@@ -4,7 +4,8 @@
 
 class Player : public Actor {
 public:
-    Player(Vector2);
+    Player(Vector2 position, Vector2 size);
     void Update(float, Keys);
-    void Render();
+	void Render();
+	virtual void EnteredCollision(GameObject *, Vector2 &);
 };

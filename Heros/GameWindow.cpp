@@ -1,4 +1,5 @@
 #include "GameWindow.h"
+#include <typeinfo>
 
 #include "Block.h"
 #include "SpriteSheet.h"
@@ -9,13 +10,15 @@ GameWindow::GameWindow() {
     /* push basic level */
     level_ = new LevelManager();
 
-    Vector2 player_spawn = { 64, 48 };
-    player_ = new Player(player_spawn);
+	Vector2 player_spawn = { 100, 32 };
+	player_ = new Player(player_spawn, Vector2(16, 16));
 
     Texture grass_top = { 444, 253, 16, 16 };
     for (int x = 0; x < 15; x++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 64.0f}));
-    }
+        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 48.0f}));
+	}
+
+	level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * 10, 32.0f }));
 
     level_->PlayableLayer()->push_back(player_);
 }
@@ -60,12 +63,35 @@ void GameWindow::GameLoop(float delta) {
 	
     LevelLayer *layer = level_->PlayableLayer();
 
-    /* Update all layers */
-    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-        GameObject *object = *it;
+	GameObject *object;
+	GameObject *object2;
 
-        object->Update(delta, keys_);
-    }
+	/* Check collision on playerlayer */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		object = *it;
+
+		for (LevelLayer::iterator it2 = layer->begin(); it2 != layer->end(); ++it2) {
+			if (it == it2)
+				continue;
+
+			object2 = *it2;
+
+			Vector2 overlapping;
+
+			if (object->CollidesWith(object2, overlapping))
+			{
+				object->EnteredCollision(object2, overlapping);
+			}
+
+		}
+	}
+
+	/* Update all layers */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+
+		object->Update(delta, keys_);
+	}
 
     /* Render all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {

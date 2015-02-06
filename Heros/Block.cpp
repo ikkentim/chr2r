@@ -4,7 +4,8 @@
 Block::Block(Texture tex) :texture_(tex), GameObject() {
 }
 
-Block::Block(Texture tex, Vector2 pos) : texture_(tex), GameObject(pos) {
+Block::Block(Texture tex, Vector2 pos) : texture_(tex), GameObject(pos,	Vector2(tex.width, tex.height)) {
+	
 }
 
 void Block::Update(float delta, Keys keys) {
