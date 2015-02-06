@@ -25,6 +25,18 @@ bool GameObject::CollidesWith(GameObject *object, Vector2 &overlapping)
 	Vector2 bottomRight2 = Vector2(object->position_.x + object->size_.x, object->position_.y + object->size_.y) + base;
 
 	overlapping = bottomRight2 - bottomRight1; // vector to applied to object to unstuck it.
+	
+	
+	overlapping.y = 0 - (overlapping.y - this->size_.y);
+	
+	overlapping = overlapping * -1;
+
+	if (overlapping.x > overlapping.y)
+		overlapping.x = 0;
+	else
+		overlapping.y = 0;
+
+	//overlapping.y = this->size_.y + overlapping.y;
 
 	return true;
 }

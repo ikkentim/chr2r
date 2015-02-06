@@ -41,26 +41,6 @@ void GameScene::Update(float delta, Keys keys) {
 	GameObject *object;
 	GameObject *object2;
 
-	/* Check collision on playerlayer */
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		object = *it;
-
-		for (LevelLayer::iterator it2 = layer->begin(); it2 != layer->end(); ++it2) {
-			if (it == it2)
-				continue;
-
-			object2 = *it2;
-
-			Vector2 overlapping;
-
-			if (object->CollidesWith(object2, overlapping))
-			{
-				object->EnteredCollision(object2, overlapping);
-			}
-
-		}
-	}
-
     /* Update all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
         GameObject *object = *it;
@@ -94,7 +74,27 @@ void GameScene::Update(float delta, Keys keys) {
         skyx <= viewport_.width; skyx += image_width) {
         SpriteSheet::background01->Draw(tex, 
             viewport_.Position() + Vector2(skyx, 0), viewport_);
-    }
+	}
+
+	/* Check collision on playerlayer */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		object = *it;
+
+		for (LevelLayer::iterator it2 = layer->begin(); it2 != layer->end(); ++it2) {
+			if (it == it2)
+				continue;
+
+			object2 = *it2;
+
+			Vector2 overlapping;
+
+			if (object->CollidesWith(object2, overlapping))
+			{
+				object->EnteredCollision(object2, overlapping);
+			}
+
+		}
+	}
 
     /* Render all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
