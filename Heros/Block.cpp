@@ -12,6 +12,6 @@ void Block::Update(float delta, Keys keys) {
     /* TODO: update mechanism */
 }
 
-void Block::Render() {
-    SpriteSheet::terrain->Draw(texture_, position_);
+void Block::Render(Viewport &vp) {
+    SpriteSheet::terrain->Draw(texture_, position_, vp);
 }

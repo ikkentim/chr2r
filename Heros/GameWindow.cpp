@@ -1,47 +1,49 @@
 #include "GameWindow.h"
 #include <typeinfo>
 
-#include "Block.h"
 #include "SpriteSheet.h"
+#include "SplashScene.h"
+#include "LevelManager.h"
 
 GameWindow::GameWindow() {
-    keys_ = KEY_NONE;
-
-    /* push basic level */
-    level_ = new LevelManager();
-
-	Vector2 player_spawn = { 100, 32 };
-	player_ = new Player(player_spawn, Vector2(16, 16));
-
-    Texture grass_top = { 444, 253, 16, 16 };
-    for (int x = 0; x < 15; x++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, {16.0f * x, 48.0f}));
-	}
-
-	level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * 10, 32.0f }));
-
-    level_->PlayableLayer()->push_back(player_);
 }
 
 GameWindow::~GameWindow() {
-    delete level_;
-    delete player_;
+    if (scene_)
+        delete scene_;
 }
 
+void GameWindow::UpdateScene(Scene *scene) {
+	if (scene_)
+		delete scene_;
+
+	scene_ = scene;
+}
+
+irrklang::ISoundEngine *GameWindow::SoundEngine() {
+	return soundEngine_;
+}
 
 void GameWindow::GameInit() {
     SetFPS(60);
-    SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "terrain.bmp");
+    SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
+    SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
+    SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
 
-	Texture testtex = { 0, 0, 200, 200 };
-	Vector2 testvec = { 10, 10 };
-	SpriteSheet::terrain->Draw(testtex, testvec);
+    soundEngine_ = irrklang::createIrrKlangDevice();
 
-	InvalidateRect(hWnd_, 0, false);
+    if (!soundEngine_)
+        return;
+
+    scene_ = new SplashScene(this);
 }
 
 void GameWindow::GameEnd() {
     delete SpriteSheet::terrain;
+    delete SpriteSheet::splash;
+    delete SpriteSheet::background01;
+
+    soundEngine_->drop();
 }
 
 void GameWindow::GameLoop(float delta) {
@@ -56,55 +58,14 @@ void GameWindow::GameLoop(float delta) {
 
 #undef MAP_KEY
 
-    if (::GetAsyncKeyState(VK_ESCAPE))
+    if (::GetAsyncKeyState(VK_ESCAPE) && !GetAsyncKeyState(VK_LSHIFT) && !GetAsyncKeyState(VK_LCONTROL))
         if (::MessageBox(NULL, "Quit Game?", "Hero", MB_YESNO) == IDYES)
             ::exit(0);
 
-	
-    LevelLayer *layer = level_->PlayableLayer();
-
-	GameObject *object;
-	GameObject *object2;
-
-	/* Check collision on playerlayer */
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		object = *it;
-
-		for (LevelLayer::iterator it2 = layer->begin(); it2 != layer->end(); ++it2) {
-			if (it == it2)
-				continue;
-
-			object2 = *it2;
-
-			Vector2 overlapping;
-
-			if (object->CollidesWith(object2, overlapping))
-			{
-				object->EnteredCollision(object2, overlapping);
-			}
-
-		}
-	}
-
-	/* Update all layers */
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
-
-		object->Update(delta, keys_);
-	}
-
-    /* Render all layers */
-    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-        GameObject *object = *it;
-
-        /* TODO: Pass viewport to render() */
-        object->Render();
-    }
-	
-
+	scene_->Update(delta, keys_);
 }
-
-LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	return Window::MsgProc(hWnd, uMsg, wParam, lParam);
-}
+//
+//LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+//	return Window::MsgProc(hWnd, uMsg, wParam, lParam);
+//}
 

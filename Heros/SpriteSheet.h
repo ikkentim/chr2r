@@ -1,6 +1,7 @@
 #include <windows.h>
 #include "Texture.h"
 #include "Vector2.h"
+#include "Viewport.h"
 
 #pragma once
 
@@ -8,10 +9,12 @@ class SpriteSheet
 {
 public:
     static SpriteSheet *terrain;
+    static SpriteSheet *splash;
+    static SpriteSheet *background01;
 
     SpriteSheet(HWND, HDC, const char *, COLORREF = RGB(255, 128, 255));
     ~SpriteSheet(void);
-    void Draw(Texture&, Vector2& pos);
+    void Draw(Texture &, Vector2 &pos, Viewport &);
 
 private:
     HBITMAP bmpb;

@@ -1,77 +1,70 @@
 #include "Window.h"
 #include <tchar.h>
+#include <math.h>
+
+#define WINDOW_WIDTH    (640)
+#define WINDOW_HEIGHT   (480)
 
 static Window *window = NULL;
 HINSTANCE Window::instance_ = GetModuleHandle(NULL);
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return window->MsgProc(hWnd, uMsg, wParam, lParam);
 }
 
-Window::Window()
-{
+Window::Window() {
 	window = this;
 
 	this->hWnd_					= NULL;
 	this->dwCreationFlags_		= 0L;
-	this->dwWindowStyle_		= WS_OVERLAPPEDWINDOW;
-	this->dwExWindowStyle_		= WS_EX_OVERLAPPEDWINDOW;
 	this->dwCreationFlags_		= SW_SHOW;
-	this->posX_					= CW_USEDEFAULT;	
-	this->posY_					= CW_USEDEFAULT;	
-	this->dwCreationWidth_		= CW_USEDEFAULT;
-	this->dwCreationHeight_		= CW_USEDEFAULT;
 	this->hbrWindowColor_		= (HBRUSH)(COLOR_WINDOW+1);
 	this->hIcon_				= LoadIcon(instance_, (LPCTSTR)IDI_APPLICATION);
 	this->strWindowTitle_		= _T("Heros");
-	this->hMenu_				= NULL; 	
 
     ::QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
 
-    fps_ = freq_;
+    fps_ = (int)freq_;
 }
 
-Window::~Window()
-{
+Window::~Window() {
 }
 
-int Window::Run()
-{
+int Window::Run() {
     MSG msg = { 0 };
 
-    while (msg.message != WM_QUIT)
-    {
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
+    while (msg.message != WM_QUIT) {
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        else
-        {
+        else {
             ::QueryPerformanceCounter((LARGE_INTEGER*)&start_);
             stop_ = start_;
 
             while (stop_ - start_ < freq_ / fps_)
-                ::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);
+				::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);
+
+            Rectangle(graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
             GameLoop(1.0f / fps_);
 
-			//BitBlt(dc_, 0, 0, 800, 600, graphics_, 0, 0, SRCCOPY);
-        }
+			StretchBlt(dc_, drawRect_.left, drawRect_.top, 
+				drawRect_.right - drawRect_.left, 
+                drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
+	        }
     }
 
     GameEnd();
 
-	//SelectObject(graphics_, oldBitmap_);
-	//DeleteObject(bitmap_);
-	//DeleteDC(graphics_);
+	SelectObject(graphics_, oldHandle_);
+	DeleteObject(bitmap_);
+	DeleteDC(graphics_);
 
     return msg.wParam;
 }
 
-HRESULT Window::Create()
-{
+HRESULT Window::Create() {
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX); 
@@ -90,40 +83,86 @@ HRESULT Window::Create()
 
 	::RegisterClassEx(&wcex);
 
-	RECT winSz = { 0, 0, 640, 480 };
-	AdjustWindowRect(&winSz, CS_VREDRAW | CS_HREDRAW, true);
+    int window_width = WINDOW_WIDTH;
+    int window_height = WINDOW_HEIGHT;
 
-	hWnd_ = ::CreateWindowEx(dwExWindowStyle_,_T("Skeleton"), strWindowTitle_, dwWindowStyle_,
-	  posX_, posY_, 
-	  winSz.right - winSz.left,
-	  winSz.bottom - winSz.top, 
-	  NULL, hMenu_, instance_, NULL);
+#ifdef FULLSCREEN_MODE
+	HMONITOR hmon = MonitorFromWindow(hWnd_,
+		MONITOR_DEFAULTTONEAREST);
+
+	MONITORINFO monitor = { sizeof(monitor) };
+
+	if (!GetMonitorInfo(hmon, &monitor)) return false;
+
+	hWnd_ = ::CreateWindowEx(0, _T("Skeleton"), strWindowTitle_, WS_POPUP | WS_VISIBLE,
+		monitor.rcMonitor.left,
+		monitor.rcMonitor.top,
+		monitor.rcMonitor.right - monitor.rcMonitor.left,
+		monitor.rcMonitor.bottom - monitor.rcMonitor.top,
+	  NULL, NULL, instance_, NULL);
+
+	window_width = monitor.rcMonitor.right - monitor.rcMonitor.left;
+	window_height = monitor.rcMonitor.bottom - monitor.rcMonitor.top;
+#else
+
+    RECT winSz = { 0, 0, window_width, window_height };
+    AdjustWindowRect(&winSz, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, false);
+
+    hWnd_ = ::CreateWindowEx(0, _T("Skeleton"), strWindowTitle_, 
+        WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX ^ WS_MINIMIZEBOX,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+        winSz.right - winSz.left,
+        winSz.bottom - winSz.top,
+		NULL, NULL, instance_, NULL);
+#endif /* FULLSCREEN_MODE */
+
+    float hScale = (float)window_width / WINDOW_WIDTH;
+    float vScale = (float)window_height / WINDOW_HEIGHT;
+	float scale = hScale < vScale ? hScale : vScale;
+
+	int width = (int)floor(640.0f * scale);
+	int height = (int)floor(480.0f * scale);
+
+	int hOffset = (window_width - width) / 2;
+	int vOffset = (window_height - height) / 2;
+
+	drawRect_ = {
+		hOffset, vOffset,
+		window_width - hOffset,
+		window_height - vOffset
+	};
 
 	if (!hWnd_) return false;
 
-    graphics_ = ::GetDC(hWnd_);
+	dc_ = ::GetDC(hWnd_);
 
-	//graphics_ = CreateCompatibleDC(dc_);
-	//bitmap_ = CreateBitmap(800, 600, 1, 24, NULL); // width, height, 1, bit_depth, NULL
-	//oldBitmap_ = (HBITMAP)SelectObject(graphics_, bitmap_);
+	graphics_ = CreateCompatibleDC(dc_);
+    bitmap_ = CreateCompatibleBitmap(dc_, WINDOW_WIDTH, WINDOW_HEIGHT);
+	oldHandle_ = SelectObject(graphics_, bitmap_);
 
-	//Rectangle(graphics_, 100, 100, 100, 100);
+	/* Clear whitespace to black.
+     */
+	HBRUSH brush = CreateSolidBrush(0);
+	SelectObject(dc_, brush);
+	Rectangle(dc_, 0, 0, window_width, window_height);
+
+	SelectObject(graphics_, CreatePen(PS_NULL, 0, 0));
+	SelectObject(graphics_, CreateSolidBrush(0xffffff));
+
     GameInit();
 
 	::ShowWindow(hWnd_, dwCreationFlags_);
 	::UpdateWindow(hWnd_);
 
 	return true;
-
 }
 
-LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
+LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	if (!hWnd_)
 		hWnd_ = hWnd;
 
-	switch (uMsg) 
-	{
+	switch (uMsg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -133,8 +172,7 @@ LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
-void Window::SetFPS(int fps)
-{
+void Window::SetFPS(int fps) {
     if (fps > 0 && fps < freq_)
         this->fps_ = fps;
 }
