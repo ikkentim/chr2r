@@ -18,17 +18,30 @@ void GameWindow::UpdateScene(Scene *scene) {
     scene_ = scene;
 }
 
+irrklang::ISoundEngine *GameWindow::SoundEngine() {
+    return soundEngine_;
+}
+
 void GameWindow::GameInit() {
     SetFPS(60);
-    SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "terrain.bmp");
-    SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "splash.bmp");
-    SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "background01.bmp");
+    SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
+    SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
+    SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
+
+    soundEngine_ = irrklang::createIrrKlangDevice();
+
+    if (!soundEngine_)
+        return;
 
     scene_ = new SplashScene(this);
 }
 
 void GameWindow::GameEnd() {
     delete SpriteSheet::terrain;
+    delete SpriteSheet::splash;
+    delete SpriteSheet::background01;
+
+    soundEngine_->drop();
 }
 
 void GameWindow::GameLoop(float delta) {
