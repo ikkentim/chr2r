@@ -10,6 +10,7 @@ class SpriteSheet
 public:
     static SpriteSheet *terrain;
     static SpriteSheet *splash;
+    static SpriteSheet *background01;
 
     SpriteSheet(HWND, HDC, const char *, COLORREF = RGB(255, 128, 255));
     ~SpriteSheet(void);

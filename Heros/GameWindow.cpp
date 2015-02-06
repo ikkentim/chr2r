@@ -22,6 +22,7 @@ void GameWindow::GameInit() {
     SetFPS(60);
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "terrain.bmp");
     SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "splash.bmp");
+    SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "background01.bmp");
 
     scene_ = new SplashScene(this);
 }

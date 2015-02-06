@@ -4,6 +4,7 @@
  * instead of global vars */
 SpriteSheet *SpriteSheet::terrain;
 SpriteSheet *SpriteSheet::splash;
+SpriteSheet *SpriteSheet::background01;
 
 SpriteSheet::SpriteSheet(HWND hWnd, HDC dcBuf,
     const char * file,
@@ -30,7 +31,8 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
 	Vector2 offset = pos - vp.Position();
 
 	if (offset.x < -texture.width || offset.y < -texture.height ||
-		offset.x > vp.width || offset.y > vp.height) return;
+		offset.x > vp.width || offset.y > vp.height) 
+        return;
 
     int x = (int)pos.x - vp.x;
     int y = (int)pos.y - vp.y;

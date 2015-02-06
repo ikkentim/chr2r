@@ -11,8 +11,8 @@ GameScene::GameScene(GameWindow *window) {
     player_ = new Player(player_spawn);
 
 
-    Vector2 Ennemis_spawn = { 80, 50 };
-    ennemis_ = new Ennemis{ Ennemis_spawn };
+    Vector2 ennemis_spawn = { 80, 50 };
+    ennemis_ = new Ennemis{ ennemis_spawn };
 
     Texture grass_top = { 444, 253, 16, 16 };
     for (int x = 0; x < 15; x++) {
@@ -40,33 +40,41 @@ void GameScene::Update(float delta, Keys keys) {
     /* Update all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
         GameObject *object = *it;
-
         object->Update(delta, keys);
+    }
+
+    /* Update viewport */
+    const int borderOffset = 215;
+
+    int minx = viewport_.x + borderOffset;
+    int maxx = viewport_.x - borderOffset + viewport_.width;
+
+    int miny = viewport_.y + borderOffset;
+    int maxy = viewport_.y - borderOffset + viewport_.height;
+
+    auto pos = player_->Position();
+    int posx = (int)floor(pos.x);
+    int posy = (int)floor(pos.y);
+
+    if (posx < minx) viewport_.x += posx - minx;
+    else if (posx > maxx) viewport_.x += posx - maxx;
+
+    if (posy < miny) viewport_.y += posy - miny;
+    else if (posy > maxy) viewport_.y += posy - maxy;
+
+    /* Draw background */
+    /* FIXME: Make LevelManager decide background */
+    const int image_width = 727;/* FIXME: backgrounds can have different widths */
+    Texture tex = { 0, 0, image_width, viewport_.height };
+    for (int skyx = (viewport_.x / 2) % image_width - image_width; 
+        skyx <= viewport_.width; skyx += image_width) {
+        SpriteSheet::background01->Draw(tex, 
+            viewport_.Position() + Vector2(skyx, 0), viewport_);
     }
 
     /* Render all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
         GameObject *object = *it;
-
-        const int borderOffset = 215;
-
-        int minx = viewport_.x + borderOffset;
-        int maxx = viewport_.x - borderOffset + viewport_.width;
-
-        int miny = viewport_.y + borderOffset;
-        int maxy = viewport_.y - borderOffset + viewport_.height;
-
-        auto pos = player_->Position();
-        int posx = (int)floor(pos.x);
-        int posy = (int)floor(pos.y);
-
-        if (posx < minx) viewport_.x += posx - minx;
-        else if (posx > maxx) viewport_.x += posx - maxx;
-
-        if (posy < miny) viewport_.y += posy - miny;
-        else if (posy > maxy) viewport_.y += posy - maxy;
-
         object->Render(viewport_);
     }
-
 }
