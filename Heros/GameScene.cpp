@@ -15,17 +15,26 @@ GameScene::GameScene(GameWindow *window) {
     Vector2 ennemis_spawn = { 80, 50 };
     ennemis_ = new Ennemis( ennemis_spawn, size );
 
-    Texture grass_top = { 444, 253, 16, 16 };
-    for (int x = 0; x < 15; x++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f }));
-    }
+	Texture grass_top = { 444, 253, 16, 16 };
+	for (int x = 0; x < 15; x++) {
+		level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f }));
+	}
+
+	for (int x = 0; x < 5; x++) {
+		level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 220.0f }));
+	}
+
+
+	for (int x = 8; x < 15; x++) {
+		level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 190.0f }));
+	}
 
     for (int y = 0; y < 25; y++) {
         level_->PlayableLayer()->push_back(new Block(grass_top, { 256.0f, 256.0f - 16.0f * y }));
     }
 
     level_->PlayableLayer()->push_back(player_);
-    level_->PlayableLayer()->push_back(ennemis_);
+    //level_->PlayableLayer()->push_back(ennemis_);
 
 }
 
@@ -76,6 +85,12 @@ void GameScene::Update(float delta, Keys keys) {
             viewport_.Position() + Vector2(skyx, 0), viewport_);
 	}
 
+	/* Render all layers */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+		object->Render(viewport_);
+	}
+
 	/* Check collision on playerlayer */
 	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
 		object = *it;
@@ -95,10 +110,4 @@ void GameScene::Update(float delta, Keys keys) {
 
 		}
 	}
-
-    /* Render all layers */
-    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-        GameObject *object = *it;
-        object->Render(viewport_);
-    }
 }

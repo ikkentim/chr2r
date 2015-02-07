@@ -16,8 +16,6 @@ void Player::Update(float delta, Keys keys) {
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };
 
-	onGround = (position_.y > 240); // if character is on ground, add collision stuff here, (pos y > 240) is a placeholder
-
     if (keys & KEY_RIGHT) {
         velocity_ += (hAccel * delta);
 	} else if (velocity_.x > 0) {
@@ -31,12 +29,13 @@ void Player::Update(float delta, Keys keys) {
     }
 	if (keys & KEY_JUMP && onGround) { 
 		velocity_.y = JUMPPOW;
+
+		onGround = false;
     }
-	else
-		Falling(hGrav, delta);
 
+	Falling(hGrav, delta);
 
-    velocity_.Truncate(WALK_SPEED);
+    velocity_.TruncateX(WALK_SPEED);
 
     position_ += velocity_;
 }
@@ -52,5 +51,10 @@ void Player::Render(Viewport &vp) {
 
 void Player::EnteredCollision(GameObject *collider, Vector2 &overlapped)
 {
-	this->position_ += overlapped;
+	if (overlapped.y < (float)0)
+		onGround = true;
+
+	position_ += overlapped;
+
+	velocity_.y = 0;
 }

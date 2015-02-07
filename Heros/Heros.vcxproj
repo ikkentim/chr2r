@@ -54,8 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>SPRITE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -70,6 +69,11 @@
     <CustomBuildStep>
       <Command>mkdir $(OutDir)assets</Command>
     </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>FULLSCREEN_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />

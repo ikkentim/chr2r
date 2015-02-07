@@ -16,7 +16,7 @@ bool GameObject::CollidesWith(GameObject *object, Vector2 &overlapping)
 		|| this->position_.y + this->size_.y <= object->position_.y)
 		// rectangles are out of each other
 		return false;
-
+	
 	// there is a collision, calculate the factor to unstuck
 
 	Vector2 base = Vector2(this->position_.x, this->position_.y) * -1;
@@ -27,14 +27,15 @@ bool GameObject::CollidesWith(GameObject *object, Vector2 &overlapping)
 	overlapping = bottomRight2 - bottomRight1; // vector to applied to object to unstuck it.
 	
 	
+
 	overlapping.y = 0 - (overlapping.y - this->size_.y);
 	
 	overlapping = overlapping * -1;
-
+/*
 	if (overlapping.x > overlapping.y)
 		overlapping.x = 0;
 	else
-		overlapping.y = 0;
+		overlapping.y = 0;*/
 
 	//overlapping.y = this->size_.y + overlapping.y;
 

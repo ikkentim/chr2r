@@ -50,6 +50,15 @@ struct Vector2 {
         y /= length;
     }
 
+	void TruncateX(float max)
+	{
+		assert(max > 0);
+
+		if (abs(x) < max) return;
+
+		x = max;
+	}
+
     inline float Distance(const Vector2 &v2) {
         return sqrt(DistanceSq(v2));
     }

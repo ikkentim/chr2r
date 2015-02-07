@@ -17,6 +17,6 @@ public:
 	virtual void EnteredCollision(GameObject *, Vector2 &);
 
 protected:
-    Vector2 position_;
+	Vector2 position_;
 	Vector2 size_ = { 0, 0 };
 };
