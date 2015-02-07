@@ -34,7 +34,7 @@ GameScene::GameScene(GameWindow *window) {
     }
 
     level_->PlayableLayer()->push_back(player_);
-    //level_->PlayableLayer()->push_back(ennemis_);
+    level_->PlayableLayer()->push_back(ennemis_);
 
 }
 
