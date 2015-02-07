@@ -43,9 +43,5 @@ void Ennemis::Update(float delta, Keys k){
 		GoRight(delta);
 	}
 
-
 	Falling(hGrav , delta);
-
-
-	position_ += velocity_;
 }

@@ -36,8 +36,6 @@ void Player::Update(float delta, Keys keys) {
 	Falling(hGrav, delta);
 
     velocity_.TruncateX(WALK_SPEED);
-
-    position_ += velocity_;
 }
 
 void Player::Render(Viewport &vp) {
@@ -47,4 +45,9 @@ void Player::Render(Viewport &vp) {
     };
 
     SpriteSheet::terrain->Draw(texture, position_, vp);
+}
+
+void Player::EnteredCollision(GameObject *object, Vector2 &overlapped)
+{
+	Actor::EnteredCollision(object, overlapped);
 }

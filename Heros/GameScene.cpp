@@ -34,7 +34,7 @@ GameScene::GameScene(GameWindow *window) {
     }
 
     level_->PlayableLayer()->push_back(player_);
-    level_->PlayableLayer()->push_back(ennemis_);
+    //level_->PlayableLayer()->push_back(ennemis_);
 
 }
 
@@ -85,12 +85,6 @@ void GameScene::Update(float delta, Keys keys) {
             viewport_.Position() + Vector2(skyx, 0), viewport_);
 	}
 
-	/* Render all layers */
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
-		object->Render(viewport_);
-	}
-
 	/* Check collision on playerlayer */
 	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
 		object = *it;
@@ -109,5 +103,17 @@ void GameScene::Update(float delta, Keys keys) {
 			}
 
 		}
+	}
+
+	/* Render all layers */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+		object->ApplyVelocity();
+	}
+
+	/* Render all layers */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+		object->Render(viewport_);
 	}
 }

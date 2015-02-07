@@ -15,8 +15,10 @@ public:
 	virtual void Render(Viewport &) = 0;
 	bool CollidesWith(GameObject *, Vector2 &);
 	virtual void EnteredCollision(GameObject *, Vector2 &);
+	virtual void ApplyVelocity();
 
 protected:
 	Vector2 position_;
+	Vector2 velocity_;
 	Vector2 size_ = { 0, 0 };
 };

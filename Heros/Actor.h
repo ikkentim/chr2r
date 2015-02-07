@@ -10,6 +10,5 @@ public:
 	Actor(Vector2 position, Vector2 size);
 	virtual void EnteredCollision(GameObject *, Vector2 &);
 protected:
-    Vector2 velocity_;
 	bool onGround;
 };
