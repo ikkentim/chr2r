@@ -10,7 +10,10 @@ void Actor::Falling(Vector2 grav, float delta){
 }
 
 
-void Actor::EnteredCollision(GameObject *object, Vector2 &overlapping)
+void Actor::EnteredCollision(GameObject *object, Vector2 &overlapped)
 {
-	OutputDebugString("Collision!\n");
+	if (overlapped.y < (float)0)
+		onGround = true;
+
+	position_ += overlapped;
 }

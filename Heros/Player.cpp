@@ -48,13 +48,3 @@ void Player::Render(Viewport &vp) {
 
     SpriteSheet::terrain->Draw(texture, position_, vp);
 }
-
-void Player::EnteredCollision(GameObject *collider, Vector2 &overlapped)
-{
-	if (overlapped.y < (float)0)
-		onGround = true;
-
-	position_ += overlapped;
-
-	velocity_.y = 0;
-}
