@@ -6,7 +6,7 @@
 #define WALK_SPEED  (5.0f)
 #define GRAVITY     (9.81f)
 #define FRICTION	(5.0f)
-#define JUMPPOW		(-10.0f)
+#define JUMPPOW		(-2.0f)
 
 Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
 }
@@ -27,7 +27,7 @@ void Player::Update(float delta, Keys keys) {
 	} else if (velocity_.x < 0) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
     }
-	if (keys & KEY_JUMP && onGround) { 
+	if (keys & KEY_JUMP) { 
 		velocity_.y = JUMPPOW;
 
 		onGround = false;
