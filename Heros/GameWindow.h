@@ -11,8 +11,6 @@ public:
 	~GameWindow();
 
     void UpdateScene(Scene *);
-	//LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
-	//LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     irrklang::ISoundEngine *SoundEngine();
 protected:
     void GameInit();

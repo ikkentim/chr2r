@@ -7,7 +7,6 @@ public:
 	 Window();
 	 HRESULT Create();
 	 int Run();
-	 virtual ~Window();
 	LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 
 protected:

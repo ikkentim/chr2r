@@ -64,8 +64,3 @@ void GameWindow::GameLoop(float delta) {
 
 	scene_->Update(delta, keys_);
 }
-//
-//LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-//	return Window::MsgProc(hWnd, uMsg, wParam, lParam);
-//}
-

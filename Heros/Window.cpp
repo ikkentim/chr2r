@@ -27,9 +27,6 @@ Window::Window() {
     fps_ = (int)freq_;
 }
 
-Window::~Window() {
-}
-
 int Window::Run() {
     MSG msg = { 0 };
 
