@@ -2,6 +2,7 @@
 #include "Keys.h"
 #include "Scene.h"
 #include <irrKlang.h>
+#include "fps.h"
 
 #pragma once
 
@@ -20,5 +21,6 @@ protected:
 private:
     irrklang::ISoundEngine *soundEngine_;
     Scene *scene_ = NULL;
-    Keys keys_ = KEY_NONE;
+	Keys keys_ = KEY_NONE;
+	Fps fps;
 };

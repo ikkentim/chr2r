@@ -4,8 +4,10 @@
 #include "SpriteSheet.h"
 #include "SplashScene.h"
 #include "LevelManager.h"
+#include <string>
 
 GameWindow::GameWindow() {
+	fps = Fps();
 }
 
 GameWindow::~GameWindow() {
@@ -47,6 +49,7 @@ void GameWindow::GameEnd() {
 }
 
 void GameWindow::GameLoop(float delta) {
+
     /* Handle keys */
 #define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
     keys_ |= map; } else if(keys_ & map) { \
@@ -63,4 +66,13 @@ void GameWindow::GameLoop(float delta) {
             ::exit(0);
 
 	scene_->Update(delta, keys_);
+
+#ifdef SHOW_FPS
+	fps.Update();
+
+	TCHAR buf[4];
+	std::sprintf(buf, "%d", fps.GetFps());
+
+	TextOut(graphics_, 10, 10, buf, 3);
+#endif
 }
