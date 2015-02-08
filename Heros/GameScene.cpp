@@ -97,8 +97,11 @@ void GameScene::Update(float delta, Keys keys) {
 
 			Vector2 overlapping;
 
-			if (object->CollidesWith(object2, overlapping))
+			//if (object->InRange(object2, max(object->Size().x, object->Size().y)) && object->IsIntersecting(object, object2))
+			if (object->IsIntersecting(object, object2))
 			{
+				object->FixCollider(object2);
+
 				object->EnteredCollision(object2, overlapping);
 			}
 

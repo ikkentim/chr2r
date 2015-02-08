@@ -19,10 +19,13 @@ public:
 	}
     virtual void Update(float, Keys) = 0;
 	virtual void Render(Viewport &) = 0;
-	bool CollidesWith(GameObject *, Vector2 &);
 	virtual void EnteredCollision(GameObject *, Vector2 &);
 	virtual void ApplyVelocity();
-	bool IsIntersecting(GameObject *, GameObject *, bool &, bool &);
+
+	bool FixCollider(GameObject *);
+	bool CheckCollidingVelocity(GameObject *, GameObject *, bool &, bool &);
+	bool IsIntersecting(GameObject *, GameObject *);
+	bool InRange(GameObject *, float range);
 
 protected:
 	Vector2 position_;
