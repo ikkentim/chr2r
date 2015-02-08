@@ -25,6 +25,8 @@ Window::Window() {
     ::QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
 
     fps_ = (int)freq_;
+
+	lastframems_ = duration_cast< milliseconds >(high_resolution_clock::now().time_since_epoch());
 }
 
 int Window::Run() {
@@ -39,17 +41,21 @@ int Window::Run() {
             ::QueryPerformanceCounter((LARGE_INTEGER*)&start_);
             stop_ = start_;
 
-            while (stop_ - start_ < freq_ / fps_)
-				::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);
+            /*while (stop_ - start_ < freq_ / fps_)
+				::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);*/
 
             Rectangle(graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-            GameLoop(1.0f / fps_);
+			milliseconds nowms = duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch());
+
+			GameLoop((nowms.count() - lastframems_.count()) / 1000.0f);
 
 			StretchBlt(dc_, drawRect_.left, drawRect_.top, 
 				drawRect_.right - drawRect_.left, 
                 drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
 	        }
+
+		lastframems_ = duration_cast< milliseconds >(high_resolution_clock::now().time_since_epoch());
     }
 
     GameEnd();

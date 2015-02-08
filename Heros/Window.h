@@ -1,4 +1,7 @@
 #include <windows.h>
+#include <chrono>
+
+using namespace std::chrono;
 
 #pragma once
 
@@ -27,6 +30,7 @@ protected:
 
     INT64 freq_;
     INT64 start_, stop_;
+	milliseconds lastframems_;
     int fps_;
 private:
 	HDC dc_;
