@@ -20,10 +20,10 @@ bool GameObject::FixCollider(GameObject *object)
 
 	if (CheckCollidingVelocity(this, object, x, y))
 	{
-		float max = std::max(this->Velocity().x, this->Velocity().y) + 1;
+        double max = std::max(this->Velocity().x, this->Velocity().y) + 1;
 
-		float xMinus = (Velocity().x / max * 2) * -1;
-		float yMinus = (Velocity().y / max * 2) * -1;
+        double xMinus = (Velocity().x / max * 2) * -1;
+        double yMinus = (Velocity().y / max * 2) * -1;
 
 		for (int i = 0; i < max; i++)
 		{
@@ -75,14 +75,14 @@ bool GameObject::IsIntersecting(GameObject * go1, GameObject * go2)
 		|| go1->Position().y + go1->Size().y + go1->Velocity().y <= go2->Position().y);
 }
 
-bool GameObject::InRange(GameObject *go, float range)
+bool GameObject::InRange(GameObject *go, double range)
 {
-	float actualRange = sqrt(pow((position_.x - go->Position().x), 2) + pow((position_.y - go->Position().y), 2));
+    double actualRange = sqrt(pow((position_.x - go->Position().x), 2) + pow((position_.y - go->Position().y), 2));
 
 	return (actualRange <= range);
 }
 
-void GameObject::ApplyVelocity()
+void GameObject::ApplyVelocity(double delta)
 {
 	position_ += velocity_;
 }

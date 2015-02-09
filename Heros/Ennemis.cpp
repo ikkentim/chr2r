@@ -9,13 +9,13 @@ Ennemis::Ennemis(Vector2 pos, Vector2 size) :Actor(pos, size){
 }
 Ennemis :: ~Ennemis(){}
 
-void Ennemis::GoLeft(float delta){
+void Ennemis::GoLeft(double delta){
 
 	Vector2 hAccel = { -WALK_ACCEL, 0 };
 	velocity_ = hAccel;
 }
 
-void Ennemis::GoRight(float delta){
+void Ennemis::GoRight(double delta){
 
 	Vector2 hAccel = { WALK_ACCEL, 0 };
 	velocity_ = hAccel;
@@ -32,7 +32,7 @@ void Ennemis::Render(Viewport &vp) {
 	SpriteSheet::terrain->Draw(texture, position_, vp);
 }
 
-void Ennemis::Update(float delta, Keys k){
+void Ennemis::Update(double delta, Keys k){
 	Vector2 hGrav = { 0, GRAVITY };
 	onGround = (position_.y > 240);
 

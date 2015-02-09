@@ -14,7 +14,7 @@ public:
 
 protected:
      virtual void GameInit() = 0;
-     virtual void GameLoop(float) = 0;
+     virtual bool GameLoop(double) = 0;
      virtual void GameEnd() = 0;
 
 	static HINSTANCE instance_;

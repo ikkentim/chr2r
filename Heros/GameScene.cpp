@@ -44,7 +44,7 @@ GameScene::~GameScene() {
     delete ennemis_;
 }
 
-void GameScene::Update(float delta, Keys keys) {
+void GameScene::Update(double delta, Keys keys) {
     LevelLayer *layer = level_->PlayableLayer();
 
 	GameObject *object;
@@ -75,17 +75,8 @@ void GameScene::Update(float delta, Keys keys) {
     if (posy < miny) viewport_.y += posy - miny;
     else if (posy > maxy) viewport_.y += posy - maxy;
 
-    /* Draw background */
-    /* FIXME: Make LevelManager decide background */
-    const int image_width = 727;/* FIXME: backgrounds can have different widths */
-    Texture tex = { 0, 0, image_width, viewport_.height };
-    for (int skyx = (viewport_.x / 2) % image_width - image_width; 
-        skyx <= viewport_.width; skyx += image_width) {
-        SpriteSheet::background01->Draw(tex, 
-            viewport_.Position() + Vector2(skyx, 0), viewport_);
-	}
-
 	/* Check collision on playerlayer */
+    
 	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
 		object = *it;
 
@@ -108,15 +99,30 @@ void GameScene::Update(float delta, Keys keys) {
 		}
 	}
 
-	/* Render all layers */
+	/* Apply all velocities */
 	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
 		GameObject *object = *it;
-		object->ApplyVelocity();
+		object->ApplyVelocity(delta);
 	}
 
-	/* Render all layers */
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
-		object->Render(viewport_);
-	}
+}
+
+void GameScene::Render(double delta) {
+    LevelLayer *layer = level_->PlayableLayer();
+
+    /* Draw background */
+    /* FIXME: Make LevelManager decide background */
+    const int image_width = 727;/* FIXME: backgrounds can have different widths */
+    Texture tex = { 0, 0, image_width, viewport_.height };
+    for (int skyx = (viewport_.x / 2) % image_width - image_width;
+        skyx <= viewport_.width; skyx += image_width) {
+        SpriteSheet::background01->Draw(tex,
+            viewport_.Position() + Vector2(skyx, 0), viewport_);
+    }
+
+    /* Render all layers */
+    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+        GameObject *object = *it;
+        object->Render(viewport_);
+    }
 }

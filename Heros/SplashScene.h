@@ -7,8 +7,9 @@ class SplashScene : public Scene {
 public:
     SplashScene(GameWindow *);
     ~SplashScene();
-    void Update(float, Keys);
+    void Update(double, Keys);
+    void Render(double);
 private:
-    float time_;
+    double time_;
     GameWindow *window_;
 };

@@ -2,16 +2,18 @@
 #include "SpriteSheet.h"
 #include <stdio.h>
 
-#define WALK_ACCEL  (5.0f)
-#define WALK_SPEED  (5.0f)
-#define GRAVITY     (9.81f)
-#define FRICTION	(5.0f)
-#define JUMPPOW		(-2.0f)
+#define WALK_ACCEL  (250.0)
+#define WALK_SPEED  (250.0)
+#define GRAVITY     (981.0)
+#define FRICTION	(150.0)
+#define JUMPPOW		(-250.0)
 
 Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
 }
 
-void Player::Update(float delta, Keys keys) {
+static double tmp = 0;
+void Player::Update(double delta, Keys keys) {
+    tmp = delta;
     Vector2 hAccel = { WALK_ACCEL, 0 };
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };

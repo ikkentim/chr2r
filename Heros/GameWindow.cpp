@@ -6,6 +6,8 @@
 #include "LevelManager.h"
 #include <string>
 
+#define RENDER_FREQUENCY            (60)
+
 GameWindow::GameWindow() {
 	fps = Fps();
 }
@@ -47,7 +49,7 @@ void GameWindow::GameEnd() {
     soundEngine_->drop();
 }
 
-void GameWindow::GameLoop(float delta) {
+bool GameWindow::GameLoop(double delta) {
 
     /* Handle keys */
 #define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
@@ -65,13 +67,27 @@ void GameWindow::GameLoop(float delta) {
             ::exit(0);
 
 	scene_->Update(delta, keys_);
+    ups.Update();
+
+    timeSinceRender_ += delta;
+
+    if (timeSinceRender_ >= (1.0f / RENDER_FREQUENCY)) {
+        timeSinceRender_ -= (1.0f / RENDER_FREQUENCY);
+
+        scene_->Render(delta);
+        fps.Update();
 
 #ifdef SHOW_FPS
-	fps.Update();
+        TCHAR buf[16];
+        std::sprintf(buf, "FPS: %d", fps.GetFps());
+        TextOut(graphics_, 5, 5, buf, strlen(buf));
 
-	TCHAR buf[8];
-	std::sprintf(buf, "%d", fps.GetFps());
-
-	TextOut(graphics_, 10, 10, buf, 3);
+        std::sprintf(buf, "UPS: %d", ups.GetFps());
+        TextOut(graphics_, 5, 25, buf, strlen(buf));
 #endif
+        return true;
+    }
+    else {
+        return false;
+    }
 }

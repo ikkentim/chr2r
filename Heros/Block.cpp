@@ -8,7 +8,7 @@ Block::Block(Texture tex, Vector2 pos) : texture_(tex), GameObject(pos,	Vector2(
 	
 }
 
-void Block::Update(float delta, Keys keys) {
+void Block::Update(double delta, Keys keys) {
     /* TODO: update mechanism */
 }
 

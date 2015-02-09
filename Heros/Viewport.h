@@ -8,6 +8,6 @@ struct Viewport {
 	int width;
 	int height;
 	inline Vector2 Position() {
-		return{ (float)x, (float)y };
+        return{ (double)x, (double)y };
 	}
 };

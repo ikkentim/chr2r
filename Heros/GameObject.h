@@ -17,15 +17,15 @@ public:
 	Vector2 Size() const {
 		return size_;
 	}
-    virtual void Update(float, Keys) = 0;
+    virtual void Update(double, Keys) = 0;
 	virtual void Render(Viewport &) = 0;
 	virtual void EnteredCollision(GameObject *, Vector2 &);
-	virtual void ApplyVelocity();
+    virtual void ApplyVelocity(double);
 
 	bool FixCollider(GameObject *);
 	bool CheckCollidingVelocity(GameObject *, GameObject *, bool &, bool &);
 	bool IsIntersecting(GameObject *, GameObject *);
-	bool InRange(GameObject *, float range);
+    bool InRange(GameObject *, double range);
 
 protected:
 	Vector2 position_;

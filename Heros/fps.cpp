@@ -17,7 +17,7 @@ int Fps::GetFps()
 
 	if (timepassed - starttime > 0.25)
 	{
-		fps = (float)frames / (timepassed - starttime);
+        fps = (double)frames / (timepassed - starttime);
 		frames = 0;
 		starttime = timepassed;
 	}

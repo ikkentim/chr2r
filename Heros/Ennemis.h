@@ -8,10 +8,10 @@ class Ennemis : public Actor {
 public:
 	Ennemis(Vector2, Vector2);
 	~Ennemis();
-	void GoLeft(float);
-	void GoRight(float);
+    void GoLeft(double);
+    void GoRight(double);
 	void Render(Viewport &);
-	void Update(float, Keys);
+	void Update(double, Keys);
 	
 
 private: 

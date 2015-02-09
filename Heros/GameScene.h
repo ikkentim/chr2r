@@ -10,7 +10,8 @@ class GameScene : public Scene {
 public:
     GameScene(GameWindow *);
     ~GameScene();
-    void Update(float, Keys);
+    void Update(double, Keys);
+    void Render(double);
 private:
     LevelManager *level_;
     Player *player_;

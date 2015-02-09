@@ -6,7 +6,7 @@ private:
 	time_t starttime;
 	bool first = true;
 	int frames = 0;
-	float fps = 0.0f;
+	double fps = 0.0;
 public:
 	Fps();
 	void Update();

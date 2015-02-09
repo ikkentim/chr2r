@@ -4,11 +4,11 @@
 #pragma once
 
 struct Vector2 {
-    float x;
-    float y;
+    double x;
+    double y;
 
     Vector2() :x(0), y(0){ }
-    Vector2(float a, float b) :x(a), y(b){ }
+    Vector2(double a, double b) :x(a), y(b){ }
 
     inline void Zero() {
         x = 0;
@@ -19,28 +19,28 @@ struct Vector2 {
         return x == 0 && y == 0;
     }
 
-    inline float Length() {
+    inline double Length() {
         return sqrt(LengthSq());
     }
 
-    inline float LengthSq() {
+    inline double LengthSq() {
         return x * x + y * y;
     }
 
     inline void Normalize() {
-        float length = Length();
+        double length = Length();
         x /= length;
         y /= length;
     }
 
-    inline float Dot(const Vector2 &v2) const {
+    inline double Dot(const Vector2 &v2) const {
         return x*v2.x + y*v2.y;
     }
 
-    void Truncate(float max) {
+    void Truncate(double max) {
         assert(max > 0);
 
-        float length = Length();
+        double length = Length();
 
         if (length < max) return;
 
@@ -50,7 +50,7 @@ struct Vector2 {
         y /= length;
     }
 
-	void TruncateX(float max)
+	void TruncateX(double max)
 	{
 		assert(max > 0);
 
@@ -59,11 +59,11 @@ struct Vector2 {
 		x = max;
 	}
 
-    inline float Distance(const Vector2 &v2) {
+    inline double Distance(const Vector2 &v2) {
         return sqrt(DistanceSq(v2));
     }
 
-    inline float DistanceSq(const Vector2 &v2) {
+    inline double DistanceSq(const Vector2 &v2) {
         return (x - v2.x) * (x - v2.x) + (y - v2.y) * (y - v2.y);
     }
 
@@ -101,7 +101,7 @@ struct Vector2 {
         return{ x * rhs.x, y * rhs.y };
     }
 
-    inline Vector2 operator*(float rhs) {
+    inline Vector2 operator*(double rhs) {
         return{ x * rhs, y * rhs };
     }
 
@@ -109,7 +109,7 @@ struct Vector2 {
         return{ x / rhs.x, y / rhs.y };
     }
 
-    inline Vector2 operator/(float rhs) {
+    inline Vector2 operator/(double rhs) {
         return{ x / rhs, y / rhs };
     }
 

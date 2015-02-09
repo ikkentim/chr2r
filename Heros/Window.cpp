@@ -46,12 +46,11 @@ int Window::Run() {
             INT64 tick;
             ::QueryPerformanceCounter((LARGE_INTEGER*)&tick);
 
-            GameLoop((float)(tick - lastTick) / (float)frequency);
-
-			StretchBlt(dc_, drawRect_.left, drawRect_.top, 
-				drawRect_.right - drawRect_.left, 
-                drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
-
+            if (GameLoop((double)(tick - lastTick) / (double)frequency)) {
+                StretchBlt(dc_, drawRect_.left, drawRect_.top,
+                    drawRect_.right - drawRect_.left,
+                    drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
+            }
             lastTick = tick;
 	    }
 

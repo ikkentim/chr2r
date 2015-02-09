@@ -5,5 +5,6 @@
 
 class Scene {
 public:
-    virtual void Update(float, Keys) = 0;
+    virtual void Update(double, Keys) = 0;
+    virtual void Render(double) = 0;
 };
