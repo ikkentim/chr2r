@@ -91,7 +91,7 @@
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SplashShene.cpp" />
+    <ClCompile Include="SplashScene.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="main.cpp" />

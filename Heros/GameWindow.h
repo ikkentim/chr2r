@@ -1,10 +1,10 @@
+#pragma once
+
 #include "Window.h"
 #include "Keys.h"
 #include "Scene.h"
 #include <irrKlang.h>
 #include "fps.h"
-
-#pragma once
 
 class GameWindow : public Window {
 public:

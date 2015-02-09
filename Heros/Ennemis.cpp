@@ -1,8 +1,8 @@
 #include "Ennemis.h"
 
-#define WALK_SPEED  (1.0f)
-#define WALK_ACCEL  (1.0f)
-#define GRAVITY     (9.81f)
+#define WALK_ACCEL  (150.0)
+#define WALK_SPEED  (150.0)
+#define GRAVITY     (981.0)
 
 Ennemis::Ennemis(Vector2 pos, Vector2 size) :Actor(pos, size){
 	velocity_ = Vector2(WALK_SPEED, 0);
@@ -22,7 +22,6 @@ void Ennemis::GoRight(double delta){
 }
 
 
-
 void Ennemis::Render(Viewport &vp) {
 	Texture texture = {
 		257, 247,
@@ -34,8 +33,6 @@ void Ennemis::Render(Viewport &vp) {
 
 void Ennemis::Update(double delta, Keys k){
 	Vector2 hGrav = { 0, GRAVITY };
-	onGround = (position_.y > 240);
-
 	if (position_.x > 200){
 		GoLeft(delta);
 	}

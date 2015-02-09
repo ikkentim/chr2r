@@ -20,14 +20,5 @@ void SplashScene::Update(double delta, Keys) {
 }
 
 void SplashScene::Render(double delta) {
-    
-    Texture tex = {
-        0, 0, 640, 480
-    };
-    Vector2 vec = { 0, 0 };
-    Viewport vp = {
-        0, 0, 0, 0
-    };
-
-    SpriteSheet::splash->Draw(tex, vec, vp);
+    SpriteSheet::splash->Draw(Texture(0, 0, 640, 480), 0, 0);
 }

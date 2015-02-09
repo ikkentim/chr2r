@@ -3,13 +3,13 @@
 
 #include "SpriteSheet.h"
 #include "SplashScene.h"
+#include "GameScene.h"
 #include "LevelManager.h"
 #include <string>
 
 #define RENDER_FREQUENCY            (60)
 
 GameWindow::GameWindow() {
-	fps = Fps();
 }
 
 GameWindow::~GameWindow() {
@@ -29,6 +29,7 @@ irrklang::ISoundEngine *GameWindow::SoundEngine() {
 }
 
 void GameWindow::GameInit() {
+    /* Load all sprites. */
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
     SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
     SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
@@ -43,6 +44,7 @@ void GameWindow::GameInit() {
 }
 
 void GameWindow::GameEnd() {
+    /* Unload all sprites. */
     delete SpriteSheet::terrain;
     delete SpriteSheet::splash;
     delete SpriteSheet::background01;
@@ -53,7 +55,7 @@ void GameWindow::GameEnd() {
 
 bool GameWindow::GameLoop(double delta) {
 
-    /* Handle keys */
+    /* Handle key presses. */
 #define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
     keys_ |= map; } else if(keys_ & map) { \
     keys_ ^= map; }
@@ -64,13 +66,26 @@ bool GameWindow::GameLoop(double delta) {
 
 #undef MAP_KEY
 
-    if (::GetAsyncKeyState(VK_ESCAPE) && !GetAsyncKeyState(VK_LSHIFT) && !GetAsyncKeyState(VK_LCONTROL))
-        if (::MessageBox(NULL, "Quit Game?", "Hero", MB_YESNO) == IDYES)
-            ::exit(0);
+    /* Simple statement for using ESCAPE to exit. If LSHIFT or LCONTROL is
+     * pressed, ESCAPE won't close the window.
+     */
+
+    if (::GetAsyncKeyState(VK_ESCAPE) 
+        && !GetAsyncKeyState(VK_LSHIFT) 
+        && !GetAsyncKeyState(VK_LCONTROL))
+        ::exit(0);
+
+    /* This restart button leaks pretty badly but it's useful. */
+    if (::GetAsyncKeyState(VK_F5)) {
+        /* FIXME: Fix leak in GameScene. (initializer/destructor) */
+        while (::GetAsyncKeyState(VK_F5));
+        UpdateScene(new GameScene(this));
+    }
 
 	scene_->Update(delta, keys_);
     ups.Update();
 
+    /* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
 
     if (timeSinceRender_ >= (1.0f / RENDER_FREQUENCY)) {
@@ -87,9 +102,11 @@ bool GameWindow::GameLoop(double delta) {
         std::sprintf(buf, "UPS: %d", ups.GetFps());
         TextOut(graphics_, 5, 25, buf, strlen(buf));
 #endif
+        /* Tell the window to repaint. */
         return true;
     }
     else {
+        /* Tell the window there is no need for a repaint. */
         return false;
     }
 }

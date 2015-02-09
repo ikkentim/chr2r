@@ -1,8 +1,8 @@
+#pragma once
+
 #include <stdio.h>
 #include "Actor.h"
 #include "SpriteSheet.h"
-
-#pragma once
 
 class Ennemis : public Actor {
 public:
@@ -11,5 +11,5 @@ public:
     void GoLeft(double);
     void GoRight(double);
 	void Render(Viewport &);
-	void Update(float, Keys);
+	void Update(double, Keys);
 };

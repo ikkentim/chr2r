@@ -1,10 +1,10 @@
+#pragma once
+
 #include "Scene.h"
 #include "LevelManager.h"
 #include "Player.h"
 #include "Ennemis.h"
 #include "GameWindow.h"
-
-#pragma once
 
 class GameScene : public Scene {
 public:

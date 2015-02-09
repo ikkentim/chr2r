@@ -1,100 +1,101 @@
 #include "GameObject.h"
 #include "Rectangle.h"
 #include <algorithm>
-
-GameObject::GameObject() :position_({}), velocity_({}) {
-
-}
-GameObject::GameObject(Vector2 pos, Vector2 size) : position_(pos), size_(size), velocity_({}) {
-
-}
-
-bool GameObject::FixCollider(GameObject *object, Vector2 &overlapping)
-{
-	// if this object's velocity is 0,0. The other object is the problem so that one has to fix it
-	if (this->Velocity() == Vector2(0, 0))
-		return true;
-
-	bool x = true;
-	bool y = true;
-
-	if (CheckCollidingVelocity(this, object, x, y))
-	{
-        double max = std::max(this->Velocity().x, this->Velocity().y) + 1;
-
-        double xMinus = (Velocity().x / max * 2) * -1;
-        double yMinus = (Velocity().y / max * 2) * -1;
-
-		for (int i = 0; i < max; i++)
-		{
-			if (y)
-			{
-				overlapping.y += yMinus;
-				velocity_.y += yMinus;
-			}
-
-			if (x)
-			{
-				overlapping.x += xMinus;
-				velocity_.x += xMinus;
-			}
+#include <vector>
+#include <Windows.h>
 
 
-			if (!CheckCollidingVelocity(this, object, x, y))
-				return false;
-		}
-	}
-
-	return true;
+GameObject::GameObject() 
+    :position_({}), velocity_({}) {
 }
 
-bool GameObject::CheckCollidingVelocity(GameObject *go1, GameObject *go2, bool &x, bool &y)
-{
-	x = false;
-	y = false;
-
-	if (!IsIntersecting(go1, go2))
-		return false;
-	
-	// keep a backup of the original velocity because we're changing them for detection
-	Vector2 oldVelocity = velocity_;
-	
-	// check if we set velocity x to 0 if the collision is fixed, this proves that x is (part of) the problem
-	velocity_.x = 0;
-	if (!IsIntersecting(go1, go2))
-		x = true;
-	velocity_.x = oldVelocity.x;
-
-	// check if we set velocity y to 0 if the collision is fixed, this proves that y is (part of) the problem
-	velocity_.y = 0;
-	if (!IsIntersecting(go1, go2))
-		y = true;
-	velocity_.y = oldVelocity.y;
-
-	return true;
+GameObject::GameObject(bool isMovable) 
+    :isMovable_(isMovable), position_({}), velocity_({}) {
 }
 
-bool GameObject::IsIntersecting(GameObject * go1, GameObject * go2)
-{
-	return !(go1->Position().x + go1->Velocity().x >= go2->Position().x + go2->Size().x
-		|| go1->Position().x + go1->Size().x + go1->Velocity().x <= go2->Position().x
-		|| go1->Position().y + go1->Velocity().y >= go2->Position().y + go2->Size().y
-		|| go1->Position().y + go1->Size().y + go1->Velocity().y <= go2->Position().y);
+GameObject::GameObject(Vector2 pos, Vector2 size) 
+    :position_(pos), size_(size), velocity_({}) {
 }
 
-bool GameObject::InRange(GameObject *go, double range)
-{
-    double actualRange = sqrt(pow((position_.x - go->Position().x), 2) + pow((position_.y - go->Position().y), 2));
-
-	return (actualRange <= range);
+GameObject::GameObject(bool isMovable, Vector2 pos, Vector2 size) 
+    :isMovable_(isMovable), position_(pos), size_(size), velocity_({}) {
 }
 
-void GameObject::ApplyVelocity(double delta)
-{
-	position_ += velocity_;
+void GameObject::ApplyVelocity(double delta) {
+	position_ += velocity_ * delta;
 }
 
-void GameObject::EnteredCollision(GameObject *collider, Vector2 &overlapped)
-{
+bool GameObject::IsCollidingWith(GameObject *other, double delta) {
+    Vector2 position = position_ + velocity_ * delta;
+
+    /* FIXME: Take velocity into account? */
+    Vector2 other_position = other->position_;
+
+    /* TODO: Optimalisations. */
+    double maxy1 = position.y + size_.y / 2;
+    double maxy2 = other_position.y + other->size_.y / 2;
+
+    double miny1 = position.y - size_.y / 2;
+    double miny2 = other_position.y - other->size_.y / 2;
+
+    double maxx1 = position.x + size_.x / 2;
+    double maxx2 = other_position.x + other->size_.x / 2;
+
+    double minx1 = position.x - size_.x / 2;
+    double minx2 = other_position.x - other->size_.x / 2;
+
+    return !(minx1 >= maxx2 || maxx1 <= minx2 ||
+        miny1 >= maxy2 || maxy1 <= miny2);
+}
+
+void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
+    bool has_touched_ground = false;
+
+    for (LevelLayer::iterator iter = layer->begin(); 
+        iter != layer->end(); ++iter) {
+        GameObject *check = *iter;
+
+        /* Don't check collision with yourself. */
+        if (this == check) {
+            continue;
+        }
+
+        if (IsCollidingWith(check, delta)) {
+            /* notify children. */
+            EnteredCollision(check);
+
+            Vector2 offset_before = position_ - check->position_;
+            Vector2 offset_prevented = position_ + velocity_ * delta - 
+                check->position_;
+
+            double min_distance_x = (size_.x + check->size_.x) / 2;
+            double min_distance_y = (size_.y + check->size_.y) / 2;
+
+            if (abs((offset_before.x) / min_distance_x) >
+                abs((offset_before.y) / min_distance_y)) {
+                /* Move X axis to free worldspace. */
+                position_.x = offset_before.x < 0
+                    ? check->position_.x - min_distance_x
+                    : check->position_.x + min_distance_x;
+
+                /* FIXME: if x is fractionally colliding, do not modify velocity. */
+                // velocity_.x = 0;
+            }
+            else {
+                has_touched_ground = has_touched_ground || offset_before.y < 0;
+                /* Move Y axis to free worldspace. */
+                position_.y = offset_before.y < 0
+                    ? check->position_.y - min_distance_y
+                    : check->position_.y + min_distance_y;
+
+                velocity_.y = 0;
+            }
+        }
+    }
+
+    onGround_ = has_touched_ground;
+}
+
+void GameObject::EnteredCollision(GameObject *collider) {
 	
 }

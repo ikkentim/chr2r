@@ -1,7 +1,7 @@
+#pragma once
+
 #include <math.h>
 #include <assert.h>
-
-#pragma once
 
 struct Vector2 {
     double x;
@@ -56,8 +56,17 @@ struct Vector2 {
 
 		if (abs(x) < max) return;
 
-		x = max;
+		x = x < 0 ? -max : max;
 	}
+
+    void TruncateY(double max)
+    {
+        assert(max > 0);
+
+        if (abs(y) < max) return;
+
+        y = y < 0 ? -max : max;
+    }
 
     inline double Distance(const Vector2 &v2) {
         return sqrt(DistanceSq(v2));

@@ -6,8 +6,8 @@
 #define WALK_ACCEL  (250.0)
 #define WALK_SPEED  (250.0)
 #define GRAVITY     (981.0)
-#define FRICTION	(150.0)
-#define JUMPPOW		(-250.0)
+#define FRICTION	(500.0)
+#define JUMPPOW		(-300.0)
 
 Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
 }
@@ -30,10 +30,8 @@ void Player::Update(double delta, Keys keys) {
 	} else if (velocity_.x < 0) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
     }
-	if (keys & KEY_JUMP && onGround) { 
+    if (keys & KEY_JUMP && IsOnGround()) {
 		velocity_.y = JUMPPOW;
-
-		onGround = false;
     }
 
 	Falling(hGrav, delta);
@@ -43,22 +41,22 @@ void Player::Update(double delta, Keys keys) {
 	if (velocity_ == Vector2(0, 0)){
 		//Draw animation when you don't move
 	}
-	else if (velocity_.x > 0 && onGround == true){
+    else if (velocity_.x > 0 && IsOnGround() == true){
 		//Draw animation when you go right
 	}
-	else if (velocity_.x < 0 && onGround == true){
+    else if (velocity_.x < 0 && IsOnGround() == true){
 		//Draw animation when you go left
 	}
-	else if (onGround == false && velocity_.y > 0 && velocity_.x >0){
+    else if (IsOnGround() == false && velocity_.y > 0 && velocity_.x >0){
 		//Draw animation when you jump right
 	}
-	else if (onGround == false && velocity_.y < 0 && velocity_.x >0){
+    else if (IsOnGround() == false && velocity_.y < 0 && velocity_.x >0){
 		//Draw animation when you fall right
 	}
-	else if (onGround == false && velocity_.y > 0 && velocity_.x <0){
+    else if (IsOnGround() == false && velocity_.y > 0 && velocity_.x <0){
 		//Draw animation when you jump left
 	}
-	else if (onGround == false && velocity_.y < 0 && velocity_.x <0){
+    else if (IsOnGround() == false && velocity_.y < 0 && velocity_.x <0){
 		//Draw animation when you fall left
 	}
 
@@ -71,12 +69,4 @@ void Player::Render(Viewport &vp) {
     };
 
     SpriteSheet::terrain->Draw(texture, position_, vp);
-}
-
-void Player::EnteredCollision(GameObject *object, Vector2 &overlapped)
-{
-	if (overlapped.y < 0)
-		onGround = true;
-
-	Actor::EnteredCollision(object, overlapped);
 }

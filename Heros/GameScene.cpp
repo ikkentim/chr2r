@@ -1,40 +1,43 @@
 #include "GameScene.h"
 #include "Block.h"
 
-GameScene::GameScene(GameWindow *window) {
-    viewport_ = { 0, 0, 640, 480 };
+GameScene::GameScene(GameWindow *window)
+    :viewport_(Viewport(0, 0, 640, 480)) {
 
-    /* push basic level */
+    /* Load a level manager for testing purposes. */
     level_ = new LevelManager();
 
+    /* Load a player and an enemy for testing purposes. */
     Vector2 player_spawn = { 64, 48 };
 	Vector2 size = { 16, 16 };
 	player_ = new Player(player_spawn, size);
-
+    level_->PlayableLayer()->push_back(player_);
 
     Vector2 ennemis_spawn = { 80, 50 };
     ennemis_ = new Ennemis( ennemis_spawn, size );
+    level_->PlayableLayer()->push_back(ennemis_);
 
+    /* Load a number of object for testing purposes. */
 	Texture grass_top = { 444, 253, 16, 16 };
 	for (int x = 0; x < 15; x++) {
-		level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f }));
+		level_->PlayableLayer()->push_back(
+            new Block(grass_top, { 16.0f * x, 256.0f }));
 	}
 
 	for (int x = 0; x < 5; x++) {
-		level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 220.0f }));
+		level_->PlayableLayer()->push_back(
+            new Block(grass_top, { 16.0f * x, 220.0f }));
 	}
 
-
 	for (int x = 8; x < 15; x++) {
-		level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 190.0f }));
+		level_->PlayableLayer()->push_back(
+            new Block(grass_top, { 16.0f * x, 190.0f }));
 	}
 
     for (int y = 0; y < 25; y++) {
-        level_->PlayableLayer()->push_back(new Block(grass_top, { 256.0f, 256.0f - 16.0f * y }));
+        level_->PlayableLayer()->push_back(
+            new Block(grass_top, { 256.0f, 256.0f - 16.0f * y }));
     }
-
-    level_->PlayableLayer()->push_back(player_);
-    level_->PlayableLayer()->push_back(ennemis_);
 
 }
 
@@ -47,8 +50,6 @@ GameScene::~GameScene() {
 void GameScene::Update(double delta, Keys keys) {
     LevelLayer *layer = level_->PlayableLayer();
 
-	GameObject *object;
-	GameObject *object2;
 
     /* Update all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
@@ -76,29 +77,12 @@ void GameScene::Update(double delta, Keys keys) {
     else if (posy > maxy) viewport_.y += posy - maxy;
 
 	/* Check collision on playerlayer */
-    
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		object = *it;
-
-		for (LevelLayer::iterator it2 = layer->begin(); it2 != layer->end(); ++it2) {
-			if (it == it2)
-				continue;
-
-			object2 = *it2;
-
-			Vector2 overlapping;
-
-			if (object->InRange(object2, (max(object->Size().x, object->Size().y) * 3)) && object->IsIntersecting(object, object2))
-			//if (object->IsIntersecting(object, object2))
-			{
-				overlapping = Vector2(0, 0);
-
-				object->FixCollider(object2, overlapping);
-
-				object->EnteredCollision(object2, overlapping);
-			}
-
-		}
+    for (LevelLayer::iterator iter = layer->begin(); 
+        iter != layer->end(); ++iter) {
+        GameObject *object = *iter;
+        if (object->IsMovable()) {
+            object->CheckForCollisions(layer, delta);
+        }
 	}
 
 	/* Apply all velocities */
@@ -114,12 +98,12 @@ void GameScene::Render(double delta) {
 
     /* Draw background */
     /* FIXME: Make LevelManager decide background */
-    const int image_width = 727;/* FIXME: backgrounds can have different widths */
+    /* FIXME: backgrounds can have different widths */
+    const int image_width = 727;
     Texture tex = { 0, 0, image_width, viewport_.height };
     for (int skyx = (viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
-        SpriteSheet::background01->Draw(tex,
-            viewport_.Position() + Vector2(skyx, 0), viewport_);
+        SpriteSheet::background01->Draw(tex, skyx, 0);
     }
 
     /* Render all layers */

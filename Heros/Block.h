@@ -1,6 +1,7 @@
+#pragma once
+
 #include "GameObject.h"
 #include "Texture.h"
-#pragma once
 
 class Block : public GameObject {
 public:

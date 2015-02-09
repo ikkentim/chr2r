@@ -22,5 +22,5 @@ int Fps::GetFps()
 		starttime = timepassed;
 	}
 
-	return fps;
+	return (int)fps;
 }

@@ -1,9 +1,6 @@
-#include <windows.h>
-#include <chrono>
-
-using namespace std::chrono;
-
 #pragma once
+
+#include <windows.h>
 
 class Window {
 public:

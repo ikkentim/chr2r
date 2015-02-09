@@ -1,9 +1,9 @@
+#pragma once
+
 #include <windows.h>
 #include "Texture.h"
 #include "Vector2.h"
 #include "Viewport.h"
-
-#pragma once
 
 class SpriteSheet
 {
@@ -16,6 +16,7 @@ public:
     SpriteSheet(HWND, HDC, const char *, COLORREF = RGB(255, 128, 255));
     ~SpriteSheet(void);
     void Draw(Texture &, Vector2 &pos, Viewport &);
+    void Draw(Texture &, int offsetx, int offsety);
 
 private:
     HBITMAP bmpb;

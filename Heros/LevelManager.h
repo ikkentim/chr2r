@@ -1,9 +1,8 @@
-#include <vector>
-#include "GameObject.h"
-
 #pragma once
 
-typedef std::vector <GameObject *> LevelLayer;
+#include <vector>
+
+typedef std::vector <class GameObject *> LevelLayer;
 
 class LevelManager {
 public:

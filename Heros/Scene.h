@@ -1,7 +1,8 @@
+#pragma once
+
 #include <Windows.h>
 #include "Keys.h"
 
-#pragma once
 
 class Scene {
 public:

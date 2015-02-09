@@ -1,11 +1,10 @@
-#include "Actor.h"
-
 #pragma once
+
+#include "Actor.h"
 
 class Player : public Actor {
 public:
     Player(Vector2 position, Vector2 size);
-    void Update(double, Keys);
-	virtual void EnteredCollision(GameObject *, Vector2 &);
-    void Render(Viewport &);
+    void Update(double, Keys) override;
+    void Render(Viewport &) override;
 };

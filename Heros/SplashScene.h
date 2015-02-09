@@ -1,7 +1,7 @@
+#pragma once
+
 #include "Scene.h"
 #include "GameWindow.h"
-
-#pragma once
 
 class SplashScene : public Scene {
 public:
