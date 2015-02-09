@@ -44,8 +44,6 @@ int Window::Run() {
             /*while (stop_ - start_ < freq_ / fps_)
 				::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);*/
 
-            Rectangle(graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-
 			milliseconds nowms = duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch());
 
 			GameLoop((nowms.count() - lastframems_.count()) / 1000.0f);
