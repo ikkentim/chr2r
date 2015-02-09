@@ -9,7 +9,7 @@ GameObject::GameObject(Vector2 pos, Vector2 size) : position_(pos), size_(size),
 
 }
 
-bool GameObject::FixCollider(GameObject *object)
+bool GameObject::FixCollider(GameObject *object, Vector2 &overlapping)
 {
 	// if this object's velocity is 0,0. The other object is the problem so that one has to fix it
 	if (this->Velocity() == Vector2(0, 0))
@@ -27,11 +27,18 @@ bool GameObject::FixCollider(GameObject *object)
 
 		for (int i = 0; i < max; i++)
 		{
-			if (x)
-				velocity_.x += xMinus;
-
 			if (y)
+			{
+				overlapping.y += yMinus;
 				velocity_.y += yMinus;
+			}
+
+			if (x)
+			{
+				overlapping.x += xMinus;
+				velocity_.x += xMinus;
+			}
+				
 
 			if (!CheckCollidingVelocity(this, object, x, y))
 				return false;
@@ -77,7 +84,7 @@ bool GameObject::IsIntersecting(GameObject * go1, GameObject * go2)
 
 bool GameObject::InRange(GameObject *go, float range)
 {
-	float actualRange = sqrt(pow((position_.x - go->Position().x), 2) + pow((position_.y - go->Position().y), 2));
+	float actualRange = sqrt(pow((position_.x + velocity_.x - go->Position().x), 2) + pow((position_.y + velocity_.y - go->Position().y), 2));
 
 	return (actualRange <= range);
 }

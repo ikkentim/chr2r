@@ -27,7 +27,7 @@ void Player::Update(float delta, Keys keys) {
 	} else if (velocity_.x < 0) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
     }
-	if (keys & KEY_JUMP) { 
+	if (keys & KEY_JUMP && onGround) { 
 		velocity_.y = JUMPPOW;
 
 		onGround = false;
@@ -49,5 +49,8 @@ void Player::Render(Viewport &vp) {
 
 void Player::EnteredCollision(GameObject *object, Vector2 &overlapped)
 {
+	if (overlapped.y < 0)
+		onGround = true;
+
 	Actor::EnteredCollision(object, overlapped);
 }
