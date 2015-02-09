@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "SpriteSheet.h"
 #include <stdio.h>
+#include <time.h>
 
 #define WALK_ACCEL  (250.0)
 #define WALK_SPEED  (250.0)
@@ -29,7 +30,7 @@ void Player::Update(double delta, Keys keys) {
 	} else if (velocity_.x < 0) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
     }
-	if (keys & KEY_JUMP) { 
+	if (keys & KEY_JUMP && onGround) { 
 		velocity_.y = JUMPPOW;
 
 		onGround = false;
@@ -38,6 +39,29 @@ void Player::Update(double delta, Keys keys) {
 	Falling(hGrav, delta);
 
     velocity_.TruncateX(WALK_SPEED);
+
+	if (velocity_ == Vector2(0, 0)){
+		//Draw animation when you don't move
+	}
+	else if (velocity_.x > 0 && onGround == true){
+		//Draw animation when you go right
+	}
+	else if (velocity_.x < 0 && onGround == true){
+		//Draw animation when you go left
+	}
+	else if (onGround == false && velocity_.y > 0 && velocity_.x >0){
+		//Draw animation when you jump right
+	}
+	else if (onGround == false && velocity_.y < 0 && velocity_.x >0){
+		//Draw animation when you fall right
+	}
+	else if (onGround == false && velocity_.y > 0 && velocity_.x <0){
+		//Draw animation when you jump left
+	}
+	else if (onGround == false && velocity_.y < 0 && velocity_.x <0){
+		//Draw animation when you fall left
+	}
+
 }
 
 void Player::Render(Viewport &vp) {
@@ -51,5 +75,8 @@ void Player::Render(Viewport &vp) {
 
 void Player::EnteredCollision(GameObject *object, Vector2 &overlapped)
 {
+	if (overlapped.y < 0)
+		onGround = true;
+
 	Actor::EnteredCollision(object, overlapped);
 }

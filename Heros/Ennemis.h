@@ -11,13 +11,5 @@ public:
     void GoLeft(double);
     void GoRight(double);
 	void Render(Viewport &);
-	void Update(double, Keys);
-	
-
-private: 
-	bool collision = false;
-	bool jump = true;
-
-	
-
+	void Update(float, Keys);
 };

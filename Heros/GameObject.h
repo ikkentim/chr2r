@@ -22,7 +22,7 @@ public:
 	virtual void EnteredCollision(GameObject *, Vector2 &);
     virtual void ApplyVelocity(double);
 
-	bool FixCollider(GameObject *);
+	bool FixCollider(GameObject *, Vector2 &);
 	bool CheckCollidingVelocity(GameObject *, GameObject *, bool &, bool &);
 	bool IsIntersecting(GameObject *, GameObject *);
     bool InRange(GameObject *, double range);

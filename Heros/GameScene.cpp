@@ -34,7 +34,7 @@ GameScene::GameScene(GameWindow *window) {
     }
 
     level_->PlayableLayer()->push_back(player_);
-    //level_->PlayableLayer()->push_back(ennemis_);
+    level_->PlayableLayer()->push_back(ennemis_);
 
 }
 
@@ -88,10 +88,12 @@ void GameScene::Update(double delta, Keys keys) {
 
 			Vector2 overlapping;
 
-			//if (object->InRange(object2, max(object->Size().x, object->Size().y)) && object->IsIntersecting(object, object2))
-			if (object->IsIntersecting(object, object2))
+			if (object->InRange(object2, (max(object->Size().x, object->Size().y) * 3)) && object->IsIntersecting(object, object2))
+			//if (object->IsIntersecting(object, object2))
 			{
-				object->FixCollider(object2);
+				overlapping = Vector2(0, 0);
+
+				object->FixCollider(object2, overlapping);
 
 				object->EnteredCollision(object2, overlapping);
 			}
