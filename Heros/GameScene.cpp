@@ -9,7 +9,9 @@ GameScene::GameScene(GameWindow *window) {
 
     Vector2 player_spawn = { 64, 48 };
 	Vector2 size = { 16, 16 };
-	player_ = new Player(player_spawn, size);
+	Vector2 Psize = { 24 , 40 };
+	player_ = new Player(player_spawn, Psize);
+	
 
 
     Vector2 ennemis_spawn = { 80, 50 };

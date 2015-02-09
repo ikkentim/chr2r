@@ -30,7 +30,7 @@ void GameWindow::GameInit() {
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
     SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
     SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
-	SpriteSheet::character = new SpriteSheet(hWnd_, graphics_, "DocChar.bmp");
+	SpriteSheet::character = new SpriteSheet(hWnd_, graphics_, "spr/DocChar.bmp");
 
     soundEngine_ = irrklang::createIrrKlangDevice();
 
