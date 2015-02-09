@@ -70,7 +70,7 @@ void GameWindow::GameLoop(float delta) {
 #ifdef SHOW_FPS
 	fps.Update();
 
-	TCHAR buf[4];
+	TCHAR buf[8];
 	std::sprintf(buf, "%d", fps.GetFps());
 
 	TextOut(graphics_, 10, 10, buf, 3);
