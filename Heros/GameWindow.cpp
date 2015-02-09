@@ -27,7 +27,6 @@ irrklang::ISoundEngine *GameWindow::SoundEngine() {
 }
 
 void GameWindow::GameInit() {
-    SetFPS(60);
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
     SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
     SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");

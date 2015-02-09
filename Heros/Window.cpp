@@ -1,6 +1,7 @@
 #include "Window.h"
 #include <tchar.h>
 #include <math.h>
+#include <iostream>
 
 #define WINDOW_WIDTH    (640)
 #define WINDOW_HEIGHT   (480)
@@ -22,15 +23,19 @@ Window::Window() {
 	this->hIcon_				= LoadIcon(instance_, (LPCTSTR)IDI_APPLICATION);
 	this->strWindowTitle_		= _T("Heros");
 
-    ::QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
+    
 
-    fps_ = (int)freq_;
-
-	lastframems_ = duration_cast< milliseconds >(high_resolution_clock::now().time_since_epoch());
 }
 
 int Window::Run() {
     MSG msg = { 0 };
+
+    INT64 frequency;
+    ::QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+
+    INT64 lastTick;
+
+    ::QueryPerformanceCounter((LARGE_INTEGER*)&lastTick);
 
     while (msg.message != WM_QUIT) {
         if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE)) {
@@ -38,22 +43,18 @@ int Window::Run() {
             DispatchMessage(&msg);
         }
         else {
-            ::QueryPerformanceCounter((LARGE_INTEGER*)&start_);
-            stop_ = start_;
+            INT64 tick;
+            ::QueryPerformanceCounter((LARGE_INTEGER*)&tick);
 
-            /*while (stop_ - start_ < freq_ / fps_)
-				::QueryPerformanceCounter((LARGE_INTEGER*)&stop_);*/
-
-			milliseconds nowms = duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch());
-
-			GameLoop((nowms.count() - lastframems_.count()) / 1000.0f);
+            GameLoop((float)(tick - lastTick) / (float)frequency);
 
 			StretchBlt(dc_, drawRect_.left, drawRect_.top, 
 				drawRect_.right - drawRect_.left, 
                 drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
-	        }
 
-		lastframems_ = duration_cast< milliseconds >(high_resolution_clock::now().time_since_epoch());
+            lastTick = tick;
+	    }
+
     }
 
     GameEnd();
@@ -171,9 +172,4 @@ LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
    }
    return 0;
-}
-
-void Window::SetFPS(int fps) {
-    if (fps > 0 && fps < freq_)
-        this->fps_ = fps;
 }
