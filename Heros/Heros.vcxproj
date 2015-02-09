@@ -85,7 +85,7 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Ennemis.cpp" />
-    <ClCompile Include="fps.cpp" />
+    <ClCompile Include="Fps.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
@@ -100,7 +100,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Ennemis.h" />
-    <ClInclude Include="fps.h" />
+    <ClInclude Include="Fps.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />

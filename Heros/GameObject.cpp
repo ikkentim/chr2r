@@ -20,10 +20,11 @@ bool GameObject::FixCollider(GameObject *object, Vector2 &overlapping)
 
 	if (CheckCollidingVelocity(this, object, x, y))
 	{
-		float max = std::max(this->Velocity().x, this->Velocity().y) + 1;
+		int precision = 10;
+		float max = (std::max(this->Velocity().x, this->Velocity().y) + 1) * precision;
 
-		float xMinus = (Velocity().x / max * 2) * -1;
-		float yMinus = (Velocity().y / max * 2) * -1;
+		float xMinus = (Velocity().x / max) * -1;
+		float yMinus = (Velocity().y / max) * -1;
 
 		for (int i = 0; i < max; i++)
 		{
