@@ -10,7 +10,8 @@ GameScene::GameScene(GameWindow *window)
     /* Load a player and an enemy for testing purposes. */
     Vector2 player_spawn = { 64, 48 };
 	Vector2 size = { 16, 16 };
-	player_ = new Player(player_spawn, size);
+	Vector2 Psize = { 24 , 40 };
+	player_ = new Player(player_spawn, Psize);
     level_->PlayableLayer()->push_back(player_);
 
     Vector2 ennemis_spawn = { 80, 50 };
@@ -90,7 +91,6 @@ void GameScene::Update(double delta, Keys keys) {
 		GameObject *object = *it;
 		object->ApplyVelocity(delta);
 	}
-
 }
 
 void GameScene::Render(double delta) {
@@ -104,11 +104,11 @@ void GameScene::Render(double delta) {
     for (int skyx = (viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
         SpriteSheet::background01->Draw(tex, skyx, 0);
-    }
+	}
 
-    /* Render all layers */
-    for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-        GameObject *object = *it;
-        object->Render(viewport_);
-    }
+	/* Render all layers */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+		object->Render(viewport_);
+	}
 }
