@@ -12,12 +12,4 @@ public:
 	void GoRight(float);
 	void Render(Viewport &);
 	void Update(float, Keys);
-	
-
-private: 
-	bool collision = false;
-	bool jump = true;
-
-	
-
 };

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "SpriteSheet.h"
 #include <stdio.h>
+#include <time.h>
 
 #define WALK_ACCEL  (5.0f)
 #define WALK_SPEED  (5.0f)
@@ -28,6 +29,7 @@ void Player::Update(float delta, Keys keys) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
     }
 	if (keys & KEY_JUMP) { 
+		
 		velocity_.y = JUMPPOW;
 
 		onGround = false;
@@ -36,6 +38,29 @@ void Player::Update(float delta, Keys keys) {
 	Falling(hGrav, delta);
 
     velocity_.TruncateX(WALK_SPEED);
+
+	if (velocity_ == Vector2(0, 0)){
+		//Draw animation when you don't move
+	}
+	else if (velocity_.x > 0 && onGround == true){
+		//Draw animation when you go right
+	}
+	else if (velocity_.x < 0 && onGround == true){
+		//Draw animation when you go left
+	}
+	else if (onGround == false && velocity_.y > 0 && velocity_.x >0){
+		//Draw animation when you jump right
+	}
+	else if (onGround == false && velocity_.y < 0 && velocity_.x >0){
+		//Draw animation when you fall right
+	}
+	else if (onGround == false && velocity_.y > 0 && velocity_.x <0){
+		//Draw animation when you jump left
+	}
+	else if (onGround == false && velocity_.y < 0 && velocity_.x <0){
+		//Draw animation when you fall left
+	}
+
 }
 
 void Player::Render(Viewport &vp) {

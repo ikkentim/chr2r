@@ -31,6 +31,7 @@ void GameWindow::GameInit() {
     SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
     SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
     SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
+	SpriteSheet::character = new SpriteSheet(hWnd_, graphics_, "DocChar.bmp");
 
     soundEngine_ = irrklang::createIrrKlangDevice();
 
@@ -44,6 +45,7 @@ void GameWindow::GameEnd() {
     delete SpriteSheet::terrain;
     delete SpriteSheet::splash;
     delete SpriteSheet::background01;
+	delete SpriteSheet::character;
 
     soundEngine_->drop();
 }

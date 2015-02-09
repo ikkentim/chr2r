@@ -11,6 +11,7 @@ public:
     static SpriteSheet *terrain;
     static SpriteSheet *splash;
     static SpriteSheet *background01;
+	static SpriteSheet *character;
 
     SpriteSheet(HWND, HDC, const char *, COLORREF = RGB(255, 128, 255));
     ~SpriteSheet(void);
