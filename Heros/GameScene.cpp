@@ -106,7 +106,20 @@ void GameScene::Render(double delta) {
         SpriteSheet::background01->Draw(tex, skyx, 0);
 	}
 
+	LevelLayer *layer;
+
+	layer = level_->BackgroundLayer();
 	/* Render all layers */
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+		object->Render(viewport_);
+	}
+	layer = level_->PlayableLayer();
+	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
+		GameObject *object = *it;
+		object->Render(viewport_);
+	}
+	layer = level_->ForegroundLayer();
 	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
 		GameObject *object = *it;
 		object->Render(viewport_);
