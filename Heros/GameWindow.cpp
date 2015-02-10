@@ -63,6 +63,8 @@ bool GameWindow::GameLoop(double delta) {
 
     MAP_KEY(VK_LEFT, KEY_LEFT);
     MAP_KEY(VK_RIGHT, KEY_RIGHT);
+    MAP_KEY(VK_UP, KEY_UP);
+    MAP_KEY(VK_DOWN, KEY_DOWN);
     MAP_KEY(VK_SPACE, KEY_JUMP);
 
 #undef MAP_KEY

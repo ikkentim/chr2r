@@ -16,8 +16,8 @@ GameScene::GameScene(GameWindow *window)
 	Texture air_block = { 257, 97, 16, 16 };
 	Texture question = { 208, 181, 16, 16 };
 
-	Texture pipe_tl = { 1, 179, 16, 16 };
-	Texture pipe_tr = { 19, 179, 16, 16 };
+	Texture pipe_tl = { 1, 179, 16, 15 };
+	Texture pipe_tr = { 19, 179, 16, 15 };
 	Texture pipe_bl = { 1, 195, 16, 16 };
 	Texture pipe_br = { 19, 195, 16, 16 };
 
@@ -25,14 +25,10 @@ GameScene::GameScene(GameWindow *window)
     level_ = new LevelManager();
 
     /* Load a player and an enemy for testing purposes. */
-    Vector2 player_spawn = { 16, 240 };
-	Vector2 size = { 16, 16 };
-	Vector2 Psize = { 16 , 27 };
-	player_ = new Player(player_spawn, Psize);
+    player_ = new Player(Vector2(16, 240), Vector2(14, 27));
     level_->PlayableLayer()->push_back(player_);
 
-	Vector2 ennemis_spawn = { 80, 240 };
-	ennemis_ = new Ennemis(ennemis_spawn, size);
+    ennemis_ = new Ennemis(Vector2(80, 240), Vector2(16, 16));
 	level_->PlayableLayer()->push_back(ennemis_);
 
 	/* Load a number of object for testing purposes. */

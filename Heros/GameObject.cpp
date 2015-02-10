@@ -44,8 +44,8 @@ bool GameObject::IsCollidingWith(GameObject *other, double delta) {
     double minx1 = position.x - size_.x / 2;
     double minx2 = other_position.x - other->size_.x / 2;
 
-    return !(minx1 >= maxx2 || maxx1 <= minx2 ||
-        miny1 >= maxy2 || maxy1 <= miny2);
+    return !(minx1 > maxx2 || maxx1 < minx2 ||
+        miny1 > maxy2 || maxy1 < miny2);
 }
 
 void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
@@ -56,7 +56,8 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
         GameObject *check = *iter;
 
         /* Don't check collision with yourself or objects that are twice your size + velocity away. */
-		if (this == check || !InRange(check, max(size_.x + velocity_.x, size_.y + velocity_.y) * 2)) {
+        //if (!InRange(check, max(size_.x + velocity_.x, size_.y + velocity_.y) * 2)) continue;
+		if (this == check) {
             continue;
         }
 

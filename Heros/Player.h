@@ -11,6 +11,8 @@ public:
 		JUMP_LEFT,
 		FALL_RIGHT,
 		FALL_LEFT,
+        DUCK_RIGHT,
+        DUCK_LEFT,
 		IDLE
 	};
 
@@ -18,6 +20,7 @@ public:
     void Update(double, Keys) override;
     void Render(Viewport &) override;
 private:
+    bool isDucking_ = false;
 	double animationTime_ = 0;
 	int animationIndex_ = 0;
     int animationFrames_ = 1;

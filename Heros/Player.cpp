@@ -17,35 +17,41 @@ Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
 
 Player::AnimationState Player::GetAnimationState(int &frames) {
     frames = 1;
-    if (velocity_.IsZero()){ /* Not moving at all */
+    if (isDucking_) { /* Is ducking. */
+        if (velocity_.x < 0) { /* Is moving left. */
+            return DUCK_LEFT;
+        }
+        return DUCK_RIGHT;
+    }
+    else if (velocity_.IsZero()){ /* Not moving at all. */
         return IDLE;
     }
-    else if (IsOnGround()) {/* Is on ground */
+    else if (IsOnGround()) {/* Is on ground. */
         
-        if (velocity_.x > 0) { /* Is moving right */
+        if (velocity_.x > 0) { /* Is moving right. */
             frames = 3;
             return RUN_RIGHT;
         }
-        if (velocity_.x < 0) { /* Is moving left */
+        if (velocity_.x < 0) { /* Is moving left. */
             frames = 3;
             return RUN_LEFT;
         }
         return IDLE;
     }
     else {
-        if (velocity_.y < -0.1f) { /* Jumping */
-            if (velocity_.x > 0) { /* Is moving right or straight up */
+        if (velocity_.y < -0.1f) { /* Jumping. */
+            if (velocity_.x >= 0) { /* Is moving right or straight up. */
                 return JUMP_RIGHT;
             }
-            if (velocity_.x <= 0) { /* Is moving left */
+            if (velocity_.x < 0) { /* Is moving left. */
                 return JUMP_LEFT;
             }
         }
         else { /* Falling */
-            if (velocity_.x > 0) { /* Is moving right or straight up */
+            if (velocity_.x >= 0) { /* Is moving right or straight up. */
                 return FALL_RIGHT;
             }
-            if (velocity_.x <= 0) { /* Is moving left */
+            if (velocity_.x < 0) { /* Is moving left. */
                 return FALL_LEFT;
             }
         }
@@ -58,13 +64,13 @@ void Player::Update(double delta, Keys keys) {
 	animationTime_ += delta;
 
 
-    if (keys & KEY_RIGHT) {
+    if (!(keys & KEY_DOWN) && keys & KEY_RIGHT) {
         velocity_ += (hAccel * delta);
 	} else if (velocity_.x > 0) {
         velocity_ += velocity_ < (hDecel * delta) ? -velocity_ : (-hDecel * delta);
     }
 
-	if (keys & KEY_LEFT) {
+    if (!(keys & KEY_DOWN) && keys & KEY_LEFT) {
 		velocity_ -= (hAccel * delta);
 	} else if (velocity_.x < 0) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
@@ -73,8 +79,10 @@ void Player::Update(double delta, Keys keys) {
 		velocity_.y = JUMPPOW;
     }
 
-	Falling(hGrav, delta);
+    isDucking_ = !!(keys & KEY_DOWN);
 
+	Falling(hGrav, delta);
+    
     velocity_.TruncateX(WALK_SPEED);
 
     AnimationState new_state = GetAnimationState(animationFrames_);
@@ -115,6 +123,14 @@ void Player::Render(Viewport &vp) {
     Texture texture = { 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT };
 
     switch (state_) {
+    case DUCK_RIGHT:
+        texture.left = 0 * TEXTURE_WIDTH;
+        texture.top = 1 * TEXTURE_HEIGHT;
+        break;
+    case DUCK_LEFT:
+        texture.left = 0 * TEXTURE_WIDTH;
+        texture.top = 0 * TEXTURE_HEIGHT;
+        break;
     case RUN_RIGHT:
         texture.left = 2 * TEXTURE_WIDTH;
         texture.top = 1 * TEXTURE_HEIGHT;
