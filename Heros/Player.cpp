@@ -87,9 +87,7 @@ void Player::Update(double delta, Keys keys) {
     if (keys & KEY_JUMP && IsOnGround()) {
         velocity_.y = JUMPPOW;
 
-        auto sound = soundEngine_->play2D("snd/smb_jump-small.wav", false, false, true);
-        sound->setVolume(0.5f);
-        sound->drop();
+        soundEngine_->play2D("snd/smb_jump-small.wav");
     }
 
     isDucking_ = !!(keys & KEY_DOWN);

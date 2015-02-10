@@ -36,10 +36,12 @@ void GameWindow::GameInit() {
     SpriteSheet::character = new SpriteSheet(hWnd_, graphics_, "spr/DocChar.bmp");
     SpriteSheet::mario = new SpriteSheet(hWnd_, graphics_, "spr/mario.bmp");
 
-    soundEngine_ = irrklang::createIrrKlangDevice();
+    soundEngine_ = irrklang::createIrrKlangDevice(); 
+    
+    assert(soundEngine_ && "Sound engine failed to load (missing resources?)");
 
-    if (!soundEngine_)
-        return;
+    soundEngine_->setSoundVolume(0.3f);/* Master Volume. */
+
 
     scene_ = new SplashScene(this);
 }

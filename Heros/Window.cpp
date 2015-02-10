@@ -29,11 +29,11 @@ Window::Window() {
 
 int Window::Run() {
     MSG msg = { 0 };
-
     INT64 frequency;
+    INT64 lastTick;
+
     ::QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
 
-    INT64 lastTick;
 
     ::QueryPerformanceCounter((LARGE_INTEGER*)&lastTick);
 
@@ -46,7 +46,8 @@ int Window::Run() {
             INT64 tick;
             ::QueryPerformanceCounter((LARGE_INTEGER*)&tick);
 
-            if (GameLoop((double)(tick - lastTick) / (double)frequency)) {
+                if (GetFocus() == hWnd_ &&
+                GameLoop((double)(tick - lastTick) / (double)frequency)) {
                 StretchBlt(dc_, drawRect_.left, drawRect_.top,
                     drawRect_.right - drawRect_.left,
                     drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);

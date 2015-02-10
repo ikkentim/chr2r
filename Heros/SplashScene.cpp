@@ -2,10 +2,7 @@
 #include "GameScene.h"
 
 SplashScene::SplashScene(GameWindow *window) :time_(0.0f), window_(window) {
-    auto tune = window->SoundEngine()
-        ->play2D("snd/smb_coin.wav", false, false, true);
-    tune->setVolume(0.3f);
-    tune->drop();
+    window->SoundEngine()->play2D("snd/smb_coin.wav");
 }
 
 SplashScene::~SplashScene() {

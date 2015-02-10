@@ -6,9 +6,7 @@
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     /* Start some testing sounds */
-    auto sound = SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true, false, true);
-    sound->setVolume(0.2f);
-    sound->drop();
+    SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
 
 	Texture grass_top = { 444, 253, 16, 16 };
 	Texture grass_middle = { 444, 270, 16, 16 };
