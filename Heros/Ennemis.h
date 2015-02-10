@@ -10,6 +10,6 @@ public:
 	~Ennemis();
     void GoLeft(double);
     void GoRight(double);
-	void Render(Viewport &);
-	void Update(double, Keys);
+	void Render(Viewport &) override;
+    void Update(double, Keys) override;
 };

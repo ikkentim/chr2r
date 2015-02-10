@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "SpriteSheet.h"
+#include "GameScene.h"
 #include <stdio.h>
 
 #define WALK_ACCEL          (250.0)
@@ -10,9 +11,10 @@
 
 #define ANIMATION_INTERVAL  (0.1)
 #define TEXTURE_WIDTH       (22)
-#define TEXTURE_HEIGHT      (27)
+#define TEXTURE_HEIGHT      (28)
 
-Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
+Player::Player(GameScene *scene, Vector2 pos, Vector2 size) :Actor(pos, size) {
+    soundEngine_ = scene->SoundEngine();
 }
 
 Player::AnimationState Player::GetAnimationState(int &frames) {
@@ -29,10 +31,16 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
     else if (IsOnGround()) {/* Is on ground. */
         
         if (velocity_.x > 0) { /* Is moving right. */
+            if (keys_ & KEY_LEFT) {
+                return SLIDE_RIGHT;
+            }
             frames = 3;
             return RUN_RIGHT;
         }
         if (velocity_.x < 0) { /* Is moving left. */
+            if (keys_ & KEY_RIGHT) {
+                return SLIDE_LEFT;
+            }
             frames = 3;
             return RUN_LEFT;
         }
@@ -63,6 +71,7 @@ void Player::Update(double delta, Keys keys) {
 	Vector2 hGrav = { 0, GRAVITY };
 	animationTime_ += delta;
 
+    keys_ = keys;
 
     if (!(keys & KEY_DOWN) && keys & KEY_RIGHT) {
         velocity_ += (hAccel * delta);
@@ -76,7 +85,11 @@ void Player::Update(double delta, Keys keys) {
 		velocity_ -= velocity_ < (hDecel * delta) ? velocity_ : (-hDecel * delta);
     }
     if (keys & KEY_JUMP && IsOnGround()) {
-		velocity_.y = JUMPPOW;
+        velocity_.y = JUMPPOW;
+
+        auto sound = soundEngine_->play2D("snd/smb_jump-small.wav", false, false, true);
+        sound->setVolume(0.5f);
+        sound->drop();
     }
 
     isDucking_ = !!(keys & KEY_DOWN);
@@ -148,6 +161,14 @@ void Player::Render(Viewport &vp) {
     case FALL_LEFT:
         texture.left = 1 * TEXTURE_WIDTH;
         texture.top = 0 * TEXTURE_HEIGHT;
+        break;
+    case SLIDE_RIGHT:
+        texture.left = 1 * TEXTURE_WIDTH;
+        texture.top = 2 * TEXTURE_HEIGHT;
+        break;
+    case SLIDE_LEFT:
+        texture.left = 1 * TEXTURE_WIDTH;
+        texture.top = 3 * TEXTURE_HEIGHT;
         break;
     default: /* idle */
         texture.left = 4 * TEXTURE_WIDTH;

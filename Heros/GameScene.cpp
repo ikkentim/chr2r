@@ -1,8 +1,14 @@
 #include "GameScene.h"
 #include "Block.h"
 
+#include <irrKlang.h>
+
 GameScene::GameScene(GameWindow *window)
-	:viewport_(Viewport(0, 0, 640, 480)) {
+	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
+    /* Start some testing sounds */
+    auto sound = SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true, false, true);
+    sound->setVolume(0.2f);
+    sound->drop();
 
 	Texture grass_top = { 444, 253, 16, 16 };
 	Texture grass_middle = { 444, 270, 16, 16 };
@@ -25,7 +31,7 @@ GameScene::GameScene(GameWindow *window)
     level_ = new LevelManager();
 
     /* Load a player and an enemy for testing purposes. */
-    player_ = new Player(Vector2(16, 240), Vector2(14, 27));
+    player_ = new Player(this, Vector2(16, 240), Vector2(14, 27));
     level_->PlayableLayer()->push_back(player_);
 
     ennemis_ = new Ennemis(Vector2(80, 240), Vector2(16, 16));
@@ -94,7 +100,6 @@ GameScene::~GameScene() {
 
 void GameScene::Update(double delta, Keys keys) {
     LevelLayer *layer = level_->PlayableLayer();
-
 
     /* Update all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {

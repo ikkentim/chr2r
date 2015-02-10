@@ -31,7 +31,7 @@ void Ennemis::Render(Viewport &vp) {
 	SpriteSheet::terrain->Draw(texture, position_, vp);
 }
 
-void Ennemis::Update(double delta, Keys k){
+void Ennemis::Update(double delta, Keys keys){
 	Vector2 hGrav = { 0, GRAVITY };
 	if (position_.x > 200){
 		GoLeft(delta);
