@@ -16,7 +16,7 @@ void Player::Update(double delta, Keys keys) {
     Vector2 hAccel = { WALK_ACCEL, 0 };
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };
-	animationTime += delta;
+	animationTime += delta + 0.0003f;
 
 
     if (keys & KEY_RIGHT) {
@@ -49,7 +49,7 @@ void Player::Update(double delta, Keys keys) {
             animationTime = 0;
         }
 	}
-    else if (velocity_.x > 0 && IsOnGround() == true){
+    else if (velocity_.x > 0 && IsOnGround() == true /* && velocity_.y ==0*/) {
 		//Draw animation when you go right
 		if (state != GO_RIGHT){
 			state = GO_RIGHT;
@@ -60,7 +60,7 @@ void Player::Update(double delta, Keys keys) {
             animationTime = 0;
         }
 	}
-    else if (velocity_.x < 0 && IsOnGround() == true){
+	else if (velocity_.x < 0 && IsOnGround() == true /*&& velocity_.y == 0*/){
 		//Draw animation when you go left
 		if (state != GO_LEFT){
 			state = GO_LEFT;
@@ -71,7 +71,7 @@ void Player::Update(double delta, Keys keys) {
             animationTime = 0;
         }
 	}
-    else if (IsOnGround() == false && velocity_.y > 0 && velocity_.x >0){
+	else if (IsOnGround() == false && velocity_.y > 0.5f && velocity_.x >0){
 		//Draw animation when you jump right
 		if (state != JUMP_RIGHT){
 			state = JUMP_RIGHT;
@@ -94,7 +94,7 @@ void Player::Update(double delta, Keys keys) {
             animationTime = 0;
         }
 	}
-    else if (IsOnGround() == false && velocity_.y > 0 && velocity_.x <0){
+	else if (IsOnGround() == false && velocity_.y > 0.5f && velocity_.x <0){
 		//Draw animation when you jump left
 		if (state != JUMP_LEFT){
 			state = JUMP_LEFT;
@@ -148,7 +148,7 @@ void Player::Render(Viewport &vp) {
 		SpriteSheet::character->Draw(texture_Right, position_, vp);
 	else if (state == GO_LEFT)
 		SpriteSheet::character->Draw(texture_Left, position_, vp);
-	else if (state == JUMP_LEFT){
+	else if (state == JUMP_LEFT || state == JUMP_RIGHT){
 		SpriteSheet::character->Draw(texture_Jump, position_, vp);
 	}
 	else if (state == DONT_MOVE){
