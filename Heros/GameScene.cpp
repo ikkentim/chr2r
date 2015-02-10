@@ -37,7 +37,7 @@ GameScene::GameScene(GameWindow *window)
 
 	/* Load a number of object for testing purposes. */
 	for (int x = -10; x < 25; x++)
-		for (int y = 0; y < 40; y++)
+		for (int y = 0; y < 20; y++)
 			if (x == -10 && y == 0)
 				level_->PlayableLayer()->push_back(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }));
 			else if (x == 24 && y == 0)
@@ -52,8 +52,8 @@ GameScene::GameScene(GameWindow *window)
 				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
 
 	/* Load a number of object for testing purposes. */
-	for (int x = 28; x < 1000; x++)
-		for (int y = 0; y < 40; y++)
+	for (int x = 28; x < 100; x++)
+		for (int y = 0; y < 20; y++)
 			if (x == 28 && y == 0)
 				level_->PlayableLayer()->push_back(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }));
 			else if (x == 99 && y == 0)
