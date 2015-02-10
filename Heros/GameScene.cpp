@@ -78,8 +78,7 @@ void GameScene::Update(double delta, Keys keys) {
     else if (posy > maxy) viewport_.y += posy - maxy;
 
 	/* Check collision on playerlayer */
-    for (LevelLayer::iterator iter = layer->begin(); 
-        iter != layer->end(); ++iter) {
+    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
         if (object->IsMovable()) {
             object->CheckForCollisions(layer, delta);
@@ -94,7 +93,6 @@ void GameScene::Update(double delta, Keys keys) {
 }
 
 void GameScene::Render(double delta) {
-    LevelLayer *layer = level_->PlayableLayer();
 
     /* Draw background */
     /* FIXME: Make LevelManager decide background */
