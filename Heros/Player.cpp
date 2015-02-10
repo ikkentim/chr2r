@@ -6,7 +6,7 @@
 #define WALK_SPEED  (250.0)
 #define GRAVITY     (981.0)
 #define FRICTION	(500.0)
-#define JUMPPOW		(-300.0)
+#define JUMPPOW		(-400.0)
 
 
 Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
