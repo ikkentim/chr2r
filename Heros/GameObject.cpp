@@ -55,8 +55,8 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
         iter != layer->end(); ++iter) {
         GameObject *check = *iter;
 
-        /* Don't check collision with yourself. */
-        if (this == check) {
+        /* Don't check collision with yourself or objects that are twice your size + velocity away. */
+		if (this == check || !InRange(check, max(size_.x + velocity_.x, size_.y + velocity_.y) * 2)) {
             continue;
         }
 
@@ -94,6 +94,16 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
     }
 
     onGround_ = has_touched_ground;
+}
+
+double GameObject::Range(GameObject * object)
+{
+	return sqrt(pow(position_.x - object->Position().x, 2) + pow(position_.y - object->Position().y, 2));
+}
+
+bool GameObject::InRange(GameObject * object, int range)
+{
+	return Range(object) < range;
 }
 
 void GameObject::EnteredCollision(GameObject *collider) {

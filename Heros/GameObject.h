@@ -40,7 +40,9 @@ public:
     /* Collision */
     bool IsCollidingWith(GameObject *, double);
     void CheckForCollisions(LevelLayer *, double);
-    virtual void EnteredCollision(GameObject *);
+	virtual void EnteredCollision(GameObject *);
+	double Range(GameObject *);
+	bool InRange(GameObject *, int);
 protected:
 	Vector2 position_;
     Vector2 velocity_;
