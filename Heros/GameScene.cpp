@@ -2,44 +2,92 @@
 #include "Block.h"
 
 GameScene::GameScene(GameWindow *window)
-    :viewport_(Viewport(0, 0, 640, 480)) {
+	:viewport_(Viewport(0, 0, 640, 480)) {
+
+	Texture grass_top = { 444, 253, 16, 16 };
+	Texture grass_middle = { 444, 270, 16, 16 };
+
+	Texture grass_tl = { 427, 202, 16, 16 };
+	Texture grass_tr = { 461, 202, 16, 16 };
+
+	Texture grass_left = { 427, 219, 16, 16 };
+	Texture grass_right = { 461, 219, 16, 16 };
+
+	Texture air_block = { 257, 97, 16, 16 };
+	Texture question = { 208, 181, 16, 16 };
+
+	Texture pipe_tl = { 1, 179, 16, 16 };
+	Texture pipe_tr = { 19, 179, 16, 16 };
+	Texture pipe_bl = { 1, 195, 16, 16 };
+	Texture pipe_br = { 19, 195, 16, 16 };
 
     /* Load a level manager for testing purposes. */
     level_ = new LevelManager();
 
     /* Load a player and an enemy for testing purposes. */
-    Vector2 player_spawn = { 64, 48 };
+    Vector2 player_spawn = { 16, 240 };
 	Vector2 size = { 16, 16 };
 	Vector2 Psize = { 24 , 40 };
 	player_ = new Player(player_spawn, Psize);
     level_->PlayableLayer()->push_back(player_);
 
-    Vector2 ennemis_spawn = { 80, 50 };
-    ennemis_ = new Ennemis( ennemis_spawn, size );
-    level_->PlayableLayer()->push_back(ennemis_);
+	Vector2 ennemis_spawn = { 80, 240 };
+	ennemis_ = new Ennemis(ennemis_spawn, size);
+	level_->PlayableLayer()->push_back(ennemis_);
 
-    /* Load a number of object for testing purposes. */
-	Texture grass_top = { 444, 253, 16, 16 };
-	for (int x = 0; x < 15; x++) {
-		level_->PlayableLayer()->push_back(
-            new Block(grass_top, { 16.0f * x, 256.0f }));
+	/* Load a number of object for testing purposes. */
+	for (int x = -10; x < 25; x++)
+		for (int y = 0; y < 40; y++)
+			if (x == -10 && y == 0)
+				level_->PlayableLayer()->push_back(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }));
+			else if (x == 24 && y == 0)
+				level_->PlayableLayer()->push_back(new Block(grass_tr, { 16.0f * x, 256.0f + 16 * y }));
+			else if (y == 0)
+				level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f + 16 * y }));
+			else if (x == -10)
+				level_->ForegroundLayer()->push_back(new Block(grass_left, { 16.0f * x, 256.0f + 16 * y }));
+			else if (x == 24)
+				level_->ForegroundLayer()->push_back(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }));
+			else
+				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
+
+	/* Load a number of object for testing purposes. */
+	for (int x = 28; x < 1000; x++)
+		for (int y = 0; y < 40; y++)
+			if (x == 28 && y == 0)
+				level_->PlayableLayer()->push_back(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }));
+			else if (x == 99 && y == 0)
+				level_->PlayableLayer()->push_back(new Block(grass_tr, { 16.0f * x, 256.0f + 16 * y }));
+			else if (y == 0)
+				level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f + 16 * y }));
+			else if (x == 28)
+				level_->ForegroundLayer()->push_back(new Block(grass_left, { 16.0f * x, 256.0f + 16 * y }));
+			else if (x == 99)
+				level_->ForegroundLayer()->push_back(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }));
+			else
+				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
+
+	/* Load a number of object for testing purposes. */
+	for (int x = 0; x < 3; x++) {
+		level_->PlayableLayer()->push_back(new Block(air_block, { 96 + (16.0f * x), 192.0f }));
 	}
 
-	for (int x = 0; x < 5; x++) {
-		level_->PlayableLayer()->push_back(
-            new Block(grass_top, { 16.0f * x, 220.0f }));
+	/* Load a number of object for testing purposes. */
+	for (int x = 0; x < 4; x++) {
+		level_->PlayableLayer()->push_back(new Block(air_block, { 480 + (16.0f * x), 192 }));
 	}
 
-	for (int x = 8; x < 15; x++) {
-		level_->PlayableLayer()->push_back(
-            new Block(grass_top, { 16.0f * x, 190.0f }));
+	/* Load a number of object for testing purposes. */
+	for (int x = 0; x < 8; x++) {
+		level_->PlayableLayer()->push_back(new Block(air_block, { 544 + (16.0f * x), 128 }));
 	}
 
-    for (int y = 0; y < 25; y++) {
-        level_->PlayableLayer()->push_back(
-            new Block(grass_top, { 256.0f, 256.0f - 16.0f * y }));
-    }
+	level_->PlayableLayer()->push_back(new Block(question, { 112, 192.0f }));
 
+	level_->PlayableLayer()->push_back(new Block(pipe_tl, { 256, 224.0f }));
+	level_->PlayableLayer()->push_back(new Block(pipe_tr, { 272, 224.0f }));
+	level_->PlayableLayer()->push_back(new Block(pipe_bl, { 256, 240 }));
+	level_->PlayableLayer()->push_back(new Block(pipe_br, { 272, 240 }));
 }
 
 GameScene::~GameScene() {
