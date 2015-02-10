@@ -2,21 +2,60 @@
 #include "SpriteSheet.h"
 #include <stdio.h>
 
-#define WALK_ACCEL  (250.0)
-#define WALK_SPEED  (250.0)
-#define GRAVITY     (981.0)
-#define FRICTION	(500.0)
-#define JUMPPOW		(-400.0)
+#define WALK_ACCEL          (250.0)
+#define WALK_SPEED          (250.0)
+#define GRAVITY             (981.0)
+#define FRICTION	        (500.0)
+#define JUMPPOW		        (-400.0)
 
+#define ANIMATION_INTERVAL  (0.1)
+#define TEXTURE_WIDTH       (22)
+#define TEXTURE_HEIGHT      (27)
 
 Player::Player(Vector2 pos, Vector2 size) :Actor(pos, size) {
 }
 
+Player::AnimationState Player::GetAnimationState(int &frames) {
+    frames = 1;
+    if (velocity_.IsZero()){ /* Not moving at all */
+        return IDLE;
+    }
+    else if (IsOnGround()) {/* Is on ground */
+        
+        if (velocity_.x > 0) { /* Is moving right */
+            frames = 3;
+            return RUN_RIGHT;
+        }
+        if (velocity_.x < 0) { /* Is moving left */
+            frames = 3;
+            return RUN_LEFT;
+        }
+        return IDLE;
+    }
+    else {
+        if (velocity_.y < -0.1f) { /* Jumping */
+            if (velocity_.x > 0) { /* Is moving right or straight up */
+                return JUMP_RIGHT;
+            }
+            if (velocity_.x <= 0) { /* Is moving left */
+                return JUMP_LEFT;
+            }
+        }
+        else { /* Falling */
+            if (velocity_.x > 0) { /* Is moving right or straight up */
+                return FALL_RIGHT;
+            }
+            if (velocity_.x <= 0) { /* Is moving left */
+                return FALL_LEFT;
+            }
+        }
+    }
+}
 void Player::Update(double delta, Keys keys) {
     Vector2 hAccel = { WALK_ACCEL, 0 };
     Vector2 hDecel = { FRICTION, 0 };
 	Vector2 hGrav = { 0, GRAVITY };
-	animationTime += delta + 0.0003f;
+	animationTime_ += delta;
 
 
     if (keys & KEY_RIGHT) {
@@ -38,130 +77,75 @@ void Player::Update(double delta, Keys keys) {
 
     velocity_.TruncateX(WALK_SPEED);
 
-	if (velocity_ == Vector2(0, 0)){
-		//Draw animation when you don't move
-		if (state != DONT_MOVE){
-			state = DONT_MOVE;
-			animationIndex = 0;
-		}
-        if (animationTime > 1){
-            ++animationIndex;
-            animationTime = 0;
-        }
-	}
-    else if (velocity_.x > 0 && IsOnGround() == true /* && velocity_.y ==0*/) {
-		//Draw animation when you go right
-		if (state != GO_RIGHT){
-			state = GO_RIGHT;
-			animationIndex = 0;
-		}
-        if (animationTime > 1){
-            ++animationIndex;
-            animationTime = 0;
-        }
-	}
-	else if (velocity_.x < 0 && IsOnGround() == true /*&& velocity_.y == 0*/){
-		//Draw animation when you go left
-		if (state != GO_LEFT){
-			state = GO_LEFT;
-			animationIndex = 0;
-		}
-        if (animationTime > 1){
-            ++animationIndex;
-            animationTime = 0;
-        }
-	}
-	else if (IsOnGround() == false && velocity_.y > 0.5f && velocity_.x >0){
-		//Draw animation when you jump right
-		if (state != JUMP_RIGHT){
-			state = JUMP_RIGHT;
-			animationIndex = 0;
-		}
+    AnimationState new_state = GetAnimationState(animationFrames_);
 
-        if (animationTime > 1){
-            ++animationIndex;
-            animationTime = 0;
-        }
-	}
-    else if (IsOnGround() == false && velocity_.y < 0 && velocity_.x >0){
-		//Draw animation when you fall right
-		if (state != FALL_RIGHT){
-			state = FALL_RIGHT;
-			animationIndex = 0;
-		}
-        if (animationTime > 1){
-            ++animationIndex;
-            animationTime = 0;
-        }
-	}
-	else if (IsOnGround() == false && velocity_.y > 0.5f && velocity_.x <0){
-		//Draw animation when you jump left
-		if (state != JUMP_LEFT){
-			state = JUMP_LEFT;
-			animationIndex = 0;
-		}
-        if (animationTime > 1){
-            ++animationIndex;
-            animationTime = 0;
-        }
-	}
-    else if (IsOnGround() == false && velocity_.y < 0 && velocity_.x <0){
-		//Draw animation when you fall left
-		if (state != FALL_LEFT){
-			state = FALL_LEFT;
-			animationIndex = 0;
-		}
-		if (animationTime > 1){
-			++animationIndex;
-			animationTime = 0;
-		}
-	}
-		if (animationIndex >= 4){
-			animationIndex = 0;
-	}
+    if (state_ != new_state) {
+        state_ = new_state;
+        animationIndex_ = 0;
+    }
+    else if (animationTime_ >= ANIMATION_INTERVAL) {
+        animationTime_ -= ANIMATION_INTERVAL;
+
+        /* Limit the animation index to the number of available frames.
+         * The number of available frames is calcuated according to the 
+         * following table: 
+         * 
+         * animationFrames_ | number of available frames
+         * -----------------+---------------------------
+         * 1                | 1
+         * 2                | 2
+         * 3                | 4
+         * 4                | 6
+         * 5                | 8
+         * ...
+         *
+         * We need this number of available frames to go back and forth trough
+         * all the frames, (0, 1, 2, 1, 0, 1, 2, ...) instead of looping trough
+         * the frames (0, 1, 2, 0, 1, 2, ...).
+         */
+        int available_frames = animationFrames_ > 2 
+            ? animationFrames_ * 2 - 2 
+            : animationFrames_;
+
+        animationIndex_ = (animationIndex_ + 1) % available_frames;
+    }
 }
 
 void Player::Render(Viewport &vp) {
-	//TODO: Add new all texture and if test for the character when we will select a good sprite =)
-    
-    Texture texture_Right = {
-        animationIndex*24, 80,
-        24, 40
-    };
-	Texture texture_Left = {
-		animationIndex * 24, 40,
-		24, 40
-    };
-	//TODO: Create Jump right and Jump left Texture
-	Texture texture_Jump = {
-		animationIndex * 24, 120,
-		24, 40
-	};
-	Texture texture_DontMove = {
-		animationIndex * 24, 0,
-		24, 40
-	};
-	
+    Texture texture = { 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT };
 
-
-	if (state == GO_RIGHT)
-		SpriteSheet::character->Draw(texture_Right, position_, vp);
-	else if (state == GO_LEFT)
-		SpriteSheet::character->Draw(texture_Left, position_, vp);
-	else if (state == JUMP_LEFT || state == JUMP_RIGHT){
-		SpriteSheet::character->Draw(texture_Jump, position_, vp);
-	}
-	else if (state == DONT_MOVE){
-		SpriteSheet::character->Draw(texture_DontMove, position_, vp);
-	}
-    else {
-        /* Aparently, sometimes the state of the player is none of those above.
-         * Therefore, no texture is drawn.
-         */
-        OutputDebugString("Unknown state!\n");
+    switch (state_) {
+    case RUN_RIGHT:
+        texture.left = 2 * TEXTURE_WIDTH;
+        texture.top = 1 * TEXTURE_HEIGHT;
+        break;
+    case RUN_LEFT:
+        texture.left = 2 * TEXTURE_WIDTH;
+        texture.top = 0 * TEXTURE_HEIGHT;
+        break;
+    case JUMP_RIGHT:
+    case FALL_RIGHT:
+        texture.left = 1 * TEXTURE_WIDTH;
+        texture.top = 1 * TEXTURE_HEIGHT;
+        break;
+    case JUMP_LEFT:
+    case FALL_LEFT:
+        texture.left = 1 * TEXTURE_WIDTH;
+        texture.top = 0 * TEXTURE_HEIGHT;
+        break;
+    default: /* idle */
+        texture.left = 4 * TEXTURE_WIDTH;
+        texture.top = 1 * TEXTURE_HEIGHT;
+        break;
     }
 
-    /* Temporary texture! Remove when animated character works completely!
-     * (or when you are working on the animated character) */
-   // SpriteSheet::character->Draw(Texture(0 * 24, 40, 24, 40), position_, vp);
+    /* Calculate the frame that should be shown based on the animationIndex_.
+     */
+    int idx = animationIndex_ > 2 
+        ? animationFrames_ - (2 * (animationIndex_ % animationFrames_) + 2) 
+        : animationIndex_;
+
+    texture.left += idx * TEXTURE_WIDTH;
+
+    SpriteSheet::mario->Draw(texture, position_, vp);
 }

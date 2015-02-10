@@ -27,7 +27,7 @@ GameScene::GameScene(GameWindow *window)
     /* Load a player and an enemy for testing purposes. */
     Vector2 player_spawn = { 16, 240 };
 	Vector2 size = { 16, 16 };
-	Vector2 Psize = { 24 , 40 };
+	Vector2 Psize = { 16 , 27 };
 	player_ = new Player(player_spawn, Psize);
     level_->PlayableLayer()->push_back(player_);
 

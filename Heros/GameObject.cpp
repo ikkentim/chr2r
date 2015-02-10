@@ -82,7 +82,7 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                 // velocity_.x = 0;
             }
             else {
-                has_touched_ground = has_touched_ground || offset_before.y < 0;
+                has_touched_ground = has_touched_ground || offset_before.y <= 0;
                 /* Move Y axis to free worldspace. */
                 position_.y = offset_before.y < 0
                     ? check->position_.y - min_distance_y
