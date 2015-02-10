@@ -123,6 +123,7 @@ void Player::Update(double delta, Keys keys) {
 
 void Player::Render(Viewport &vp) {
 	//TODO: Add new all texture and if test for the character when we will select a good sprite =)
+    
     Texture texture_Right = {
         animationIndex*24, 80,
         24, 40
@@ -145,16 +146,20 @@ void Player::Render(Viewport &vp) {
 
 	if (state == GO_RIGHT)
 		SpriteSheet::character->Draw(texture_Right, position_, vp);
-
-	if (state == GO_LEFT)
+	else if (state == GO_LEFT)
 		SpriteSheet::character->Draw(texture_Left, position_, vp);
-	if (state == JUMP_LEFT){
+	else if (state == JUMP_LEFT){
 		SpriteSheet::character->Draw(texture_Jump, position_, vp);
 	}
-	if (state == DONT_MOVE){
+	else if (state == DONT_MOVE){
 		SpriteSheet::character->Draw(texture_DontMove, position_, vp);
 	}
-
+    else {
+        /* Aparently, sometimes the state of the player is none of those above.
+         * Therefore, no texture is drawn.
+         */
+        OutputDebugString("Unknown state!\n");
+    }
 
     /* Temporary texture! Remove when animated character works completely!
      * (or when you are working on the animated character) */
