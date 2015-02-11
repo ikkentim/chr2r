@@ -31,21 +31,10 @@ bool GameObject::IsCollidingWith(GameObject *other, double delta) {
     /* FIXME: Take velocity into account? */
     Vector2 other_position = other->position_;
 
-    /* TODO: Optimalisations. */
-    double maxy1 = position.y + size_.y / 2;
-    double maxy2 = other_position.y + other->size_.y / 2;
-
-    double miny1 = position.y - size_.y / 2;
-    double miny2 = other_position.y - other->size_.y / 2;
-
-    double maxx1 = position.x + size_.x / 2;
-    double maxx2 = other_position.x + other->size_.x / 2;
-
-    double minx1 = position.x - size_.x / 2;
-    double minx2 = other_position.x - other->size_.x / 2;
-
-    return !(minx1 > maxx2 || maxx1 < minx2 ||
-        miny1 > maxy2 || maxy1 < miny2);
+    return !(position.x - size_.x / 2 > other_position.x + other->size_.x / 2 || 
+        position.x + size_.x / 2 < other_position.x - other->size_.x / 2 ||
+        position.y - size_.y / 2 > other_position.y + other->size_.y / 2 || 
+        position.y + size_.y / 2 < other_position.y - other->size_.y / 2);
 }
 
 void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
@@ -64,6 +53,7 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
         if (IsCollidingWith(check, delta)) {
 
             Vector2 offset_before = position_ - check->position_;
+            Vector2 offset_prevented = offset_before + velocity_ * delta;
 
             double min_distance_x = (size_.x + check->size_.x) / 2;
             double min_distance_y = (size_.y + check->size_.y) / 2;
@@ -88,14 +78,17 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                 velocity_.y = 0;
 			}
 
+            Vector2 collision = 
+                offset_prevented - (position_ - check->position_);
+
 			/* notify children. */
-			EnteredCollision(check);
+            EnteredCollision(check, collision);
         }
     }
 
     onGround_ = has_touched_ground;
 }
 
-void GameObject::EnteredCollision(GameObject *collider) {
+void GameObject::EnteredCollision(GameObject *collider, Vector2 collision) {
 	
 }
