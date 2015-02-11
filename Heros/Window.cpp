@@ -21,10 +21,7 @@ Window::Window() {
 	this->dwCreationFlags_		= SW_SHOW;
 	this->hbrWindowColor_		= (HBRUSH)(COLOR_WINDOW+1);
 	this->hIcon_				= LoadIcon(instance_, (LPCTSTR)IDI_APPLICATION);
-	this->strWindowTitle_		= _T("Heros");
-
-    
-
+	this->strWindowTitle_		= _T("Classic Heroes Redefined 2: Revengeance, The Presequel REMASTERED - 2015 Special Edition pre-proloque");
 }
 
 int Window::Run() {
