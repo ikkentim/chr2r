@@ -70,6 +70,10 @@
     <CustomBuildStep>
       <Command>mkdir $(OutDir)assets</Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)dependencies" "$(TargetDir)" /E /Y</Command>
+      <Message>Copy dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -80,6 +84,12 @@
       <AdditionalDependencies>Msimg32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(SolutionDir)dependencies" "$(TargetDir)" /E /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
