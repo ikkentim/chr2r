@@ -129,13 +129,9 @@ void GameScene::Update(double delta, Keys keys) {
         GameObject *object = *iter;
         if (object->IsMovable()) {
             object->CheckForCollisions(layer, delta);
-        }
-	}
 
-	/* Apply all velocities */
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
-		object->ApplyVelocity(delta);
+		    object->ApplyVelocity(delta);
+        }
 	}
 }
 
