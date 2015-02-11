@@ -9,7 +9,7 @@
 #define FRICTION	        (500.0)
 #define JUMPPOW		        (-400.0)
 
-#define ANIMATION_INTERVAL  (0.1)
+#define ANIMATION_INTERVAL  (0.08)
 #define TEXTURE_WIDTH       (22)
 #define TEXTURE_HEIGHT      (28)
 
