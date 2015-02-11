@@ -57,40 +57,7 @@ void GameWindow::GameEnd() {
 }
 
 bool GameWindow::GameLoop(double delta) {
-
-    /* Handle key presses. */
-#define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
-    keys_ |= map; } else if(keys_ & map) { \
-    keys_ ^= map; }
-
-    MAP_KEY(VK_LEFT, KEY_LEFT);
-    MAP_KEY(VK_RIGHT, KEY_RIGHT);
-    MAP_KEY(VK_UP, KEY_UP);
-    MAP_KEY(VK_DOWN, KEY_DOWN);
-    MAP_KEY(VK_SPACE, KEY_JUMP);
-
-#undef MAP_KEY
-
-    /* Simple statement for using ESCAPE to exit. If LSHIFT or LCONTROL is
-     * pressed, ESCAPE won't close the window.
-     */
-
-    if (::GetAsyncKeyState(VK_ESCAPE) 
-        && !GetAsyncKeyState(VK_LSHIFT) 
-        && !GetAsyncKeyState(VK_LCONTROL))
-        ::exit(0);
-
-    /* This restart button leaks pretty badly but it's useful. */
-    if (::GetAsyncKeyState(VK_F5)) {
-        /* FIXME: Fix leak in GameScene. (initializer/destructor) */
-        while (::GetAsyncKeyState(VK_F5));
-        UpdateScene(new GameScene(this));
-    }
-
-	scene_->Update(delta, keys_);
-    ups.Update();
-
-    /* Check whether it is time to render another frame. */
+	/* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
 
     if (timeSinceRender_ >= (1.0f / RENDER_FREQUENCY)) {
@@ -110,8 +77,39 @@ bool GameWindow::GameLoop(double delta) {
         /* Tell the window to repaint. */
         return true;
     }
-    else {
-        /* Tell the window there is no need for a repaint. */
+	else {
+		/* Handle key presses. */
+#define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
+	keys_ |= map; } else if (keys_ & map) { \
+	keys_ ^= map; }
+
+		MAP_KEY(VK_LEFT, KEY_LEFT);
+		MAP_KEY(VK_RIGHT, KEY_RIGHT);
+		MAP_KEY(VK_UP, KEY_UP);
+		MAP_KEY(VK_DOWN, KEY_DOWN);
+		MAP_KEY(VK_SPACE, KEY_JUMP);
+
+#undef MAP_KEY
+
+		/* Simple statement for using ESCAPE to exit. If LSHIFT or LCONTROL is
+		* pressed, ESCAPE won't close the window.
+		*/
+
+		if (::GetAsyncKeyState(VK_ESCAPE)
+			&& !GetAsyncKeyState(VK_LSHIFT)
+			&& !GetAsyncKeyState(VK_LCONTROL))
+			::exit(0);
+
+		/* This restart button leaks pretty badly but it's useful. */
+		if (::GetAsyncKeyState(VK_F5)) {
+			/* FIXME: Fix leak in GameScene. (initializer/destructor) */
+			while (::GetAsyncKeyState(VK_F5));
+			UpdateScene(new GameScene(this));
+		}
+
+		scene_->Update(delta, keys_);
+		ups.Update();
+
         return false;
     }
 }
