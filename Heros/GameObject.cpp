@@ -62,12 +62,8 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
         }
 
         if (IsCollidingWith(check, delta)) {
-            /* notify children. */
-            EnteredCollision(check);
 
             Vector2 offset_before = position_ - check->position_;
-            Vector2 offset_prevented = position_ + velocity_ * delta - 
-                check->position_;
 
             double min_distance_x = (size_.x + check->size_.x) / 2;
             double min_distance_y = (size_.y + check->size_.y) / 2;
@@ -79,8 +75,8 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                     ? check->position_.x - min_distance_x
                     : check->position_.x + min_distance_x;
 
-                /* FIXME: if x is fractionally colliding, do not modify velocity. */
-                // velocity_.x = 0;
+				if (!onGround_)
+					velocity_.x = 0;
             }
             else {
                 has_touched_ground = has_touched_ground || offset_before.y <= 0;
@@ -90,7 +86,10 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                     : check->position_.y + min_distance_y;
 
                 velocity_.y = 0;
-            }
+			}
+
+			/* notify children. */
+			EnteredCollision(check);
         }
     }
 
