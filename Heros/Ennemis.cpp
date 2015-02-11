@@ -42,3 +42,7 @@ void Ennemis::Update(double delta, Keys keys){
 
 	Falling(hGrav , delta);
 }
+
+void Ennemis::EnteredCollision(GameObject * collider)
+{
+}

@@ -184,3 +184,7 @@ void Player::Render(Viewport &vp) {
 
     SpriteSheet::mario->Draw(texture, position_, vp);
 }
+
+void Player::EnteredCollision(GameObject * collider)
+{
+}
