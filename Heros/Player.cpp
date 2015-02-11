@@ -6,7 +6,7 @@
 #define WALK_ACCEL          (250.0)
 #define WALK_SPEED          (250.0)
 #define GRAVITY             (981.0)
-#define FRICTION	        (500.0)
+#define FRICTION	        (550.0)
 #define JUMPPOW		        (-400.0)
 
 #define ANIMATION_INTERVAL  (0.08)
@@ -22,11 +22,14 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
     if (isDucking_) { /* Is ducking. */
         if (velocity_.x < 0) { /* Is moving left. */
             return DUCK_LEFT;
+        }   
+        if (velocity_.x > 0) { /* Is moving right. */
+            return DUCK_RIGHT;
         }
-        return DUCK_RIGHT;
+        return isLastMovementLeft_ ? DUCK_LEFT : DUCK_RIGHT;
     }
     else if (velocity_.IsZero()){ /* Not moving at all. */
-        return IDLE;
+        return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
     }
     else if (IsOnGround()) {/* Is on ground. */
         
@@ -44,24 +47,26 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
             frames = 3;
             return RUN_LEFT;
         }
-        return IDLE;
+        return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
     }
     else {
         if (velocity_.y < -0.1f) { /* Jumping. */
-            if (velocity_.x >= 0) { /* Is moving right or straight up. */
+            if (velocity_.x > 0) { /* Is moving right or straight up. */
                 return JUMP_RIGHT;
             }
             if (velocity_.x < 0) { /* Is moving left. */
                 return JUMP_LEFT;
             }
+            return isLastMovementLeft_ ? JUMP_LEFT : JUMP_RIGHT;
         }
         else { /* Falling */
-            if (velocity_.x >= 0) { /* Is moving right or straight up. */
+            if (velocity_.x > 0) { /* Is moving right or straight up. */
                 return FALL_RIGHT;
             }
             if (velocity_.x < 0) { /* Is moving left. */
                 return FALL_LEFT;
             }
+            return isLastMovementLeft_ ? FALL_LEFT : FALL_RIGHT;
         }
     }
 }
@@ -92,8 +97,10 @@ void Player::Update(double delta, Keys keys) {
 
     isDucking_ = !!(keys & KEY_DOWN);
 
+    if (velocity_.x != 0.00)
+        isLastMovementLeft_ = velocity_.x < 0;
+
 	Falling(hGrav, delta);
-    
     velocity_.TruncateX(WALK_SPEED);
 
     AnimationState new_state = GetAnimationState(animationFrames_);
@@ -168,7 +175,12 @@ void Player::Render(Viewport &vp) {
         texture.left = 1 * TEXTURE_WIDTH;
         texture.top = 3 * TEXTURE_HEIGHT;
         break;
-    default: /* idle */
+    case IDLE_LEFT:
+        texture.left = 4 * TEXTURE_WIDTH;
+        texture.top = 0 * TEXTURE_HEIGHT;
+        break;
+    case IDLE_RIGHT:
+    default:
         texture.left = 4 * TEXTURE_WIDTH;
         texture.top = 1 * TEXTURE_HEIGHT;
         break;
