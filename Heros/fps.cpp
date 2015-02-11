@@ -1,26 +1,26 @@
 #include <ctime>
 #include "fps.h"
 
-Fps::Fps() :starttime(time(0))
+Fps::Fps() :lastframetime_(time(0))
 {
 
 }
 
 void Fps::Update()
 {
-	frames++;
+	frames_++;
 }
 
 int Fps::GetFps()
 {
-	time_t timepassed = time(0);
+	time_t currenttime = time(0);
 
-	if (timepassed - starttime > 0.25)
+	if (currenttime - lastframetime_ > 0.25)
 	{
-        fps = (double)frames / (timepassed - starttime);
-		frames = 0;
-		starttime = timepassed;
+		fps_ = (double)frames_ / (currenttime - lastframetime_);
+		frames_ = 0;
+		lastframetime_ = currenttime;
 	}
 
-	return (int)fps;
+	return (int)fps_;
 }

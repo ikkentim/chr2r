@@ -5,10 +5,9 @@
 class Fps
 {
 private:
-	time_t starttime;
-	bool first = true;
-	int frames = 0;
-	double fps = 0.0;
+	time_t lastframetime_;
+	int frames_ = 0;
+	double fps_ = 0.0;
 public:
 	Fps();
 	void Update();
