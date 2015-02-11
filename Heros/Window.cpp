@@ -48,9 +48,15 @@ int Window::Run() {
 
                 if (GetFocus() == hWnd_ &&
                 GameLoop((double)(tick - lastTick) / (double)frequency)) {
-                StretchBlt(dc_, drawRect_.left, drawRect_.top,
-                    drawRect_.right - drawRect_.left,
-                    drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
+#ifdef FULLSCREEN_MODE
+					StretchBlt(dc_, drawRect_.left, drawRect_.top,
+						drawRect_.right - drawRect_.left,
+						drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
+#else
+					BitBlt(dc_, drawRect_.left, drawRect_.top,
+						drawRect_.right - drawRect_.left,
+						drawRect_.bottom - drawRect_.top, graphics_, 0, 0, SRCCOPY);
+#endif
             }
             lastTick = tick;
 	    }
