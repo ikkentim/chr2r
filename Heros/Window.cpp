@@ -48,7 +48,8 @@ int Window::Run() {
 
                 if (GetFocus() == hWnd_ &&
                 GameLoop((double)(tick - lastTick) / (double)frequency)) {
-#ifdef FULLSCREEN_MODE
+
+#ifdef FULLSCREEN_MODE //bitblp is faster but we need stretchblp for fullscreen
 					StretchBlt(dc_, drawRect_.left, drawRect_.top,
 						drawRect_.right - drawRect_.left,
 						drawRect_.bottom - drawRect_.top, graphics_, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, SRCCOPY);
