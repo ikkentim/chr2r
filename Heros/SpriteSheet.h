@@ -5,23 +5,32 @@
 #include "Vector2.h"
 #include "Viewport.h"
 
+#define SPRITE_SHEET_COUNT      (4)
+
 class SpriteSheet
 {
 public:
-    static SpriteSheet *terrain;
-    static SpriteSheet *splash;
-    static SpriteSheet *background01;
-    static SpriteSheet *character;
-    static SpriteSheet *mario;
+    enum Type {
+        TERRAIN,
+        SPLASH_SCREEN,
+        BACKGROUND01,
+        MARIO
+    };
 
-    SpriteSheet(HWND, HDC, const char *, COLORREF = RGB(255, 128, 255));
+    static void SetWindow(HWND, HDC);
+    static void Unload();
+    static SpriteSheet *Get(Type);
+
+    SpriteSheet(const char *);
     ~SpriteSheet(void);
     void Draw(Texture &, Vector2 &pos, Viewport &);
     void Draw(Texture &, int offsetx, int offsety);
 
 private:
-    HBITMAP bmpb;
-    HWND hWnd;
-    HDC	dcBuf, dcImage;
-    COLORREF transCol;
+    static SpriteSheet *spriteSheets_[SPRITE_SHEET_COUNT];
+    static char *spriteFileNames_[SPRITE_SHEET_COUNT];
+    static HWND hWnd_;
+    static HDC dcBuf_;
+
+    HDC	dcImage_;
 };

@@ -17,5 +17,5 @@ void SplashScene::Update(double delta, Keys) {
 }
 
 void SplashScene::Render(double delta) {
-    SpriteSheet::splash->Draw(Texture(0, 0, 640, 480), 0, 0);
+    SpriteSheet::Get(SpriteSheet::SPLASH_SCREEN)->Draw(Texture(0, 0, 640, 480), 0, 0);
 }
