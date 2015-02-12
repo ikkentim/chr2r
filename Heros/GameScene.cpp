@@ -28,13 +28,8 @@ GameScene::GameScene(GameWindow *window)
 	Texture pipe_br = { 19, 195, 16, 16 };
 
 	//test coin
-	Texture air_coin = { 245, 80, 14, 16 };
+	Texture air_coin = { 0, 0, 14, 16 };
 
-
-	/*TODO:: test coin in the air and everywhere*/
-	for (int x = 0; x < 3; x++) {
-		level_->PlayableLayer()->push_back(new Coin(air_coin, { 426 + (16.0f * x), 192.0f }));
-	}
 
     /* Load a level manager for testing purposes. */
     level_ = new LevelManager();
@@ -61,6 +56,9 @@ GameScene::GameScene(GameWindow *window)
 				level_->ForegroundLayer()->push_back(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }));
 			else
 				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
+
+			
+
 
 	/* Load a number of object for testing purposes. */
 	for (int x = 28; x < 100; x++)
@@ -99,6 +97,11 @@ GameScene::GameScene(GameWindow *window)
 	level_->PlayableLayer()->push_back(new Block(pipe_tr, { 272, 224.0f }));
 	level_->PlayableLayer()->push_back(new Block(pipe_bl, { 256, 240 }));
 	level_->PlayableLayer()->push_back(new Block(pipe_br, { 272, 240 }));
+
+	/*Load coin coin in the air */
+	for (int x = 0; x < 3; x++) {
+		level_->PlayableLayer()->push_back(new Coin(air_coin, { 490 + (16.0f * x), 210.0f }));
+	}
 }
 
 GameScene::~GameScene() {

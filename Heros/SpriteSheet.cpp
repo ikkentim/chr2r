@@ -6,6 +6,7 @@ char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
     "spr/splash.bmp",
     "spr/background01.bmp",
     "spr/mario.bmp",
+	"spr/coin_2.bmp"
 };
 
 HWND SpriteSheet::hWnd_;

@@ -13,5 +13,5 @@ void Coin::Update(double delta, Keys keys) {
 }
 
 void Coin::Render(Viewport &vp) {
-	SpriteSheet::coin->Draw(texture_, position_, vp);
+	SpriteSheet::Get(SpriteSheet::COIN)->Draw(texture_, position_, vp);
 }
