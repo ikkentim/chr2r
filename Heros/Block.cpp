@@ -13,5 +13,5 @@ void Block::Update(double delta, Keys keys) {
 }
 
 void Block::Render(Viewport &vp) {
-    SpriteSheet::terrain->Draw(texture_, position_, vp);
+    SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture_, position_, vp);
 }

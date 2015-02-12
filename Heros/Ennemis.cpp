@@ -28,7 +28,7 @@ void Ennemis::Render(Viewport &vp) {
 		16, 16
 	};
 
-	SpriteSheet::terrain->Draw(texture, position_, vp);
+	SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture, position_, vp);
 }
 
 void Ennemis::Update(double delta, Keys keys){

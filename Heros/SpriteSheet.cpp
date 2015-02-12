@@ -1,33 +1,49 @@
 #include "SpriteSheet.h"
 
-/* FIXME: Create some kind of spritesheet loading mechanism, 
- * instead of global vars */
-SpriteSheet *SpriteSheet::terrain;
-SpriteSheet *SpriteSheet::splash;
-SpriteSheet *SpriteSheet::background01;
-SpriteSheet *SpriteSheet::character;
-SpriteSheet *SpriteSheet::mario;
-SpriteSheet *SpriteSheet::coin;
+SpriteSheet *SpriteSheet::spriteSheets_[SPRITE_SHEET_COUNT];
+char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
+    "spr/terrain.bmp",
+    "spr/splash.bmp",
+    "spr/background01.bmp",
+    "spr/mario.bmp",
+};
 
-SpriteSheet::SpriteSheet(HWND hWnd, HDC dcBuf,
-    const char * file,
-    COLORREF transCol) {
-    this->hWnd = hWnd;
-    this->dcBuf = dcBuf;
-    this->transCol = transCol;
+HWND SpriteSheet::hWnd_;
+HDC SpriteSheet::dcBuf_;
 
+void SpriteSheet::SetWindow(HWND hWnd, HDC dcBuf) {
+    hWnd_ = hWnd;
+    dcBuf_ = dcBuf;
+}
+
+SpriteSheet *SpriteSheet::Get(Type type) {
+    if (!spriteSheets_[type]) {
+        spriteSheets_[type] = new SpriteSheet(spriteFileNames_[type]);
+    }
+
+    return spriteSheets_[type];
+}
+
+void SpriteSheet::Unload() {
+    for (int i = 0; i < SPRITE_SHEET_COUNT; i++) {
+        if (spriteSheets_[i]) {
+            delete spriteSheets_[i];
+        }
+    }
+}
+SpriteSheet::SpriteSheet(const char * file) {
     HBITMAP bitmap = (HBITMAP)LoadImage(NULL, file, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
     
     assert(bitmap && "Bitmap cannot be loaded (asset missing?)");
 
-    dcImage = CreateCompatibleDC(dcBuf);
-    (HBITMAP)SelectObject(dcImage, bitmap);
+    dcImage_ = CreateCompatibleDC(dcBuf_);
+    (HBITMAP)SelectObject(dcImage_, bitmap);
 
-    GetObject(dcImage, sizeof(bitmap), &bitmap);
+    GetObject(dcImage_, sizeof(bitmap), &bitmap);
 }
 
 SpriteSheet::~SpriteSheet(void) {
-    ::ReleaseDC(hWnd, dcImage);
+    ::ReleaseDC(hWnd_, dcImage_);
 }
 
 void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
@@ -51,9 +67,8 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
 }
 
 void SpriteSheet::Draw(Texture &texture, int x, int y) {
-    TransparentBlt(dcBuf,
-        x, y,
-        texture.width, texture.height, dcImage,
+    TransparentBlt(dcBuf_, x, y,
+        texture.width, texture.height, dcImage_,
         texture.left, texture.top,
-        texture.width, texture.height, transCol);
+        texture.width, texture.height, 0xFF80FF);
 }

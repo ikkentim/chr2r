@@ -155,7 +155,7 @@ void GameScene::Render(double delta) {
     Texture tex = { 0, 0, image_width, viewport_.height };
     for (int skyx = -(viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
-        SpriteSheet::background01->Draw(tex, skyx, 0);
+        SpriteSheet::Get(SpriteSheet::BACKGROUND01)->Draw(tex, skyx, 0);
 	}
 
 	LevelLayer *layer;

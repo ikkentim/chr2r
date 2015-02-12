@@ -29,31 +29,17 @@ irrklang::ISoundEngine *GameWindow::SoundEngine() {
 }
 
 void GameWindow::GameInit() {
-    /* Load all sprites. */
-    SpriteSheet::terrain = new SpriteSheet(hWnd_, graphics_, "spr/terrain.bmp");
-    SpriteSheet::splash = new SpriteSheet(hWnd_, graphics_, "spr/splash.bmp");
-    SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
-    SpriteSheet::character = new SpriteSheet(hWnd_, graphics_, "spr/DocChar.bmp");
-    SpriteSheet::mario = new SpriteSheet(hWnd_, graphics_, "spr/mario.bmp");
-	SpriteSheet::coin = new SpriteSheet(hWnd_, graphics_, "spr/coin_2");
+    SpriteSheet::SetWindow(hWnd_, graphics_);
 
     soundEngine_ = irrklang::createIrrKlangDevice(); 
-    
     assert(soundEngine_ && "Sound engine failed to load (missing resources?)");
-
     soundEngine_->setSoundVolume(0.3f);/* Master Volume. */
-
 
     scene_ = new SplashScene(this);
 }
 
 void GameWindow::GameEnd() {
-    /* Unload all sprites. */
-    delete SpriteSheet::terrain;
-    delete SpriteSheet::splash;
-    delete SpriteSheet::background01;
-	delete SpriteSheet::character;
-	delete SpriteSheet::coin;
+    SpriteSheet::Unload();
 
     soundEngine_->drop();
 }

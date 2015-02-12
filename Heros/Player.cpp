@@ -194,7 +194,7 @@ void Player::Render(Viewport &vp) {
 
     texture.left += idx * TEXTURE_WIDTH;
 
-    SpriteSheet::mario->Draw(texture, position_, vp);
+    SpriteSheet::Get(SpriteSheet::MARIO)->Draw(texture, position_, vp);
 }
 
 void Player::EnteredCollision(GameObject * collider, Vector2 collision)
