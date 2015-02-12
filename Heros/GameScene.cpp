@@ -36,67 +36,65 @@ GameScene::GameScene(GameWindow *window)
 
     /* Load a player and an enemy for testing purposes. */
     player_ = new Player(this, Vector2(16, 240), Vector2(14, 27));
-    level_->PlayableLayer()->push_back(player_);
 
-    ennemis_ = new Ennemis(Vector2(80, 240), Vector2(16, 16));
-	level_->PlayableLayer()->push_back(ennemis_);
+	level_->Add(player_, LevelManager::MOVABLE);
+
+	ennemis_ = new Ennemis(Vector2(80, 240), Vector2(16, 16));
+	level_->Add(ennemis_, LevelManager::MOVABLE);
 
 	/* Load a number of object for testing purposes. */
 	for (int x = -10; x < 25; x++)
 		for (int y = 0; y < 20; y++)
 			if (x == -10 && y == 0)
-				level_->PlayableLayer()->push_back(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }), LevelManager::PLAYABLE);
 			else if (x == 24 && y == 0)
-				level_->PlayableLayer()->push_back(new Block(grass_tr, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_tr, { 16.0f * x, 256.0f + 16 * y }), LevelManager::PLAYABLE);
 			else if (y == 0)
-				level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_top, { 16.0f * x, 256.0f + 16 * y }), LevelManager::PLAYABLE);
 			else if (x == -10)
-				level_->ForegroundLayer()->push_back(new Block(grass_left, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_left, { 16.0f * x, 256.0f + 16 * y }), LevelManager::FOREGROUND);
 			else if (x == 24)
-				level_->ForegroundLayer()->push_back(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }), LevelManager::FOREGROUND);
 			else
-				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
-
-			
-
+				level_->Add(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }), LevelManager::FOREGROUND);
 
 	/* Load a number of object for testing purposes. */
 	for (int x = 28; x < 100; x++)
 		for (int y = 0; y < 20; y++)
 			if (x == 28 && y == 0)
-				level_->PlayableLayer()->push_back(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_tl, { 16.0f * x, 256.0f + 16 * y }), LevelManager::PLAYABLE);
 			else if (x == 99 && y == 0)
-				level_->PlayableLayer()->push_back(new Block(grass_tr, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_tr, { 16.0f * x, 256.0f + 16 * y }), LevelManager::PLAYABLE);
 			else if (y == 0)
-				level_->PlayableLayer()->push_back(new Block(grass_top, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_top, { 16.0f * x, 256.0f + 16 * y }), LevelManager::PLAYABLE);
 			else if (x == 28)
-				level_->ForegroundLayer()->push_back(new Block(grass_left, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_left, { 16.0f * x, 256.0f + 16 * y }), LevelManager::FOREGROUND);
 			else if (x == 99)
-				level_->ForegroundLayer()->push_back(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_right, { 16.0f * x, 256.0f + 16 * y }), LevelManager::FOREGROUND);
 			else
-				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
+				level_->Add(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }), LevelManager::FOREGROUND);
 
 	/* Load a number of object for testing purposes. */
 	for (int x = 0; x < 3; x++) {
-		level_->PlayableLayer()->push_back(new Block(air_block, { 96 + (16.0f * x), 192.0f }));
+		level_->Add(new Block(air_block, { 96 + (16.0f * x), 192.0f }), LevelManager::PLAYABLE);
 	}
 
 	/* Load a number of object for testing purposes. */
 	for (int x = 0; x < 4; x++) {
-		level_->PlayableLayer()->push_back(new Block(air_block, { 480 + (16.0f * x), 192 }));
+		level_->Add(new Block(air_block, { 480 + (16.0f * x), 192 }), LevelManager::PLAYABLE);
 	}
 
 	/* Load a number of object for testing purposes. */
 	for (int x = 0; x < 8; x++) {
-		level_->PlayableLayer()->push_back(new Block(air_block, { 544 + (16.0f * x), 128 }));
+		level_->Add(new Block(air_block, { 544 + (16.0f * x), 128 }), LevelManager::PLAYABLE);
 	}
 
-	level_->PlayableLayer()->push_back(new Block(question, { 112, 192.0f }));
+	level_->Add(new Block(question, { 112, 192.0f }), LevelManager::PLAYABLE);
 
-	level_->PlayableLayer()->push_back(new Block(pipe_tl, { 256, 224.0f }));
-	level_->PlayableLayer()->push_back(new Block(pipe_tr, { 272, 224.0f }));
-	level_->PlayableLayer()->push_back(new Block(pipe_bl, { 256, 240 }));
-	level_->PlayableLayer()->push_back(new Block(pipe_br, { 272, 240 }));
+	level_->Add(new Block(pipe_tl, { 256, 224.0f }), LevelManager::PLAYABLE);
+	level_->Add(new Block(pipe_tr, { 272, 224.0f }), LevelManager::PLAYABLE);
+	level_->Add(new Block(pipe_bl, { 256, 240 }), LevelManager::PLAYABLE);
+	level_->Add(new Block(pipe_br, { 272, 240 }), LevelManager::PLAYABLE);
 
 	/*Load coin coin in the air */
 	/*for (int x = 0; x < 3; x++) {
@@ -111,7 +109,7 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Update(double delta, Keys keys) {
-    LevelLayer *layer = level_->PlayableLayer();
+    LevelLayer *layer = level_->Movables();
 
     /* Update all layers */
     for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
@@ -141,11 +139,10 @@ void GameScene::Update(double delta, Keys keys) {
 	/* Check collision on playerlayer */
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
-        if (object->IsMovable()) {
-            object->CheckForCollisions(layer, delta);
 
-		    object->ApplyVelocity(delta);
-        }
+		object->CheckForCollisions(level_->PlayableLayer(), delta);
+
+		object->ApplyVelocity(delta);
 	}
 }
 
