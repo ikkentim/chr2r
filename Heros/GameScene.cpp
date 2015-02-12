@@ -99,9 +99,9 @@ GameScene::GameScene(GameWindow *window)
 	level_->PlayableLayer()->push_back(new Block(pipe_br, { 272, 240 }));
 
 	/*Load coin coin in the air */
-	for (int x = 0; x < 3; x++) {
+	/*for (int x = 0; x < 3; x++) {
 		level_->PlayableLayer()->push_back(new Coin(air_coin, { 490 + (16.0f * x), 210.0f }));
-	}
+	}*/
 }
 
 GameScene::~GameScene() {
