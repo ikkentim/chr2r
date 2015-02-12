@@ -1,5 +1,7 @@
 #include "GameScene.h"
 #include "Block.h"
+#include "Coin.h"
+
 
 #include <irrKlang.h>
 
@@ -24,6 +26,15 @@ GameScene::GameScene(GameWindow *window)
 	Texture pipe_tr = { 19, 179, 16, 15 };
 	Texture pipe_bl = { 1, 195, 16, 16 };
 	Texture pipe_br = { 19, 195, 16, 16 };
+
+	//test coin
+	Texture air_coin = { 245, 80, 14, 16 };
+
+
+	/*TODO:: test coin in the air and everywhere*/
+	for (int x = 0; x < 3; x++) {
+		level_->PlayableLayer()->push_back(new Coin(air_coin, { 426 + (16.0f * x), 192.0f }));
+	}
 
     /* Load a level manager for testing purposes. */
     level_ = new LevelManager();

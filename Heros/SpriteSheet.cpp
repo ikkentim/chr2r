@@ -7,6 +7,7 @@ SpriteSheet *SpriteSheet::splash;
 SpriteSheet *SpriteSheet::background01;
 SpriteSheet *SpriteSheet::character;
 SpriteSheet *SpriteSheet::mario;
+SpriteSheet *SpriteSheet::coin;
 
 SpriteSheet::SpriteSheet(HWND hWnd, HDC dcBuf,
     const char * file,

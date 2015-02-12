@@ -35,6 +35,7 @@ void GameWindow::GameInit() {
     SpriteSheet::background01 = new SpriteSheet(hWnd_, graphics_, "spr/background01.bmp");
     SpriteSheet::character = new SpriteSheet(hWnd_, graphics_, "spr/DocChar.bmp");
     SpriteSheet::mario = new SpriteSheet(hWnd_, graphics_, "spr/mario.bmp");
+	SpriteSheet::coin = new SpriteSheet(hWnd_, graphics_, "spr/coin_2");
 
     soundEngine_ = irrklang::createIrrKlangDevice(); 
     
@@ -52,6 +53,7 @@ void GameWindow::GameEnd() {
     delete SpriteSheet::splash;
     delete SpriteSheet::background01;
 	delete SpriteSheet::character;
+	delete SpriteSheet::coin;
 
     soundEngine_->drop();
 }

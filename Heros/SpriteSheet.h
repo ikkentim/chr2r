@@ -13,6 +13,7 @@ public:
     static SpriteSheet *background01;
     static SpriteSheet *character;
     static SpriteSheet *mario;
+	static SpriteSheet *coin;
 
     SpriteSheet(HWND, HDC, const char *, COLORREF = RGB(255, 128, 255));
     ~SpriteSheet(void);
