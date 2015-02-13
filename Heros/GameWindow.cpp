@@ -39,7 +39,12 @@ void GameWindow::GameInit() {
 }
 
 void GameWindow::GameEnd() {
-    SpriteSheet::Unload();
+    /* Unload all sprites. */
+ /*   delete SpriteSheet::terrain;
+    delete SpriteSheet::splash;
+    delete SpriteSheet::background01;
+	delete SpriteSheet::character;
+*/
 
     soundEngine_->drop();
 }

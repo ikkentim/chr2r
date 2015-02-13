@@ -18,6 +18,11 @@ public:
     LevelLayer *ForegroundLayer() {
         return &foregroundLayer_;
     }
+	LevelLayer *Movables() {
+		return &movables_;
+	}
+	enum Layer { MOVABLE, BACKGROUND, PLAYABLE, FOREGROUND };
+	void Add(GameObject *, LevelManager::Layer);
 
     static LevelManager *Load(const char *, class GameScene *, class Player *&);
     static void WriteSimpleLevel();/* TODO: TEMP! Delete soon! */
@@ -25,4 +30,5 @@ private:
     LevelLayer backgroundLayer_;
     LevelLayer playableLayer_;
     LevelLayer foregroundLayer_;
+	LevelLayer movables_;
 };
