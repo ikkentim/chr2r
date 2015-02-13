@@ -2,7 +2,6 @@
 
 #define WALK_ACCEL  (150.0)
 #define WALK_SPEED  (150.0)
-#define GRAVITY     (981.0)
 
 Ennemis::Ennemis(Vector2 pos) :Actor(pos, Vector2(16, 16)){
 	velocity_ = Vector2(WALK_SPEED, 0);
@@ -32,7 +31,6 @@ void Ennemis::Render(Viewport &vp) {
 }
 
 void Ennemis::Update(double delta, Keys keys){
-	Vector2 hGrav = { 0, GRAVITY };
 	if (position_.x > 200){
 		GoLeft(delta);
 	}
@@ -40,7 +38,7 @@ void Ennemis::Update(double delta, Keys keys){
 		GoRight(delta);
 	}
 
-	Falling(hGrav , delta);
+	Falling(delta);
 }
 
 void Ennemis::EnteredCollision(GameObject * collider)

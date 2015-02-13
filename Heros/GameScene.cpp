@@ -21,7 +21,10 @@ GameScene::~GameScene() {
 void GameScene::Update(double delta, Keys keys) {
 
     /* Update viewport */
-    const int borderOffset = 215;
+
+    /* Minimum distance between window edge and the player*/
+    const int borderOffset = 215; 
+    
 
     int minx = viewport_.x + borderOffset;
     int maxx = viewport_.x - borderOffset + viewport_.width;
@@ -61,7 +64,6 @@ void GameScene::Render(double delta) {
         skyx <= viewport_.width; skyx += image_width) {
         SpriteSheet::Get(SpriteSheet::BACKGROUND01)->Draw(tex, skyx, 0);
 	}
-
 
 	/* Render all layers */
 	LevelLayer *layer;

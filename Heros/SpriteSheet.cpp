@@ -61,8 +61,8 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
     /* Shift the drawing location by half the texture size.
      * The given position is the center of the object.
      */
-    int x = (int)pos.x - vp.x - texture.width / 2;
-    int y = (int)pos.y - vp.y - texture.height / 2;
+    int x = floor(pos.x) - vp.x - texture.width / 2;
+    int y = floor(pos.y) - vp.y - texture.height / 2;
 
     Draw(texture, x, y);
 }
