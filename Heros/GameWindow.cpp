@@ -39,13 +39,7 @@ void GameWindow::GameInit() {
 }
 
 void GameWindow::GameEnd() {
-    /* Unload all sprites. */
- /*   delete SpriteSheet::terrain;
-    delete SpriteSheet::splash;
-    delete SpriteSheet::background01;
-	delete SpriteSheet::character;
-*/
-
+    SpriteSheet::Unload();
     soundEngine_->drop();
 }
 
@@ -95,6 +89,8 @@ bool GameWindow::GameLoop(double delta) {
 
 		/* This restart button leaks pretty badly but it's useful. */
 		if (::GetAsyncKeyState(VK_F5)) {
+            soundEngine_->stopAllSounds();
+
 			/* FIXME: Fix leak in LevelManager. (initializer/destructor) */
 			while (::GetAsyncKeyState(VK_F5));
 			UpdateScene(new GameScene(this));

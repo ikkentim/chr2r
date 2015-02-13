@@ -2,12 +2,17 @@
 #include <fstream>
 #include "Block.h"
 #include "Ennemis.h"
+#include "Coin.h"
 #include "Player.h"
 
 enum ActorType {
     ENNEMIS
 };
 
+enum ObjectType {
+    BLOCK,
+    COIN
+};
 struct LevelData {
     unsigned int bottom;
     unsigned int player_x;
@@ -28,7 +33,7 @@ struct ObjectData {
     int width;
     int height;
     Texture texture;
-    int type_ph;/* placeholder */
+    ObjectType type;
     LevelManager::Layer layer;
     char aligner_27bytes[27];/* aligner */
 };
@@ -81,21 +86,18 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 
         GameObject *object = NULL;
 
-        //swich(object_buffer.type) /* TODO: switch type of object */
-        object = new Block(object_buffer.texture,
-            Vector2(object_buffer.x, object_buffer.y));
-
-        switch (object_buffer.layer) {
-        case PLAYABLE:
-            manager->playableLayer_.push_back(object);
+        switch(object_buffer.type) {
+        case BLOCK:
+            object = new Block(object_buffer.texture,
+                Vector2(object_buffer.x, object_buffer.y));
             break;
-        case BACKGROUND:
-            manager->backgroundLayer_.push_back(object);
-            break;
-        case FOREGROUND:
-            manager->foregroundLayer_.push_back(object);
+        case COIN:
+            object = new Coin(object_buffer.texture,
+                Vector2(object_buffer.x, object_buffer.y));
             break;
         }
+
+        manager->Add(object, object_buffer.layer);
     }
 
     ActorData actor_buffer;
@@ -110,11 +112,11 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
             break;
         }
 
-        manager->playableLayer_.push_back(actor);
+        manager->Add(actor, MOVABLE);
     }
 
     player = new Player(scene, Vector2(header.player_x, header.player_y));
-    manager->playableLayer_.push_back(player);
+    manager->Add(player, MOVABLE);
 
     lvl.close();
 
@@ -122,7 +124,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 }
 
 
-
+/* TEMPORARY FUNCTION! */
 void LevelManager::WriteSimpleLevel()
 {
     LevelData lvl;
@@ -165,7 +167,7 @@ void LevelManager::WriteSimpleLevel()
     obj.width = 16;
     obj.height = 16;
     obj.texture = grass_tl;
-    obj.type_ph = 0;
+    obj.type = BLOCK;
     obj.layer = PLAYABLE;
 
     for (int x = -10; x < 25; x++)
@@ -173,18 +175,26 @@ void LevelManager::WriteSimpleLevel()
             obj.x = 16 * x;
             obj.y = 16 * y + 256;
 
+            obj.layer = PLAYABLE;
+
             if (x == -10 && y == 0)
                 obj.texture = grass_tl;
             else if (x == 24 && y == 0)
                 obj.texture = grass_tr;
             else if (y == 0)
                 obj.texture = grass_top;
-            else if (x == -10)
+            else if (x == -10) {
+                obj.layer = FOREGROUND;
                 obj.texture = grass_left;
-            else if (x == 24)
+            }
+            else if (x == 24) {
+                obj.layer = FOREGROUND;
                 obj.texture = grass_right;
-            else
+            }
+            else {
+                obj.layer = FOREGROUND;
                 obj.texture = grass_middle;
+            }
 
             lvlout.write((char *)&obj, sizeof(ObjectData));
         }
@@ -194,21 +204,31 @@ void LevelManager::WriteSimpleLevel()
             obj.x = 16 * x;
             obj.y = 16 * y + 256;
 
+            obj.layer = PLAYABLE;
+
             if (x == 28 && y == 0)
                 obj.texture = grass_tl;
             else if (x == 99 && y == 0)
                 obj.texture = grass_tr;
             else if (y == 0)
                 obj.texture = grass_top;
-            else if (x == 28)
+            else if (x == 28) {
+                obj.layer = FOREGROUND;
                 obj.texture = grass_left;
-            else if (x == 99)
+            }
+            else if (x == 99) {
+                obj.layer = FOREGROUND;
                 obj.texture = grass_right;
-            else
+            }
+            else {
+                obj.layer = FOREGROUND;
                 obj.texture = grass_middle;
+            }
 
             lvlout.write((char *)&obj, sizeof(ObjectData));
         }
+
+    obj.layer = PLAYABLE;
 
     for (int x = 0; x < 3; x++) {
         obj.x = 96 + (16 * x);
