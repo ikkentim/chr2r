@@ -20,6 +20,7 @@ protected:
 
 private:
     irrklang::ISoundEngine *soundEngine_;
+    float frameInterval_ = 0.1f;
     double timeSinceRender_ = 0;
     Scene *scene_ = NULL;
 	Keys keys_ = KEY_NONE;

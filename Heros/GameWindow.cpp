@@ -7,8 +7,6 @@
 #include "LevelManager.h"
 #include <string>
 
-#define RENDER_FREQUENCY            (60)
-
 GameWindow::GameWindow() {
 }
 
@@ -36,6 +34,14 @@ void GameWindow::GameInit() {
     soundEngine_->setSoundVolume(0.3f);/* Master Volume. */
 
     scene_ = new SplashScene(this);
+
+    DEVMODE mode;
+    EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);
+
+    int refresh_rate = mode.dmDisplayFrequency;
+    if (refresh_rate < 30)
+        refresh_rate = 30;
+    frameInterval_ = 1.0f / refresh_rate;
 }
 
 void GameWindow::GameEnd() {
@@ -47,8 +53,8 @@ bool GameWindow::GameLoop(double delta) {
 	/* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
 
-    if (timeSinceRender_ >= (1.0f / RENDER_FREQUENCY)) {
-        timeSinceRender_ -= (1.0f / RENDER_FREQUENCY);
+    if (timeSinceRender_ >= frameInterval_) {
+        timeSinceRender_ -= frameInterval_;
 
         scene_->Render(delta);
         fps.Update();
