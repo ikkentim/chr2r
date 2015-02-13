@@ -7,11 +7,7 @@
 enum ActorType {
     ENNEMIS
 };
-enum LayerType : char {
-    PLAYABLE,
-    BACKGROUND,
-    FOREGROUND
-};
+
 struct LevelData {
     unsigned int bottom;
     unsigned int player_x;
@@ -33,7 +29,7 @@ struct ObjectData {
     int height;
     Texture texture;
     int type_ph;/* placeholder */
-    LayerType layer;
+    LevelManager::Layer layer;
     char aligner_27bytes[27];/* aligner */
 };
 

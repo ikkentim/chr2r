@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "Block.h"
 #include "Coin.h"
-
+#include "Ennemis.h"
 
 #include <irrKlang.h>
 
@@ -37,12 +37,11 @@ GameScene::GameScene(GameWindow *window)
     level_ = new LevelManager();
 
     /* Load a player and an enemy for testing purposes. */
-    player_ = new Player(this, Vector2(16, 240), Vector2(14, 27));
+    player_ = new Player(this, Vector2(16, 240));
 
 	level_->Add(player_, LevelManager::MOVABLE);
 
-	ennemis_ = new Ennemis(Vector2(80, 240), Vector2(16, 16));
-	level_->Add(ennemis_, LevelManager::MOVABLE);
+	level_->Add(new Ennemis(Vector2(80, 240)), LevelManager::MOVABLE);
 
 	for (int x = -10; x < 25; x++)
 		for (int y = 0; y < 20; y++)

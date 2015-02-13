@@ -1,11 +1,14 @@
 #include "GameWindow.h"
+#include "LevelManager.h"/* TODO: Remove */
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
-    LPSTR lpCmdLine,  int nCmdShow) {
-	GameWindow app;
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+    LPSTR lpCmdLine, int nCmdShow) {
 
-	if (!app.Create())
-		return 0;
-	
-	return app.Run();
+    LevelManager::WriteSimpleLevel();/* TODO: Remove */
+    GameWindow app;
+
+    if (!app.Create())
+        return 0;
+
+    return app.Run();
 }
