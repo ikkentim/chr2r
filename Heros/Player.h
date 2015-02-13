@@ -21,7 +21,7 @@ public:
         IDLE_LEFT,
 	};
 
-    Player(class GameScene *, Vector2 position, Vector2 size);
+    Player(class GameScene *, Vector2);
     void Update(double, Keys) override;
 	void Render(Viewport &) override;
 	void EnteredCollision(GameObject *, Vector2) override;

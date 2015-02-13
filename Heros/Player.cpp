@@ -13,7 +13,7 @@
 #define TEXTURE_WIDTH       (22)
 #define TEXTURE_HEIGHT      (28)
 
-Player::Player(GameScene *scene, Vector2 pos, Vector2 size) :Actor(pos, size) {
+Player::Player(GameScene *scene, Vector2 pos) :Actor(pos, Vector2(14, 27)) {
     soundEngine_ = scene->SoundEngine();
 }
 

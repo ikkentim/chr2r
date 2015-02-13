@@ -1,8 +1,274 @@
 #include "LevelManager.h"
+#include <fstream>
+#include "Block.h"
+#include "Ennemis.h"
+#include "Player.h"
+
+enum ActorType {
+    ENNEMIS
+};
+enum LayerType : char {
+    PLAYABLE,
+    BACKGROUND,
+    FOREGROUND
+};
+struct LevelData {
+    unsigned int bottom;
+    unsigned int player_x;
+    unsigned int player_y;
+    unsigned int player_abilities_ph; /* placeholder */
+    unsigned int object_count;
+    unsigned int actor_count;
+    SpriteSheet::Type background;
+    char aligner_4bytes[4];/* aligner */
+};
+
+struct ObjectData {
+    ObjectData() :texture(Texture(0, 0, 0, 0)) {
+    }
+
+    int x;
+    int y;
+    int width;
+    int height;
+    Texture texture;
+    int type_ph;/* placeholder */
+    LayerType layer;
+    char aligner_27bytes[27];/* aligner */
+};
+
+struct ActorData {
+    int x;
+    int y;
+    ActorType type;
+    char aligner_12bytes[20];/* aligner */
+};
+using namespace std;
 
 LevelManager::LevelManager() {
 }
 
 LevelManager::~LevelManager() {
-    /* FIXME: delete contents of each layer */
+    /* FIXME: delete contents of each layer (mem leak) */
+}
+
+/* 
+ * === LEVEL DATA FILE STRUCTURE ===
+ * ! file is written in little endian
+ *
+ * 0x00000000 -                                 | header
+ * 0x00000019                                   |
+ * ---------------------------------------------+---------------------
+ * 0x00000020 -                                 |
+ * 0x00000020 +                                 | game objects
+ * (header.object_count * sizeof(ObjectData))   |
+ * ---------------------------------------------+---------------------
+ * ...... + 1 -                                 |
+ * ...... + 1 +                                 | actors
+ * (header.actor_count * sizeof(ObjectData))    |
+ */
+
+
+LevelManager *LevelManager::Load(const char * name, GameScene *scene, 
+    Player *&player) {
+    LevelManager *manager = new LevelManager();
+
+    ifstream lvl;
+    lvl.open(name, ios::in | ios::binary);
+
+    LevelData header;
+    lvl.read((char *)&header, sizeof(header));
+    
+    ObjectData object_buffer;
+    for (int i = 0; i < header.object_count; i++) {
+        lvl.read((char *)&object_buffer, sizeof(object_buffer));
+
+        GameObject *object = NULL;
+
+        //swich(object_buffer.type) /* TODO: switch type of object */
+        object = new Block(object_buffer.texture,
+            Vector2(object_buffer.x, object_buffer.y));
+
+        switch (object_buffer.layer) {
+        case PLAYABLE:
+            manager->playableLayer_.push_back(object);
+            break;
+        case BACKGROUND:
+            manager->backgroundLayer_.push_back(object);
+            break;
+        case FOREGROUND:
+            manager->foregroundLayer_.push_back(object);
+            break;
+        }
+    }
+
+    ActorData actor_buffer;
+    for (int i = 0; i < header.actor_count; i++) {
+        lvl.read((char *)&actor_buffer, sizeof(actor_buffer));
+
+        Actor *actor = NULL;
+
+        switch (actor_buffer.type) {
+        case ENNEMIS:
+            actor = new Ennemis(Vector2(actor_buffer.x, actor_buffer.y));
+            break;
+        }
+
+        manager->playableLayer_.push_back(actor);
+    }
+
+    player = new Player(scene, Vector2(header.player_x, header.player_y));
+    manager->playableLayer_.push_back(player);
+
+    lvl.close();
+
+    return manager;
+}
+
+
+
+void LevelManager::WriteSimpleLevel()
+{
+    LevelData lvl;
+    lvl.bottom = 500;
+    lvl.player_x = 16;
+    lvl.player_y = 240;
+    lvl.player_abilities_ph = 0;
+    lvl.object_count = 2160;
+    lvl.actor_count = 1;
+    lvl.background = SpriteSheet::BACKGROUND01;
+
+    ActorData actor;
+    actor.x = 80;
+    actor.y = 240;
+    actor.type = ENNEMIS;
+
+    ofstream lvlout;
+    lvlout.open("level01.dat", ios::out | ios::binary);
+
+    lvlout.write((char *)&lvl, sizeof(lvl));
+
+    Texture grass_top = { 444, 253, 16, 16 };
+    Texture grass_middle = { 444, 270, 16, 16 };
+
+    Texture grass_tl = { 427, 202, 16, 16 };
+    Texture grass_tr = { 461, 202, 16, 16 };
+
+    Texture grass_left = { 427, 219, 16, 16 };
+    Texture grass_right = { 461, 219, 16, 16 };
+
+    Texture air_block = { 257, 97, 16, 16 };
+    Texture question = { 208, 181, 16, 16 };
+
+    Texture pipe_tl = { 1, 179, 16, 15 };
+    Texture pipe_tr = { 19, 179, 16, 15 };
+    Texture pipe_bl = { 1, 195, 16, 16 };
+    Texture pipe_br = { 19, 195, 16, 16 };
+
+    ObjectData obj;
+    obj.width = 16;
+    obj.height = 16;
+    obj.texture = grass_tl;
+    obj.type_ph = 0;
+    obj.layer = PLAYABLE;
+
+    for (int x = -10; x < 25; x++)
+        for (int y = 0; y < 20; y++) {
+            obj.x = 16 * x;
+            obj.y = 16 * y + 256;
+
+            if (x == -10 && y == 0)
+                obj.texture = grass_tl;
+            else if (x == 24 && y == 0)
+                obj.texture = grass_tr;
+            else if (y == 0)
+                obj.texture = grass_top;
+            else if (x == -10)
+                obj.texture = grass_left;
+            else if (x == 24)
+                obj.texture = grass_right;
+            else
+                obj.texture = grass_middle;
+
+            lvlout.write((char *)&obj, sizeof(ObjectData));
+        }
+
+    for (int x = 28; x < 100; x++)
+        for (int y = 0; y < 20; y++) {
+            obj.x = 16 * x;
+            obj.y = 16 * y + 256;
+
+            if (x == 28 && y == 0)
+                obj.texture = grass_tl;
+            else if (x == 99 && y == 0)
+                obj.texture = grass_tr;
+            else if (y == 0)
+                obj.texture = grass_top;
+            else if (x == 28)
+                obj.texture = grass_left;
+            else if (x == 99)
+                obj.texture = grass_right;
+            else
+                obj.texture = grass_middle;
+
+            lvlout.write((char *)&obj, sizeof(ObjectData));
+        }
+
+    for (int x = 0; x < 3; x++) {
+        obj.x = 96 + (16 * x);
+        obj.y = 192;
+        obj.texture = air_block;
+
+        lvlout.write((char *)&obj, sizeof(ObjectData));
+    }
+
+    for (int x = 0; x < 4; x++) {
+        obj.x = 480 + (16 * x);
+        obj.y = 192;
+        obj.texture = air_block;
+
+        lvlout.write((char *)&obj, sizeof(ObjectData));
+    }
+
+    for (int x = 0; x < 8; x++) {
+        obj.x = 544 + (16 * x);
+        obj.y = 128;
+        obj.texture = air_block;
+
+        lvlout.write((char *)&obj, sizeof(ObjectData));
+    }
+
+    obj.x = 112;
+    obj.y = 192;
+    obj.texture = question;
+    lvlout.write((char *)&obj, sizeof(ObjectData));
+
+    obj.x = 256;
+    obj.y = 224;
+    obj.height = 15;
+    obj.texture = pipe_tl;
+    lvlout.write((char *)&obj, sizeof(ObjectData));
+
+    obj.x = 272;
+    obj.y = 224;
+    obj.height = 15;
+    obj.texture = pipe_tr;
+    lvlout.write((char *)&obj, sizeof(ObjectData));
+
+    obj.x = 256;
+    obj.y = 240;
+    obj.height = 16;
+    obj.texture = pipe_bl;
+    lvlout.write((char *)&obj, sizeof(ObjectData));
+
+    obj.x = 272;
+    obj.y = 240;
+    obj.height = 16;
+    obj.texture = pipe_br;
+    lvlout.write((char *)&obj, sizeof(ObjectData));
+
+
+    lvlout.write((char *)&actor, sizeof(ActorData));
+
+    lvlout.close();
 }

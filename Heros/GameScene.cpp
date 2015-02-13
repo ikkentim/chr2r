@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Block.h"
+#include "Ennemis.h"
 
 #include <irrKlang.h>
 
@@ -7,6 +8,8 @@ GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     /* Start some testing sounds */
     SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
+
+    //level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
 	Texture grass_top = { 444, 253, 16, 16 };
 	Texture grass_middle = { 444, 270, 16, 16 };
@@ -28,14 +31,9 @@ GameScene::GameScene(GameWindow *window)
     /* Load a level manager for testing purposes. */
     level_ = new LevelManager();
 
-    /* Load a player and an enemy for testing purposes. */
-    player_ = new Player(this, Vector2(16, 240), Vector2(14, 27));
-    level_->PlayableLayer()->push_back(player_);
+    level_->PlayableLayer()->push_back(player_ = new Player(this, Vector2(16, 240)));
+    level_->PlayableLayer()->push_back(new Ennemis(Vector2(80, 240)));
 
-    ennemis_ = new Ennemis(Vector2(80, 240), Vector2(16, 16));
-	level_->PlayableLayer()->push_back(ennemis_);
-
-	/* Load a number of object for testing purposes. */
 	for (int x = -10; x < 25; x++)
 		for (int y = 0; y < 20; y++)
 			if (x == -10 && y == 0)
@@ -51,7 +49,6 @@ GameScene::GameScene(GameWindow *window)
 			else
 				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
 
-	/* Load a number of object for testing purposes. */
 	for (int x = 28; x < 100; x++)
 		for (int y = 0; y < 20; y++)
 			if (x == 28 && y == 0)
@@ -67,17 +64,14 @@ GameScene::GameScene(GameWindow *window)
 			else
 				level_->ForegroundLayer()->push_back(new Block(grass_middle, { 16.0f * x, 256.0f + 16 * y }));
 
-	/* Load a number of object for testing purposes. */
 	for (int x = 0; x < 3; x++) {
 		level_->PlayableLayer()->push_back(new Block(air_block, { 96 + (16.0f * x), 192.0f }));
 	}
 
-	/* Load a number of object for testing purposes. */
 	for (int x = 0; x < 4; x++) {
 		level_->PlayableLayer()->push_back(new Block(air_block, { 480 + (16.0f * x), 192 }));
 	}
 
-	/* Load a number of object for testing purposes. */
 	for (int x = 0; x < 8; x++) {
 		level_->PlayableLayer()->push_back(new Block(air_block, { 544 + (16.0f * x), 128 }));
 	}
@@ -88,12 +82,12 @@ GameScene::GameScene(GameWindow *window)
 	level_->PlayableLayer()->push_back(new Block(pipe_tr, { 272, 224.0f }));
 	level_->PlayableLayer()->push_back(new Block(pipe_bl, { 256, 240 }));
 	level_->PlayableLayer()->push_back(new Block(pipe_br, { 272, 240 }));
+
 }
 
 GameScene::~GameScene() {
     delete level_;
     delete player_;
-    delete ennemis_;
 }
 
 void GameScene::Update(double delta, Keys keys) {

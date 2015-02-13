@@ -4,7 +4,7 @@
 #define WALK_SPEED  (150.0)
 #define GRAVITY     (981.0)
 
-Ennemis::Ennemis(Vector2 pos, Vector2 size) :Actor(pos, size){
+Ennemis::Ennemis(Vector2 pos) :Actor(pos, Vector2(16, 16)){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 Ennemis :: ~Ennemis(){}

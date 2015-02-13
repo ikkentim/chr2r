@@ -6,7 +6,7 @@
 
 class Ennemis : public Actor {
 public:
-	Ennemis(Vector2, Vector2);
+	Ennemis(Vector2);
 	~Ennemis();
     void GoLeft(double);
     void GoRight(double);

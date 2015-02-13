@@ -4,7 +4,6 @@
 #include "Scene.h"
 #include "LevelManager.h"
 #include "Player.h"
-#include "Ennemis.h"
 #include "GameWindow.h"
 
 class GameScene : public Scene {
@@ -18,8 +17,7 @@ public:
     }
 private:
     GameWindow *window_;
-    LevelManager *level_;
     Player *player_;
+    LevelManager *level_;
     Viewport viewport_;
-    Ennemis *ennemis_;
 };

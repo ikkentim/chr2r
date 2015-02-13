@@ -56,10 +56,10 @@ bool GameWindow::GameLoop(double delta) {
 
 #ifdef SHOW_FPS
         TCHAR buf[16];
-        std::sprintf(buf, "FPS: %d", fps.GetFps());
+        sprintf_s(buf, "FPS: %d", fps.GetFps());
         TextOut(graphics_, 5, 5, buf, strlen(buf));
 
-        std::sprintf(buf, "UPS: %d", ups.GetFps());
+        sprintf_s(buf, "UPS: %d", ups.GetFps());
         TextOut(graphics_, 5, 25, buf, strlen(buf));
 #endif
         /* Tell the window to repaint. */
@@ -90,7 +90,7 @@ bool GameWindow::GameLoop(double delta) {
 
 		/* This restart button leaks pretty badly but it's useful. */
 		if (::GetAsyncKeyState(VK_F5)) {
-			/* FIXME: Fix leak in GameScene. (initializer/destructor) */
+			/* FIXME: Fix leak in LevelManager. (initializer/destructor) */
 			while (::GetAsyncKeyState(VK_F5));
 			UpdateScene(new GameScene(this));
 		}
