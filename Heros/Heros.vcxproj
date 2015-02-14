@@ -101,6 +101,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SplashScene.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
@@ -118,7 +119,9 @@
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SpriteSheet.h" />
@@ -128,8 +131,12 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\dependencies\spr\coin_2.bmp" />
     <Image Include="DocChar.bmp" />
     <Image Include="DocChar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Heros.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -87,6 +87,9 @@
     <ClCompile Include="Coin.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -143,6 +146,12 @@
     <ClInclude Include="Coin.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="DocChar.png">
@@ -151,5 +160,9 @@
     <Image Include="DocChar.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\dependencies\spr\coin_2.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Heros.rc" />
   </ItemGroup>
 </Project>
