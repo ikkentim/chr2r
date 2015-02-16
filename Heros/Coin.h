@@ -1,14 +1,14 @@
 #pragma once
 
 #include "GameObject.h"
-#include "Texture.h"
 
 class Coin : public GameObject{
 public:
-	Coin(Texture);
-	Coin(Texture, Vector2);
+	Coin(Vector2);
     void Update(GameScene *, double, Keys) override;
 	void Render(Viewport &) override;
+    void EnteredCollision(GameScene *, GameObject *, Vector2) override;
 private:
-	Texture texture_;
+    double 	animationTime_ = 0;
+    int animationIndex_ = 0;
 };
