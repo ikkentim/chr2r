@@ -4,27 +4,29 @@
 
 #define ANIMATION_INTERVAL  (0.12)
 
-Coin::Coin(Vector2 pos) :GameObject(pos, Vector2(12, 16)){
+Coin::Coin(Vector2 pos) :GameObject(false, pos, Vector2(12, 16)){
 
 }
 
 void Coin::Update(GameScene *scene, double delta, Keys keys) {
     animationTime_ += delta;
 
-    if (animationTime_ >= ANIMATION_INTERVAL) {
+    if (!pickedUp_ && animationTime_ >= ANIMATION_INTERVAL) {
         animationTime_ -= ANIMATION_INTERVAL;
         animationIndex_ = (animationIndex_ + 1) % 4;
     }
 }
 
 void Coin::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
-    if (obj == scene->player()){
+    if (!pickedUp_ && obj == scene->player()){
         scene->SoundEngine()->play2D("snd/smb_coin.wav");
-    }
 
-    /* TODO: Remove object from scene */
+        pickedUp_ = true;
+    }
 }
 void Coin::Render(Viewport &vp) {
+    if (pickedUp_) return;
+
     Texture t0 = { 219, 28, 12, 16 };
     Texture t1 = { 232, 28, 8, 16 };
     Texture t2 = { 241, 28, 6, 16 };

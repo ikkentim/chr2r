@@ -19,6 +19,9 @@ public:
     Player *player() {
         return player_;
     }
+    LevelManager *level() {
+        return level_;
+    }
 private:
     GameWindow *window_;
     Player *player_;

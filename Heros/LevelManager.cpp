@@ -4,6 +4,7 @@
 #include "Ennemis.h"
 #include "Coin.h"
 #include "Player.h"
+#include <algorithm>
 
 enum ActorType {
     ENNEMIS
@@ -81,7 +82,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     lvl.read((char *)&header, sizeof(header));
     
     ObjectData object_buffer;
-    for (int i = 0; i < header.object_count; i++) {
+    for (unsigned int i = 0; i < header.object_count; i++) {
         lvl.read((char *)&object_buffer, sizeof(object_buffer));
 
         GameObject *object = NULL;
@@ -100,7 +101,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     }
 
     ActorData actor_buffer;
-    for (int i = 0; i < header.actor_count; i++) {
+    for (unsigned int i = 0; i < header.actor_count; i++) {
         lvl.read((char *)&actor_buffer, sizeof(actor_buffer));
 
         Actor *actor = NULL;
@@ -288,10 +289,8 @@ void LevelManager::WriteSimpleLevel()
     lvlout.close();
 }
 
-void LevelManager::Add(GameObject * object, LevelManager::Layer layer)
-{
-	switch (layer)
-	{
+void LevelManager::Add(GameObject * object, LevelManager::Layer layer) {
+	switch (layer) {
 	case LevelManager::MOVABLE:
 		Movables()->push_back(object);
 		PlayableLayer()->push_back(object);

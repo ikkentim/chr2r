@@ -11,9 +11,9 @@ class GameObject {
 public:
     /* Constructors */
     GameObject();
-    GameObject(bool isMovable);
+    GameObject(bool isSolid);
 	GameObject(Vector2 position, Vector2 size);
-    GameObject(bool isMovable, Vector2 pos, Vector2 size);
+    GameObject(bool isSolid, Vector2 pos, Vector2 size);
 
     /* Getters */
 	Vector2 Position() const {
@@ -25,8 +25,8 @@ public:
 	Vector2 Size() const {
 		return size_;
 	}
-    bool IsMovable() const {
-        return isMovable_;
+    bool IsSolid() const {
+        return isSolid_;
     }
     bool IsOnGround() const {
         return onGround_;
@@ -46,9 +46,9 @@ public:
 protected:
 	Vector2 position_;
     Vector2 velocity_;
-	Vector2 size_;
+    Vector2 size_;
 
 private:
     bool onGround_ = false;
-    bool isMovable_ = false;
+    bool isSolid_ = true;
 };
