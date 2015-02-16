@@ -102,6 +102,7 @@ void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double 
 
 			/* Notify children. */
             EnteredCollision(scene, check, collision);
+            check->EnteredCollision(scene, this, -collision);
         }
     }
 

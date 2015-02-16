@@ -15,6 +15,9 @@ public:
     irrklang::ISoundEngine *SoundEngine() {
         return window_->SoundEngine();
     }
+    Player *player() {
+        return player_;
+    }
 private:
     GameWindow *window_;
     Player *player_;

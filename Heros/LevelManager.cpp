@@ -92,8 +92,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
                 Vector2(object_buffer.x, object_buffer.y));
             break;
         case COIN:
-            object = new Coin(object_buffer.texture,
-                Vector2(object_buffer.x, object_buffer.y));
+            object = new Coin(Vector2(object_buffer.x, object_buffer.y));
             break;
         }
 
