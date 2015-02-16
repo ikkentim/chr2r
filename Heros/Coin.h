@@ -11,4 +11,5 @@ public:
 private:
     double 	animationTime_ = 0;
     int animationIndex_ = 0;
+    bool pickedUp_ = false;
 };
