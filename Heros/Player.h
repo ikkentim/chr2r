@@ -22,9 +22,8 @@ public:
 	};
 
     Player(class GameScene *, Vector2);
-    void Update(double, Keys) override;
+    void Update(GameScene *, double, Keys) override;
 	void Render(Viewport &) override;
-	void EnteredCollision(GameObject *, Vector2) override;
 
 private:
     Keys keys_ = KEY_NONE;

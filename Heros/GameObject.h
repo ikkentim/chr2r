@@ -5,6 +5,8 @@
 #include "Keys.h"
 #include "LevelManager.h"
 
+class GameScene;
+
 class GameObject {
 public:
     /* Constructors */
@@ -31,7 +33,7 @@ public:
     }
 
     /* Game logic */
-    virtual void Update(double, Keys) = 0;
+    virtual void Update(GameScene *, double, Keys) = 0;
 	virtual void Render(Viewport &) = 0;
 
     /* Positioning */
@@ -39,8 +41,8 @@ public:
 
     /* Collision */
     bool IsCollidingWith(GameObject *, double);
-    void CheckForCollisions(LevelLayer *, double);
-	virtual void EnteredCollision(GameObject *, Vector2);
+    void CheckForCollisions(GameScene *, LevelLayer *, double);
+    virtual void EnteredCollision(GameScene *, GameObject *, Vector2);
 protected:
 	Vector2 position_;
     Vector2 velocity_;

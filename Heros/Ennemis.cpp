@@ -30,7 +30,7 @@ void Ennemis::Render(Viewport &vp) {
 	SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture, position_, vp);
 }
 
-void Ennemis::Update(double delta, Keys keys){
+void Ennemis::Update(GameScene *scene, double delta, Keys keys){
 	if (position_.x > 200){
 		GoLeft(delta);
 	}
@@ -39,8 +39,4 @@ void Ennemis::Update(double delta, Keys keys){
 	}
 
 	Falling(delta);
-}
-
-void Ennemis::EnteredCollision(GameObject * collider)
-{
 }

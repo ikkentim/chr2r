@@ -47,8 +47,8 @@ void GameScene::Update(double delta, Keys keys) {
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
 
-        object->Update(delta, keys);
-        object->CheckForCollisions(level_->PlayableLayer(), delta);
+        object->Update(this, delta, keys);
+        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
         object->ApplyVelocity(delta);
     }
 }

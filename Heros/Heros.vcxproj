@@ -132,14 +132,6 @@
     <ClInclude Include="Viewport.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\dependencies\spr\coin_2.bmp" />
-    <Image Include="DocChar.bmp" />
-    <Image Include="DocChar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Heros.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
