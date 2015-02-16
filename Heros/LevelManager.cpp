@@ -132,7 +132,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
-    lvl.object_count = 2160;
+    lvl.object_count = 2160 + 16;
     lvl.actor_count = 1;
     lvl.background = SpriteSheet::BACKGROUND01;
 
@@ -283,6 +283,15 @@ void LevelManager::WriteSimpleLevel()
     obj.texture = pipe_br;
     lvlout.write((char *)&obj, sizeof(ObjectData));
 
+
+    for (int x = 0; x < 16; x++) {
+        obj.x = 96 + (32 * x);
+        obj.y = 175;
+        obj.texture = { 0, 0, 0, 0 };
+        obj.type = COIN;
+
+        lvlout.write((char *)&obj, sizeof(ObjectData));
+    }
 
     lvlout.write((char *)&actor, sizeof(ActorData));
 
