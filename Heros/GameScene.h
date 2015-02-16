@@ -9,7 +9,8 @@
 class GameScene : public Scene {
 public:
     GameScene(GameWindow *);
-    ~GameScene();
+    virtual ~GameScene();
+	virtual void Start();
     void Update(double, Keys);
     void Render(double);
     irrklang::ISoundEngine *SoundEngine() {
