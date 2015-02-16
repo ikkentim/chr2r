@@ -16,7 +16,7 @@ Player::Player(GameScene *scene, Vector2 pos) :Actor(pos, Vector2(14, 27)) {
     soundEngine_ = scene->SoundEngine();
 }
 
-void Player::Update(double delta, Keys keys) {
+void Player::Update(GameScene *scene, double delta, Keys keys) {
 	animationTime_ += delta;
 
     /* Update movement according to keys pressed. */
@@ -200,8 +200,4 @@ void Player::Render(Viewport &vp) {
     texture.left += idx * TEXTURE_WIDTH;
 
     SpriteSheet::Get(SpriteSheet::MARIO)->Draw(texture, position_, vp);
-}
-
-void Player::EnteredCollision(GameObject * collider, Vector2 collision)
-{
 }

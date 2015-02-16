@@ -153,16 +153,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="DocChar.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="DocChar.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\dependencies\spr\coin_2.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Heros.rc" />
-  </ItemGroup>
 </Project>

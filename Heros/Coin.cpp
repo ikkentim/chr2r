@@ -8,10 +8,10 @@ Coin::Coin(Texture tex, Vector2 pos): texture_(tex), GameObject(pos, Vector2(tex
 
 }
 
-void Coin::Update(double delta, Keys keys) {
+void Coin::Update(GameScene *scene, double delta, Keys keys) {
 	/* TODO: add the collision with character to delete it and +1 to total coin player */
 }
 
 void Coin::Render(Viewport &vp) {
-	SpriteSheet::Get(SpriteSheet::COIN)->Draw(texture_, position_, vp);
+	SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture_, position_, vp);
 }
