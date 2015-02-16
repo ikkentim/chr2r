@@ -16,10 +16,12 @@ GameWindow::~GameWindow() {
 }
 
 void GameWindow::UpdateScene(Scene *scene) {
-	if (scene_)
+	if (scene_){
 		delete scene_;
+	}
 
 	scene_ = scene;
+	scene_->Start();
 }
 
 irrklang::ISoundEngine *GameWindow::SoundEngine() {
@@ -34,6 +36,7 @@ void GameWindow::GameInit() {
     soundEngine_->setSoundVolume(0.3f);/* Master Volume. */
 
     scene_ = new SplashScene(this);
+	scene_->Start();
 
     DEVMODE mode;
     EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);

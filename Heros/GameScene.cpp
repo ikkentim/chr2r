@@ -8,16 +8,18 @@
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     /* Start some testing sounds */
-    SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
-
-    level_ = LevelManager::Load("lvl/level01.dat", this, player_);
+    
 }
 
 GameScene::~GameScene() {
     delete level_;
     delete player_; /* FIXME: Should be deleted by level_ */
 }
+void GameScene::Start() {
+	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
 
+	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
+}
 void GameScene::Update(double delta, Keys keys) {
 
     /* Update viewport */

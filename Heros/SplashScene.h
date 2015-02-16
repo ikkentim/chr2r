@@ -6,7 +6,8 @@
 class SplashScene : public Scene {
 public:
     SplashScene(GameWindow *);
-    ~SplashScene();
+    virtual ~SplashScene();
+	virtual void Start();
     void Update(double, Keys);
     void Render(double);
 private:
