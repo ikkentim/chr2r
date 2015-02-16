@@ -170,7 +170,8 @@ LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	switch (uMsg) {
 	case WM_DESTROY:
-		PostQuitMessage(0);
+        exit(0);
+		//PostQuitMessage(0);
 		break;
 	default:
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);

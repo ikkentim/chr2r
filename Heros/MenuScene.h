@@ -12,8 +12,7 @@ public:
 	void Render(double);
 
 private:
-	GameWindow(*window_);
-	int selected;
-	int wait;
-	Keys known;
+	GameWindow *window_;
+	int selectedOption_=0;
+	double keyDelay_=0;
 };

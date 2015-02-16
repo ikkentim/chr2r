@@ -1,6 +1,8 @@
 #include "MenuScene.h"
 #include "GameScene.h"
 
+#define KEY_INTERVAL            (0.15)
+
 MenuScene::MenuScene(GameWindow *window) :window_(window) {
 	
 }
@@ -13,34 +15,25 @@ void MenuScene::Start() {
 	auto sound = window_->SoundEngine()->play2D("snd/jaz30.s3m", true, false, true);
 	sound->setVolume(0.5f);
 	sound->drop();
-	selected = 0;
-	wait = 0;
 }
 void MenuScene::Update(double delta, Keys k) {
 
-	if (!(k & KEY_DOWN))
-		known ^= KEY_DOWN;
-
-	if ((k & KEY_DOWN) && !(known & KEY_DOWN))
-	{
-		selected++;
-		if (selected > 2)
-			selected = 0;
-		known |= KEY_DOWN;
+    if (keyDelay_ > 0)
+        keyDelay_ -= delta;
+    
+    if (k & KEY_DOWN && keyDelay_ <= 0) {
+        keyDelay_ = KEY_INTERVAL;
+        selectedOption_ = (selectedOption_ + 1) % 3;
 	}
-	if (!(k & KEY_UP))
-		known ^= KEY_UP;
 
-	if ((k & KEY_UP) && !(known & KEY_UP)) {
-		selected--;
-		if (selected < 0)
-			selected = 2;
-		known |= KEY_UP;
+    if ((k & KEY_UP && keyDelay_ <= 0)) {
+        keyDelay_ = KEY_INTERVAL;
+        selectedOption_ = (selectedOption_ + 2) % 3;
 	}
 
 	if ((k & KEY_JUMP)) {	
 
-		switch (selected) {
+        switch (selectedOption_) {
 			case 0:
 				window_->UpdateScene(new GameScene(window_));
 				break;
@@ -61,5 +54,5 @@ void MenuScene::Render(double delta) {
 	SpriteSheet::Get(SpriteSheet::PLAY_BUTTON)->Draw(Texture(0, 0, 126, 41), xoff, yoff);
 	SpriteSheet::Get(SpriteSheet::OPTIONS_BUTTON)->Draw(Texture(0, 0, 126, 41), xoff, yoff + yspc);
 	SpriteSheet::Get(SpriteSheet::EXIT_BUTTON)->Draw(Texture(0, 0, 126, 41), xoff, yoff + yspc * 2);
-	SpriteSheet::Get(SpriteSheet::ARROW)->Draw(Texture(0, 0, 63, 40), xoff-80, yoff + yspc * selected);//alter ypos for cursor
+	SpriteSheet::Get(SpriteSheet::ARROW)->Draw(Texture(0, 0, 63, 40), xoff-80, yoff + yspc * selectedOption_);//alter ypos for cursor
 }
