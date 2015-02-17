@@ -90,4 +90,5 @@ void GameScene::Render(double delta) {
 		GameObject *object = *it;
 		object->Render(viewport_);
 	}
+
 }
