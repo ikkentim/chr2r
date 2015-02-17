@@ -14,7 +14,8 @@ public:
         TERRAIN,
         SPLASH_SCREEN,
         BACKGROUND01,
-        MARIO
+        MARIO,
+		ENNEMY_1
     };
 
     static void SetWindow(HWND, HDC);

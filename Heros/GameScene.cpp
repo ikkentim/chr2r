@@ -2,6 +2,7 @@
 #include "Block.h"
 #include "Coin.h"
 #include "Ennemis.h"
+#include "EnnemyDog.h"
 
 #include <irrKlang.h>
 

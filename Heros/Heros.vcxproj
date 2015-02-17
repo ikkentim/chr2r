@@ -96,6 +96,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Ennemis.cpp" />
+    <ClCompile Include="EnnemyDog.cpp" />
     <ClCompile Include="Fps.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Ennemis.h" />
+    <ClInclude Include="EnnemyDog.h" />
     <ClInclude Include="Fps.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />

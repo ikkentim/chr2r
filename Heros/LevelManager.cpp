@@ -2,11 +2,13 @@
 #include <fstream>
 #include "Block.h"
 #include "Ennemis.h"
+#include "EnnemyDog.h"
 #include "Coin.h"
 #include "Player.h"
 
 enum ActorType {
-    ENNEMIS
+	ENNEMIS,
+	DOG
 };
 
 enum ObjectType {
@@ -110,6 +112,9 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
         case ENNEMIS:
             actor = new Ennemis(Vector2(actor_buffer.x, actor_buffer.y));
             break;
+		case DOG:
+			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
+			break;
         }
 
         manager->Add(actor, MOVABLE);
@@ -133,13 +138,18 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
     lvl.object_count = 2160;
-    lvl.actor_count = 1;
+    lvl.actor_count = 2;
     lvl.background = SpriteSheet::BACKGROUND01;
 
     ActorData actor;
     actor.x = 80;
     actor.y = 240;
     actor.type = ENNEMIS;
+
+	ActorData dog;
+	dog.x = 110;
+	dog.y = 290;
+	dog.type = DOG;
 
     ofstream lvlout;
     lvlout.open("level01.dat", ios::out | ios::binary);
@@ -284,7 +294,9 @@ void LevelManager::WriteSimpleLevel()
     lvlout.write((char *)&obj, sizeof(ObjectData));
 
 
-    lvlout.write((char *)&actor, sizeof(ActorData));
+	lvlout.write((char *)&actor, sizeof(ActorData));
+
+	lvlout.write((char *)&dog, sizeof(ActorData));
 
     lvlout.close();
 }

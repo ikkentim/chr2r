@@ -3,6 +3,7 @@
 #define WALK_ACCEL  (150.0)
 #define WALK_SPEED  (150.0)
 
+
 Ennemis::Ennemis(Vector2 pos) :Actor(pos, Vector2(16, 16)){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
