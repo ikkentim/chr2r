@@ -6,6 +6,8 @@
 
 class Scene {
 public:
+	virtual ~Scene(){};
+	virtual void Start(){};
     virtual void Update(double, Keys) = 0;
     virtual void Render(double) = 0;
 };

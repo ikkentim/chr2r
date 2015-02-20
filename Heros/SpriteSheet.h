@@ -5,7 +5,7 @@
 #include "Vector2.h"
 #include "Viewport.h"
 
-#define SPRITE_SHEET_COUNT      (5)
+#define SPRITE_SHEET_COUNT      (9)
 
 class SpriteSheet
 {
@@ -15,7 +15,11 @@ public:
         SPLASH_SCREEN,
         BACKGROUND01,
         MARIO,
-		COIN
+		MENU_SCREEN,
+		PLAY_BUTTON,
+		OPTIONS_BUTTON,
+		EXIT_BUTTON,
+		ARROW
     };
 
     static void SetWindow(HWND, HDC);

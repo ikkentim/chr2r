@@ -8,16 +8,18 @@
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     /* Start some testing sounds */
-    SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
-
-    level_ = LevelManager::Load("lvl/level01.dat", this, player_);
+    
 }
 
 GameScene::~GameScene() {
     delete level_;
     delete player_; /* FIXME: Should be deleted by level_ */
 }
+void GameScene::Start() {
+	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
 
+	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
+}
 void GameScene::Update(double delta, Keys keys) {
 
     /* Update viewport */
@@ -42,13 +44,18 @@ void GameScene::Update(double delta, Keys keys) {
     if (posy < miny) viewport_.y += posy - miny;
     else if (posy > maxy) viewport_.y += posy - maxy;
 
-    /* Check collision on playerlayer */    
-    LevelLayer *layer = level_->Movables();
+    /* playablelayer */
+    LevelLayer *layer = level_->PlayableLayer();
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
 
-        object->Update(delta, keys);
-        object->CheckForCollisions(level_->PlayableLayer(), delta);
+        object->Update(this, delta, keys);
+    }
+    /* Check collision on movableslayer */    
+    layer = level_->Movables();
+    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+        GameObject *object = *iter;
+        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
         object->ApplyVelocity(delta);
     }
 }
@@ -83,4 +90,5 @@ void GameScene::Render(double delta) {
 		GameObject *object = *it;
 		object->Render(viewport_);
 	}
+
 }

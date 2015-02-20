@@ -9,16 +9,16 @@ GameObject::GameObject()
     :position_({}), velocity_({}) {
 }
 
-GameObject::GameObject(bool isMovable) 
-    :isMovable_(isMovable), position_({}), velocity_({}) {
+GameObject::GameObject(bool isSolid) 
+    :isSolid_(isSolid), position_({}), velocity_({}) {
 }
 
 GameObject::GameObject(Vector2 pos, Vector2 size) 
     :position_(pos), size_(size), velocity_({}) {
 }
 
-GameObject::GameObject(bool isMovable, Vector2 pos, Vector2 size) 
-    :isMovable_(isMovable), position_(pos), size_(size), velocity_({}) {
+GameObject::GameObject(bool isSolid, Vector2 pos, Vector2 size) 
+    : isSolid_(isSolid), position_(pos), size_(size), velocity_({}) {
 }
 
 void GameObject::ApplyVelocity(double delta) {
@@ -39,7 +39,7 @@ bool GameObject::IsCollidingWith(GameObject *other, double delta) {
         position.y + size_.y / 2 < other_position.y - other->size_.y / 2);
 }
 
-void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
+void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double delta) {
     bool has_touched_ground = false;
 
     for (LevelLayer::iterator iter = layer->begin(); 
@@ -58,6 +58,17 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
             Vector2 offset_before = position_ - check->position_;
             Vector2 offset_prevented = offset_before + velocity_ * delta;
 
+            /* Calculate the collision area. */
+            Vector2 collision =
+                offset_prevented - (position_ - check->position_);
+
+            /* If not solid, just notify children and don't modify velocity. */
+            if (!check->isSolid_) {
+                EnteredCollision(scene, check, collision);
+                check->EnteredCollision(scene, this, -collision);
+                continue;
+            }
+
             /* Calculate the minimum distance required between both objects. */
             double min_distance_x = (size_.x + check->size_.x) / 2;
             double min_distance_y = (size_.y + check->size_.y) / 2;
@@ -69,7 +80,7 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                 abs((offset_before.y) / min_distance_y)) {
                 /* Move the X axis to free worldspace. This is done by moving
                  * this object so that there is min_distance_x distance between
-                 the objects on the X axis. */
+                 * the objects on the X axis. */
                 position_.x = offset_before.x < 0
                     ? check->position_.x - min_distance_x
                     : check->position_.x + min_distance_x;
@@ -85,8 +96,8 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                 has_touched_ground = has_touched_ground || offset_before.y <= 0;
 
                 /* Move the Y axis to free worldspace. This is done by moving
-                * this object so that there is min_distance_y distance between
-                the objects on the Y axis. */
+                 * this object so that there is min_distance_y distance between
+                 * the objects on the Y axis. */
                 position_.y = offset_before.y < 0
                     ? check->position_.y - min_distance_y
                     : check->position_.y + min_distance_y;
@@ -96,12 +107,9 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
                 velocity_.y = 0;
 			}
 
-            /* Calculate the collision area. */
-            Vector2 collision = 
-                offset_prevented - (position_ - check->position_);
-
 			/* Notify children. */
-            EnteredCollision(check, collision);
+            EnteredCollision(scene, check, collision);
+            check->EnteredCollision(scene, this, -collision);
         }
     }
 
@@ -109,6 +117,6 @@ void GameObject::CheckForCollisions(LevelLayer *layer, double delta) {
     onGround_ = has_touched_ground;
 }
 
-void GameObject::EnteredCollision(GameObject *collider, Vector2 collision) {
+void GameObject::EnteredCollision(GameScene *scene, GameObject *collider, Vector2 collision) {
 	
 }

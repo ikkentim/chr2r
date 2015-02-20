@@ -19,7 +19,6 @@ Window::Window() {
 	this->hWnd_					= NULL;
 	this->dwCreationFlags_		= 0L;
 	this->dwCreationFlags_		= SW_SHOW;
-	this->hbrWindowColor_		= (HBRUSH)(COLOR_WINDOW+1);
 	this->hIcon_				= LoadIcon(instance_, (LPCTSTR)IDI_APPLICATION);
 	this->strWindowTitle_		= _T("Classic Heroes Redefined 2: Revengeance, The Presequel REMASTERED - 2015 Special Edition pre-proloque");
 }
@@ -82,7 +81,7 @@ HRESULT Window::Create() {
 	wcex.hInstance		= instance_;
 	wcex.hIcon			= hIcon_;
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= hbrWindowColor_;
+	wcex.hbrBackground	= NULL;
 	wcex.lpszMenuName	= NULL;
 	wcex.lpszClassName	= _T("Skeleton");
 	wcex.hIconSm		= NULL;
@@ -170,7 +169,8 @@ LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	switch (uMsg) {
 	case WM_DESTROY:
-		PostQuitMessage(0);
+        exit(0);
+		//PostQuitMessage(0);
 		break;
 	default:
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);

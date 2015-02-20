@@ -19,7 +19,6 @@ protected:
 
  	DWORD dwCreationFlags_;
 	TCHAR *strWindowTitle_;
-	HBRUSH hbrWindowColor_;
 	HICON hIcon_;
     HACCEL hAccelTable_;
     HDC graphics_;
