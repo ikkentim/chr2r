@@ -7,7 +7,7 @@ public:
 	 Window();
 	 HRESULT Create();
 	 int Run();
-	LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
+     virtual LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 
 protected:
      virtual void GameInit() = 0;
