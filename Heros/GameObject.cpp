@@ -9,16 +9,16 @@ GameObject::GameObject()
     :position_({}), velocity_({}) {
 }
 
-GameObject::GameObject(bool isMovable) 
-    :isMovable_(isMovable), position_({}), velocity_({}) {
+GameObject::GameObject(bool isSolid) 
+    :isSolid_(isSolid), position_({}), velocity_({}) {
 }
 
 GameObject::GameObject(Vector2 pos, Vector2 size) 
     :position_(pos), size_(size), velocity_({}) {
 }
 
-GameObject::GameObject(bool isMovable, Vector2 pos, Vector2 size) 
-    :isMovable_(isMovable), position_(pos), size_(size), velocity_({}) {
+GameObject::GameObject(bool isSolid, Vector2 pos, Vector2 size) 
+    : isSolid_(isSolid), position_(pos), size_(size), velocity_({}) {
 }
 
 void GameObject::ApplyVelocity(double delta) {
@@ -58,6 +58,17 @@ void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double 
             Vector2 offset_before = position_ - check->position_;
             Vector2 offset_prevented = offset_before + velocity_ * delta;
 
+            /* Calculate the collision area. */
+            Vector2 collision =
+                offset_prevented - (position_ - check->position_);
+
+            /* If not solid, just notify children and don't modify velocity. */
+            if (!check->isSolid_) {
+                EnteredCollision(scene, check, collision);
+                check->EnteredCollision(scene, this, -collision);
+                continue;
+            }
+
             /* Calculate the minimum distance required between both objects. */
             double min_distance_x = (size_.x + check->size_.x) / 2;
             double min_distance_y = (size_.y + check->size_.y) / 2;
@@ -96,12 +107,9 @@ void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double 
                 velocity_.y = 0;
 			}
 
-            /* Calculate the collision area. */
-            Vector2 collision = 
-                offset_prevented - (position_ - check->position_);
-
 			/* Notify children. */
             EnteredCollision(scene, check, collision);
+            check->EnteredCollision(scene, this, -collision);
         }
     }
 

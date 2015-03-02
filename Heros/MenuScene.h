@@ -6,10 +6,13 @@
 class MenuScene : public Scene {
 public:
 	MenuScene(GameWindow *);
-	~MenuScene();
+	virtual ~MenuScene();
+	virtual void Start();
 	void Update(double, Keys);
 	void Render(double);
 
 private:
-	GameWindow(*window_);
+	GameWindow *window_;
+	int selectedOption_=0;
+	double keyDelay_=0;
 };

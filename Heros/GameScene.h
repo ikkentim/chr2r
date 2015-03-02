@@ -9,11 +9,18 @@
 class GameScene : public Scene {
 public:
     GameScene(GameWindow *);
-    ~GameScene();
+    virtual ~GameScene();
+	virtual void Start();
     void Update(double, Keys);
     void Render(double);
     irrklang::ISoundEngine *SoundEngine() {
         return window_->SoundEngine();
+    }
+    Player *player() {
+        return player_;
+    }
+    LevelManager *level() {
+        return level_;
     }
 private:
     GameWindow *window_;

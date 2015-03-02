@@ -1,18 +1,22 @@
 #include "SplashScene.h"
-#include "GameScene.h"
+#include "MenuScene.h"
+#include "SpriteSheet.h"
 
 SplashScene::SplashScene(GameWindow *window) :time_(0.0f), window_(window) {
-    window->SoundEngine()->play2D("snd/smb_coin.wav");
+    
 }
 
 SplashScene::~SplashScene() {
 }
 
+void SplashScene::Start() {
+	window_->SoundEngine()->play2D("snd/smb_coin.wav");
+}
 void SplashScene::Update(double delta, Keys) {
     time_ += delta;
 
     if (time_ > 0.5f) { /* show splash for 0.5 seconds */
-        window_->UpdateScene(new GameScene(window_));
+        window_->UpdateScene(new MenuScene(window_));
     }
 }
 

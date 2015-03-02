@@ -1,5 +1,7 @@
 #pragma once
 
+/* TODO: Switch to an enum. */
+
 #define KEY_NONE        (0)
 
 #define KEY_LEFT        (1)

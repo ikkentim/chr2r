@@ -96,6 +96,12 @@
     <ClCompile Include="EnnemyDog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnnemyJumping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnnemyFling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -162,6 +168,12 @@
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="EnnemyDog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnnemyJumping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnnemyFlying.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
