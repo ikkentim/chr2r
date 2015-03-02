@@ -5,13 +5,13 @@ char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
     "spr/terrain.bmp",
     "spr/splash.bmp",
     "spr/background01.bmp",
+    "spr/mario.bmp",
+	"spr/metalgearsheet.bmp",
 	"spr/menu.bmp",
 	"spr/play_button.bmp",
 	"spr/options_button.bmp",
 	"spr/exit_button.bmp",
-	"spr/arrow_button.bmp"
-    "spr/mario.bmp",
-	"spr/metalgearsheet.bmp"
+	"spr/arrow_button.bmp",
 };
 
 HWND SpriteSheet::hWnd_;
