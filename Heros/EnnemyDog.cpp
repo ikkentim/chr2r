@@ -9,8 +9,8 @@
 #define TEXTURE_HEIGHT      (28)
 
 
-//Here we define the x and y where the enemy start (x=1000, y=18)
-EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(Vector2(1000, 18)){
+//TOFIX:: pass position when Enemie is create
+EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis( Vector2(36, 20)){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 

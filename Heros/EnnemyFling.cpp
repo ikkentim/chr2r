@@ -8,24 +8,24 @@
 
 
 #define ANIMATION_INTERVAL  (0.4)
-#define TEXTURE_WIDTH       (28) //TODO::To define when we add a sprite
-#define TEXTURE_HEIGHT      (28) //TODO::To define when we add a sprite
+#define TEXTURE_WIDTH       (18) 
+#define TEXTURE_HEIGHT      (18) 
 
-//Here we define the x and y where the enemy start (x=1500, y=18)
-EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(Vector2(1500, 18)){
+
+EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(Vector2(18, 18)){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
 EnnemyFlying :: ~EnnemyFlying(){}
 
 void EnnemyFlying::Render(Viewport &vp) {
-	Texture texture_left = { //TODO::We have to define the texture when a sprite will be chosen
-		75, 280,
-		33, 18
+	Texture texture_left = { 
+		425, 503,
+		18, 18
 	};
-	Texture texture_right = {	//TODO::We have to define the texture when a sprite will be chosen
-		236, 280,
-		33, 18
+	Texture texture_right = {
+		425, 503,
+		18, 18
 	};
 
 	Texture tex = texture_right;
@@ -41,22 +41,24 @@ void EnnemyFlying::Render(Viewport &vp) {
 		tex = texture_left;
 		break;
 	}
-	int idx = animationIndex_ > 6
+	//The Enemie don't have animation
+
+/*	int idx = animationIndex_ > 6
 		? animationFrames_ - (2 * (animationIndex_ % animationFrames_) + 2)
 		: animationIndex_;
 
 	tex.left += idx * TEXTURE_WIDTH;
+*/
 
-
-	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(tex, position_, vp);
+	SpriteSheet::Get(SpriteSheet::ENNEMY_2)->Draw(tex, position_, vp);
 
 }
 
 void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
 	animationTime_ += delta;
-	//pattern of the enemy
-	int a = 1500;
-	int b = 900;
+	//pattern of the enemie
+	int a = 250;
+	int b = 50;
 	if (position_.x > a){
 		nbTick_++;
 		GoLeft(delta,nbTick_);
@@ -79,7 +81,7 @@ void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
 		animationIndex_ = (animationIndex_ + 1) % 2;
 	}
 
-	Falling(delta);
+	/*There no falling fonction because the enemie fly*/
 }
 
 EnnemyFlying::AnimationState EnnemyFlying::GetAnimationState(int &frames) {

@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include "Ennemis.h"
 #include "SpriteSheet.h"
+#include "Actor.h"
 
-class EnnemyDog : public Ennemis {
+class EnnemyDog : public Ennemis{
 public:
 	enum AnimationState{
 		RUN_RIGHT,
@@ -12,10 +13,6 @@ public:
 	};
 	EnnemyDog(Vector2);
 	~EnnemyDog();
-
-//	void GoLeft(double); //Don't have to rewrite it
-//	void GoRight(double); //Don't have to rewrite it
-
 	void Render(Viewport &) override;
 	void Update(GameScene *, double, Keys) override;
 
