@@ -74,7 +74,7 @@ bool GameWindow::GameLoop(double delta) {
     if (timeSinceRender_ >= frameInterval_) {
         timeSinceRender_ -= frameInterval_;
 
-        scene_->Render(delta);
+        scene_->Render(delta, graphics_);
         fps.Update();
 
 #ifdef SHOW_FPS
@@ -217,7 +217,7 @@ LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 
         /* Set button states. */
         bool buttonStates[MAX_HID_BUTTONS] = { false };
-        for (int i = 0; i < usageLength; i++)
+        for (ULONG i = 0; i < usageLength; i++)
             buttonStates[usedButtons[i] - buttonCapabilities->Range.UsageMin] = true;
 
         /* Get x/y axis values. */

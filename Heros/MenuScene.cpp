@@ -45,7 +45,7 @@ void MenuScene::Update(double delta, Keys k) {
 	}
 }
 
-void MenuScene::Render(double delta) {
+void MenuScene::Render(double delta, HDC graphics) {
 
 	int xoff = 100;
 	int yoff = 190;

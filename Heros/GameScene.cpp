@@ -3,13 +3,18 @@
 #include "Coin.h"
 #include "Ennemis.h"
 #include "EnnemyDog.h"
-
+#include "HUD.h"
 #include <irrKlang.h>
+
+#include "TestHUD.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
-    /* Start some testing sounds */
     
+    hud_ = new HUDVector;
+	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
+
+    hud_->push_back(new TestHUD);
 }
 
 GameScene::~GameScene() {
@@ -17,9 +22,8 @@ GameScene::~GameScene() {
     delete player_; /* FIXME: Should be deleted by level_ */
 }
 void GameScene::Start() {
+    /* Testing sound */
 	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
-
-	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 }
 void GameScene::Update(double delta, Keys keys) {
 
@@ -59,9 +63,15 @@ void GameScene::Update(double delta, Keys keys) {
         object->CheckForCollisions(this, level_->PlayableLayer(), delta);
         object->ApplyVelocity(delta);
     }
+
+    /* Update HUD */
+    for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+        HUD *hud = *it;
+        hud->Update(this, delta, keys);
+    }
 }
 
-void GameScene::Render(double delta) {
+void GameScene::Render(double delta, HDC graphics) {
 
     /* Draw background */
     /* FIXME: Make LevelManager decide background */
@@ -92,4 +102,9 @@ void GameScene::Render(double delta) {
 		object->Render(viewport_);
 	}
 
+    /* Render HUD */
+    for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+        HUD *hud = *it;
+        hud->Render(graphics);
+    }
 }

@@ -5,6 +5,9 @@
 #include "LevelManager.h"
 #include "Player.h"
 #include "GameWindow.h"
+#include <vector>
+
+typedef std::vector <class HUD *> HUDVector;
 
 class GameScene : public Scene {
 public:
@@ -12,7 +15,7 @@ public:
     virtual ~GameScene();
 	virtual void Start();
     void Update(double, Keys);
-    void Render(double);
+    void Render(double, HDC graphics);
     irrklang::ISoundEngine *SoundEngine() {
         return window_->SoundEngine();
     }
@@ -25,6 +28,7 @@ public:
 private:
     GameWindow *window_;
     Player *player_;
+    HUDVector *hud_;
     LevelManager *level_;
     Viewport viewport_;
 };

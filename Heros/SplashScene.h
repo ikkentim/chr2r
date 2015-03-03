@@ -9,7 +9,7 @@ public:
     virtual ~SplashScene();
 	virtual void Start();
     void Update(double, Keys);
-    void Render(double);
+    void Render(double, HDC graphics);
 private:
     double time_;
     GameWindow *window_;

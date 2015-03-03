@@ -9,7 +9,7 @@ public:
 	virtual ~MenuScene();
 	virtual void Start();
 	void Update(double, Keys);
-	void Render(double);
+    void Render(double, HDC graphics);
 
 private:
 	GameWindow *window_;

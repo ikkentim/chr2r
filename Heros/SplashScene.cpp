@@ -20,6 +20,6 @@ void SplashScene::Update(double delta, Keys) {
     }
 }
 
-void SplashScene::Render(double delta) {
+void SplashScene::Render(double delta, HDC graphics) {
     SpriteSheet::Get(SpriteSheet::SPLASH_SCREEN)->Draw(Texture(0, 0, 640, 480), 0, 0);
 }
