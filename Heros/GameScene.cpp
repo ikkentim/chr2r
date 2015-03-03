@@ -3,10 +3,8 @@
 #include "Coin.h"
 #include "Ennemis.h"
 #include "EnnemyDog.h"
-#include "HUD.h"
 #include <irrKlang.h>
 
-#include "TestHUD.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -14,7 +12,7 @@ GameScene::GameScene(GameWindow *window)
     hud_ = new HUDVector;
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
-    hud_->push_back(new TestHUD);
+	
 }
 
 GameScene::~GameScene() {
@@ -24,6 +22,11 @@ GameScene::~GameScene() {
 void GameScene::Start() {
     /* Testing sound */
 	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
+	indialog_ = false;
+
+	dialog_ = new DialogHUD(player_);
+	hud_->push_back(dialog_);
+	
 }
 void GameScene::Update(double delta, Keys keys) {
 
@@ -49,21 +52,29 @@ void GameScene::Update(double delta, Keys keys) {
     if (posy < miny) viewport_.y += posy - miny;
     else if (posy > maxy) viewport_.y += posy - maxy;
 
-    /* playablelayer */
-    LevelLayer *layer = level_->PlayableLayer();
-    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-        GameObject *object = *iter;
+	if (!indialog_ && player_->Position().x > 1000) {
+		indialog_ = true;
+		Character* chara = new Character();
 
-        object->Update(this, delta, keys);
-    }
-    /* Check collision on movableslayer */    
-    layer = level_->Movables();
-    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-        GameObject *object = *iter;
-        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
-        object->ApplyVelocity(delta);
-    }
+		dialog_->EngageDialog(chara);
+	}
+	if (!indialog_) {
 
+		/* playablelayer */
+		LevelLayer *layer = level_->PlayableLayer();
+		for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+			GameObject *object = *iter;
+
+			object->Update(this, delta, keys);
+		}
+		/* Check collision on movableslayer */
+		layer = level_->Movables();
+		for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+			GameObject *object = *iter;
+			object->CheckForCollisions(this, level_->PlayableLayer(), delta);
+			object->ApplyVelocity(delta);
+		}
+	}
     /* Update HUD */
     for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
         HUD *hud = *it;

@@ -111,6 +111,12 @@
     <ClCompile Include="TestHUD.cpp">
       <Filter>Source Files\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="DialogHUD.cpp">
+      <Filter>Source Files\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -190,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="TestHUD.h">
       <Filter>Header Files\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogHUD.h">
+      <Filter>Header Files\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

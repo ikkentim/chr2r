@@ -1,11 +1,11 @@
 #pragma once
-
 #include <irrKlang.h>
 #include "Scene.h"
 #include "LevelManager.h"
 #include "Player.h"
 #include "GameWindow.h"
 #include <vector>
+#include "DialogHUD.h"
 
 typedef std::vector <class HUD *> HUDVector;
 
@@ -25,8 +25,10 @@ public:
     LevelManager *level() {
         return level_;
     }
+	bool indialog_;
 private:
     GameWindow *window_;
+	DialogHUD *dialog_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;
