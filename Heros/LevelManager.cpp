@@ -137,7 +137,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
-    lvl.object_count = 2160;
+    lvl.actor_count = 2;
     lvl.object_count = 2160 + 16;
     lvl.background = SpriteSheet::BACKGROUND01;
 
