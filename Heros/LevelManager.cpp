@@ -141,16 +141,6 @@ void LevelManager::WriteSimpleLevel()
     lvl.object_count = 2160 + 16;
     lvl.background = SpriteSheet::BACKGROUND01;
 
-    ActorData actor;
-    actor.x = 80;
-    actor.y = 240;
-    actor.type = ENNEMIS;
-
-	ActorData dog;
-	dog.x = 110;
-	dog.y = 290;
-	dog.type = DOG;
-
     ofstream lvlout;
     lvlout.open("level01.dat", ios::out | ios::binary);
 
@@ -303,8 +293,16 @@ void LevelManager::WriteSimpleLevel()
         lvlout.write((char *)&obj, sizeof(ObjectData));
     }
 
+    ActorData actor;
+    actor.x = 80;
+    actor.y = 240;
+    actor.type = ENNEMIS;
     lvlout.write((char *)&actor, sizeof(ActorData));
 
+    ActorData dog;
+    dog.x = 110;
+    dog.y = 290;
+    dog.type = DOG;
 	lvlout.write((char *)&dog, sizeof(ActorData));
 
     lvlout.close();
