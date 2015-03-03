@@ -294,16 +294,20 @@ void LevelManager::WriteSimpleLevel()
     }
 
     ActorData actor;
+
+
+
     actor.x = 80;
     actor.y = 240;
     actor.type = ENNEMIS;
     lvlout.write((char *)&actor, sizeof(ActorData));
 
-    ActorData dog;
-    dog.x = 110;
-    dog.y = 290;
-    dog.type = DOG;
-	lvlout.write((char *)&dog, sizeof(ActorData));
+    actor.x = 110;
+    actor.y = 290;
+    actor.type = DOG;
+    lvlout.write((char *)&actor, sizeof(ActorData));
+
+
 
     lvlout.close();
 }
