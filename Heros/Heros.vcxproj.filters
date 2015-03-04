@@ -43,15 +43,6 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{d3ada156-7059-4f7f-ba9d-947a7c0417e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\HUD">
-      <UniqueIdentifier>{b1d01196-a157-4821-945f-97e5ee0e9931}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\HUD">
-      <UniqueIdentifier>{48f6d3bc-7350-423f-9852-bac88ce1a888}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\State">
-      <UniqueIdentifier>{fe9bcf9b-bea0-4059-8509-9c6c8c8837d6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,16 +94,13 @@
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="EnnemyDog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnnemyJumping.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
     <ClCompile Include="EnnemyFling.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="TestHUD.cpp">
-      <Filter>Source Files\HUD</Filter>
+    <ClCompile Include="EnnemyJumping.cpp">
+      <Filter>Source Files\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,28 +168,13 @@
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="EnnemyDog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnnemyJumping.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
     <ClInclude Include="EnnemyFlying.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>Header Files\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="TestHUD.h">
-      <Filter>Header Files\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Alive.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Dead.h">
-      <Filter>Header Files\State</Filter>
+    <ClInclude Include="EnnemyJumping.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

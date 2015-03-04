@@ -5,7 +5,7 @@
 #include "Vector2.h"
 #include "Viewport.h"
 
-#define SPRITE_SHEET_COUNT      (10)
+#define SPRITE_SHEET_COUNT      (11)
 
 class SpriteSheet
 {
@@ -20,7 +20,9 @@ public:
 		PLAY_BUTTON,
 		OPTIONS_BUTTON,
 		EXIT_BUTTON,
-		ARROW
+		ARROW,
+		ENNEMY_2,
+
     };
 
     static void SetWindow(HWND, HDC);

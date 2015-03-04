@@ -6,46 +6,36 @@
 
 
 #define ANIMATION_INTERVAL  (0.4)
-#define TEXTURE_WIDTH       (28) //TODO::To define when we add a sprite
-#define TEXTURE_HEIGHT      (28) //TODO::To define when we add a sprite
+#define TEXTURE_WIDTH       (12) 
+#define TEXTURE_HEIGHT      (17) 
 
-//Here we define the x and y where the enemy start (x=1500, y=18)
-EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(Vector2(1500, 18)){
+//TOFIX:: pass position when Enemie is create
+EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(Vector2(12, 17)){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
 EnnemyJumping :: ~EnnemyJumping(){}
 
 void EnnemyJumping::Render(Viewport &vp) {
-	Texture texture_left = { //TODO::We have to define the texture when a sprite will be chosen
-		75, 280,
-		33, 18
+	Texture texture_OnGround = { 
+		164, 288,
+		12, 17
 	};
-	Texture texture_right = {	//TODO::We have to define the texture when a sprite will be chosen
-		236, 280,
-		33, 18
+	Texture texture_jump = {
+		164, 288,
+		12, 17
 	};
-	Texture texture_jump = {//TODO::We have to define the texture when a sprite will be chosen
-		123,123,
-		123,123
-	};
-	Texture tex = texture_right;
+	Texture tex = texture_OnGround;
 
 	switch (state_) {
 	case RUN_RIGHT:
-		//	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(texture_right, position_, vp);
-		tex = texture_right;
-		break;
-	case RUN_LEFT:
-
-		//	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(texture_left, position_, vp);
-		tex = texture_left;
+		tex = texture_OnGround;
 		break;
 	case JUMP_:
-
 		tex = texture_jump;
 		break;
 	}
+
 	int idx = animationIndex_ > 6
 		? animationFrames_ - (2 * (animationIndex_ % animationFrames_) + 2)
 		: animationIndex_;
@@ -53,15 +43,15 @@ void EnnemyJumping::Render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 
 
-	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(tex, position_, vp);
+	SpriteSheet::Get(SpriteSheet::ENNEMY_2)->Draw(tex, position_, vp);
 
 }
 
 void EnnemyJumping::Update(GameScene *scene, double delta, Keys keys){
 	animationTime_ += delta;
-	//pattern of the enemy
-	int a = 1500;
-	int b = 900;
+	//pattern of the enemie
+	int a = 500;
+	int b = 240;
 	if (position_.x > a){
 		GoLeft(delta);
 	}
@@ -99,7 +89,7 @@ EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
 		frames = 3;
 		return RUN_LEFT;
 	}
-	if (velocity_.y > 0){ /*Is Jumping.*/
+	if (IsOnGround()){ /*Is Jumping.*/
 		frames = 3;
 		return JUMP_;
 	}
