@@ -1,9 +1,12 @@
 #pragma once
 
+#include <vector>
+
 #include "Vector2.h"
 #include "Viewport.h"
 #include "Keys.h"
 #include "LevelManager.h"
+#include "State.h"
 
 class GameScene;
 
@@ -32,6 +35,10 @@ public:
         return onGround_;
     }
 
+	std::vector<State *> States() const {
+		return states_;
+	}
+
     /* Game logic */
     virtual void Update(GameScene *, double, Keys) = 0;
 	virtual void Render(Viewport &) = 0;
@@ -43,6 +50,10 @@ public:
     bool IsCollidingWith(GameObject *, double);
     void CheckForCollisions(GameScene *, LevelLayer *, double);
     virtual void EnteredCollision(GameScene *, GameObject *, Vector2);
+	void AddState(State *);
+	void RemoveState(State *);
+	void HasState(State *);
+	void ClearStates();
 protected:
 	Vector2 position_;
     Vector2 velocity_;
@@ -51,4 +62,5 @@ protected:
 private:
     bool onGround_ = false;
     bool isSolid_ = true;
+	std::vector<State *> states_;
 };
