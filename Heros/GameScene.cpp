@@ -5,7 +5,7 @@
 #include "EnnemyDog.h"
 #include "HUD.h"
 #include <irrKlang.h>
-
+#include "MenuScene.h"
 #include "TestHUD.h"
 
 GameScene::GameScene(GameWindow *window)
@@ -48,6 +48,12 @@ void GameScene::Update(double delta, Keys keys) {
 
     if (posy < miny) viewport_.y += posy - miny;
     else if (posy > maxy) viewport_.y += posy - maxy;
+
+	if (player()->GetState() == Actor::DEAD)
+	{
+		window_->UpdateScene(new GameScene(window_));
+		return;
+	}
 
     /* playablelayer */
     LevelLayer *layer = level_->PlayableLayer();

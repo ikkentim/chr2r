@@ -11,5 +11,6 @@ public:
     void GoLeft(double);
     void GoRight(double);
 	void Render(Viewport &) override;
-    void Update(GameScene *, double, Keys) override;
+	void Update(GameScene *, double, Keys) override;
+	void EnteredCollision(GameScene *, GameObject *, Vector2) override;
 };
