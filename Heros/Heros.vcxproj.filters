@@ -96,10 +96,13 @@
     <ClCompile Include="EnnemyDog.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="EnnemyFling.cpp">
+    <ClCompile Include="EnnemyJumping.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="EnnemyJumping.cpp">
+    <ClCompile Include="TestHUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnnemyFlying.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -175,6 +178,21 @@
     </ClInclude>
     <ClInclude Include="EnnemyJumping.h">
       <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Alive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestHUD.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
