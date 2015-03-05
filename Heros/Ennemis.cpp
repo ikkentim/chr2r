@@ -1,4 +1,5 @@
 #include "Ennemis.h"
+#include "GameScene.h"
 
 #define WALK_ACCEL  (150.0)
 #define WALK_SPEED  (150.0)
@@ -40,4 +41,10 @@ void Ennemis::Update(GameScene *scene, double delta, Keys keys){
 	}
 
 	Falling(delta);
+}
+
+void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
+	if (obj == scene->player()){
+		scene->player()->SetState(Actor::DEAD);
+	}
 }
