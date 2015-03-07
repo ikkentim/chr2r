@@ -3,6 +3,8 @@
 #include "Block.h"
 #include "Ennemis.h"
 #include "EnnemyDog.h"
+#include "EnnemyFlying.h"
+#include "EnnemyJumping.h"
 #include "Coin.h"
 #include "Player.h"
 #include "Character.h"
@@ -121,6 +123,13 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 			break;
 		case CHARACTER:
 			actor = new Character(Vector2(actor_buffer.x, actor_buffer.y));
+			break;
+		case FLYING_ENEMIE:
+			actor = new EnnemyFlying(Vector2(actor_buffer.x, actor_buffer.y));
+			break;
+		case JUMPING_ENEMIE:
+			actor = new EnnemyJumping(Vector2(actor_buffer.x, actor_buffer.y));
+			break;
         }
 
         manager->Add(actor, MOVABLE);
@@ -143,7 +152,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
-    lvl.actor_count = 4;
+    lvl.actor_count = 5;
     lvl.object_count = 2160 + 16;
     lvl.background = SpriteSheet::BACKGROUND01;
 
@@ -316,13 +325,14 @@ void LevelManager::WriteSimpleLevel()
 	actor.x = 100;
 	actor.y = 300;
 	actor.type = FLYING_ENEMIE;
+	lvlout.write((char*)&actor, sizeof(ActorData));
 
 	actor.x = 250;
 	actor.y = 240;
 	actor.type = JUMPING_ENEMIE;
 	lvlout.write((char *)&actor, sizeof(ActorData));
 		
-	lvlout.write((char *)&actor, sizeof(ActorData));
+	//lvlout.write((char *)&actor, sizeof(ActorData));
 
 	actor.x = 200;
 	actor.y = 100;
