@@ -3,7 +3,7 @@
 
 class Character : public Actor {
 public:
-	Character();
+	Character(Vector2);
 	void Update(GameScene*, double, Keys);
 	void Render(Viewport &vp);
 };

@@ -4,7 +4,7 @@
 #include "Ennemis.h"
 #include "EnnemyDog.h"
 #include <irrKlang.h>
-
+#include "DialogHUD.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -24,8 +24,7 @@ void GameScene::Start() {
 	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
 	indialog_ = false;
 
-	dialog_ = new DialogHUD(player_);
-	hud_->push_back(dialog_);
+	hud_->push_back(new DialogHUD(player_));
 	
 }
 void GameScene::Update(double delta, Keys keys) {
@@ -54,9 +53,7 @@ void GameScene::Update(double delta, Keys keys) {
 
 	if (!indialog_ && player_->Position().x > 1000) {
 		indialog_ = true;
-		Character* chara = new Character();
 
-		dialog_->EngageDialog(chara);
 	}
 	if (!indialog_) {
 

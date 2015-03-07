@@ -38,6 +38,17 @@ void GameWindow::GameInit() {
     assert(soundEngine_ && "Sound engine failed to load (missing resources?)");
     soundEngine_->setSoundVolume(0.3f);/* Master Volume. */
 
+	SetBkMode(graphics_, TRANSPARENT);
+
+	auto font = CreateFont(20, 10 , 0, 0,
+		FW_NORMAL, FALSE, FALSE, FALSE,
+		ANSI_CHARSET, OUT_DEFAULT_PRECIS,
+		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_ROMAN,
+		"Andy Bold");
+	SelectObject(graphics_, font);
+
+
     scene_ = new SplashScene(this);
 	scene_->Start();
 

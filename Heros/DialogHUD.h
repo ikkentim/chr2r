@@ -1,6 +1,6 @@
 #pragma once
+
 #include "HUD.h"
-#include "Character.h"
 #include <string>
 #include <vector>
 class DialogLine;
@@ -26,6 +26,4 @@ public:
 	DialogLine(bool, std::string);
 	bool playerspoken;
 	std::string sentence;
-private:
-	
 };

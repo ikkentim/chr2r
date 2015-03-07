@@ -5,7 +5,8 @@
 #include "Player.h"
 #include "GameWindow.h"
 #include <vector>
-#include "DialogHUD.h"
+#include "Character.h"
+
 
 typedef std::vector <class HUD *> HUDVector;
 
@@ -27,8 +28,7 @@ public:
     }
 	bool indialog_;
 private:
-    GameWindow *window_;
-	DialogHUD *dialog_;
+	GameWindow *window_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;

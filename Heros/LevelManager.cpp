@@ -5,11 +5,13 @@
 #include "EnnemyDog.h"
 #include "Coin.h"
 #include "Player.h"
+#include "Character.h"
 #include <algorithm>
 
 enum ActorType {
 	ENNEMIS,
-	DOG
+	DOG,
+	CHARACTER
 };
 
 enum ObjectType {
@@ -115,6 +117,8 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 		case DOG:
 			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
+		case CHARACTER:
+			actor = new Character(Vector2(actor_buffer.x, actor_buffer.y));
         }
 
         manager->Add(actor, MOVABLE);
@@ -307,6 +311,10 @@ void LevelManager::WriteSimpleLevel()
     actor.type = DOG;
     lvlout.write((char *)&actor, sizeof(ActorData));
 
+	actor.x = 200;
+	actor.y = 100;
+	actor.type = CHARACTER;
+	lvlout.write((char *)&actor, sizeof(ActorData));
 
 
     lvlout.close();
