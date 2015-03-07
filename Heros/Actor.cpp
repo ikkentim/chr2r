@@ -13,3 +13,13 @@ void Actor::Falling( double delta){
     if (!IsOnGround())
         velocity_ += (Vector2(0, GRAVITY) * delta);
 }
+
+void Actor::SetState(State state)
+{
+	state_ = state;
+}
+
+Actor::State Actor::GetState()
+{
+	return state_;
+}

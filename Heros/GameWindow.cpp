@@ -22,6 +22,8 @@ void GameWindow::UpdateScene(Scene *scene) {
 		delete scene_;
 	}
 
+	soundEngine_->stopAllSounds();
+
 	scene_ = scene;
 	scene_->Start();
 }

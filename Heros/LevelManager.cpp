@@ -11,6 +11,8 @@
 enum ActorType {
 	ENNEMIS,
 	DOG,
+	FLYING_ENEMIE,
+	JUMPING_ENEMIE
 	CHARACTER
 };
 
@@ -141,7 +143,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
-    lvl.actor_count = 2;
+    lvl.actor_count = 4;
     lvl.object_count = 2160 + 16;
     lvl.background = SpriteSheet::BACKGROUND01;
 
@@ -306,10 +308,21 @@ void LevelManager::WriteSimpleLevel()
     actor.type = ENNEMIS;
     lvlout.write((char *)&actor, sizeof(ActorData));
 
-    actor.x = 110;
-    actor.y = 290;
+    actor.x = 1000;
+    actor.y = 240;
     actor.type = DOG;
     lvlout.write((char *)&actor, sizeof(ActorData));
+
+	actor.x = 100;
+	actor.y = 300;
+	actor.type = FLYING_ENEMIE;
+
+	actor.x = 250;
+	actor.y = 240;
+	actor.type = JUMPING_ENEMIE;
+	lvlout.write((char *)&actor, sizeof(ActorData));
+		
+	lvlout.write((char *)&actor, sizeof(ActorData));
 
 	actor.x = 200;
 	actor.y = 100;

@@ -117,9 +117,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Alive.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="Dead.h" />
     <ClInclude Include="DialogHUD.h" />
     <ClInclude Include="Ennemis.h" />
     <ClInclude Include="EnnemyDog.h" />
@@ -139,6 +141,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SpriteSheet.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="TestHUD.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />

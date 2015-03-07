@@ -12,7 +12,7 @@ GameScene::GameScene(GameWindow *window)
     hud_ = new HUDVector;
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
-	
+    hud_->push_back(new TestHUD);
 }
 
 GameScene::~GameScene() {
@@ -22,10 +22,6 @@ GameScene::~GameScene() {
 void GameScene::Start() {
     /* Testing sound */
 	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
-	indialog_ = false;
-
-	hud_->push_back(new DialogHUD(player_));
-	
 }
 void GameScene::Update(double delta, Keys keys) {
 
@@ -51,26 +47,26 @@ void GameScene::Update(double delta, Keys keys) {
     if (posy < miny) viewport_.y += posy - miny;
     else if (posy > maxy) viewport_.y += posy - maxy;
 
-	if (!indialog_ && player_->Position().x > 1000) {
-		indialog_ = true;
-
+	if (player()->GetState() == Actor::DEAD)
+	{
+		window_->UpdateScene(new GameScene(window_));
+		return;
 	}
-	if (!indialog_) {
 
-		/* playablelayer */
-		LevelLayer *layer = level_->PlayableLayer();
-		for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-			GameObject *object = *iter;
+    /* playablelayer */
+    LevelLayer *layer = level_->PlayableLayer();
+    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+        GameObject *object = *iter;
 
-			object->Update(this, delta, keys);
-		}
-		/* Check collision on movableslayer */
-		layer = level_->Movables();
-		for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-			GameObject *object = *iter;
-			object->CheckForCollisions(this, level_->PlayableLayer(), delta);
-			object->ApplyVelocity(delta);
-		}
+        object->Update(this, delta, keys);
+    }
+    /* Check collision on movableslayer */    
+    layer = level_->Movables();
+    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+        GameObject *object = *iter;
+        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
+        object->ApplyVelocity(delta);
+    }
 	}
     /* Update HUD */
     for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
