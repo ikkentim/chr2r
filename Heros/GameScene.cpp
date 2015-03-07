@@ -12,7 +12,7 @@ GameScene::GameScene(GameWindow *window)
     hud_ = new HUDVector;
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
-    hud_->push_back(new TestHUD);
+    hud_->push_back(new DialogHUD(player_));
 }
 
 GameScene::~GameScene() {
@@ -67,7 +67,7 @@ void GameScene::Update(double delta, Keys keys) {
         object->CheckForCollisions(this, level_->PlayableLayer(), delta);
         object->ApplyVelocity(delta);
     }
-	}
+	
     /* Update HUD */
     for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
         HUD *hud = *it;
