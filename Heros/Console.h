@@ -7,7 +7,8 @@
 #define CONSOLE_BUFFER_SIZE         (256)
 #define CONSOLE_TYPE_BUFFER_SIZE    (32)
 
-typedef bool(*ConsoleCommandHandler)(const char *);
+typedef bool(*ConsoleCommandHandler)(class Console * const, const char *);
+
 class Console
 {
 public:
@@ -18,14 +19,16 @@ public:
     bool IsOpen() {
         return isOpen_;
     }
-    void LogNotice(char *);
-    void LogWarn(char *);
-    void LogError(char *);
+    void LogNotice(const char *, ...);
+    void LogWarn(const char *, ...);
+    void LogError(const char *, ...);
     void LogAvailableCommands();
     bool RegisterCommand(std::string, ConsoleCommandHandler);
+    void RemoveCommand(std::string);
 private:
-    void LogUserInput(char *);
-    void Log(char *message, char *type, COLORREF color);
+    void LogUserInput(const char *);
+    void Log(const char *format, va_list args, char *type, COLORREF color);
+    void Log(const char *message, char *type, COLORREF color);
     HDC dc_ = NULL;
     HBITMAP bitmap_;
     HANDLE oldHandle_;

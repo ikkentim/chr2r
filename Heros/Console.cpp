@@ -7,21 +7,17 @@
 #define CONSOLE_HEIGHT      (480)
 #define CONSOLE_TYPE_WIDTH  (64)
 
-Console *instance;
-
-bool commandscmd(const char *cmd) {
-    instance->LogAvailableCommands();
+bool commandscmd(Console * const console, const char *cmd) {
+    console->LogAvailableCommands();
 
     return true;
 }
-bool exitcmd(const char *cmd) {
+bool exitcmd(Console * const console, const char *cmd) {
     exit(0);
     return true;
 }
 
 Console::Console(HDC hdc) {
-    instance = this;
-
     dc_ = CreateCompatibleDC(hdc);
     bitmap_ = CreateCompatibleBitmap(hdc, CONSOLE_WIDTH, CONSOLE_HEIGHT);
     oldHandle_ = SelectObject(dc_, bitmap_);
@@ -64,7 +60,7 @@ void Console::ProcessCommand(char *command) {
         return;
     }
 
-    while (cmd.find(' ') == 0) cmd.erase(0);
+    while (cmd.find(' ') == 0) cmd.erase(0, 1);
 
     int sp = cmd.find(' ');
     if (sp == -1) sp = cmd.length();
@@ -75,11 +71,13 @@ void Console::ProcessCommand(char *command) {
         LogNotice("invalid command.");
         return;
     }
-
-    auto rest = cmd.substr(sp, cmd.length() - sp);
     auto func = commands_[cmdword];
 
-    if (!func(rest.c_str())) {
+    cmd.erase(0, sp);
+
+    while (cmd.find(' ', 0) == 0) cmd.erase(0, 1);
+
+    if (!func(this, cmd.c_str())) {
         LogNotice("invalid command.");
         return;
     }
@@ -92,20 +90,44 @@ void Console::SendInputCommand() {
     ClearInputBuffer();
 }
 
-void Console::LogNotice(char *message) {
-    Log(message, "notice", RGB(100, 255, 100));
+void Console::LogNotice(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    Log(format, args, "notice", RGB(100, 255, 100));
+    va_end(args);
 }
 
-void Console::LogWarn(char *message) {
-    Log(message, "warn", RGB(255, 127, 42));
+void Console::LogWarn(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    Log(format, args, "warn", RGB(255, 127, 42));
+    va_end(args);
 }
 
-void Console::LogError(char *message) {
-    Log(message, "error", RGB(255, 0, 0));
+void Console::LogError(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    Log(format, args, "error", RGB(255, 0, 0));
+    va_end(args);
 }
 
-void Console::LogUserInput(char *message) {
+void Console::LogUserInput(const char *message) {
     Log(message, "input", RGB(255, 255, 255));
+}
+
+void Console::Log(const char *format, va_list args, char *type, COLORREF color) {
+    char buffer[CONSOLE_BUFFER_SIZE];
+
+    vsnprintf(buffer, CONSOLE_BUFFER_SIZE, format, args);
+    Log(buffer, type, color);
+}
+void Console::Log(const char *message, char *type, COLORREF color) {
+
+    strcpy(consoleTypeBuffer_[consolePos_], type);
+    strcpy(consoleBuffer_[consolePos_], message);
+    consoleTypeColor_[consolePos_++] = color;
+
+    consolePos_ %= CONSOLE_LOG_COUNT;
 }
 
 bool Console::RegisterCommand(std::string name, ConsoleCommandHandler handler) {
@@ -119,14 +141,11 @@ bool Console::RegisterCommand(std::string name, ConsoleCommandHandler handler) {
     commands_[name] = handler;
 }
 
-void Console::Log(char *message, char *type, COLORREF color) {
-
-    strcpy(consoleTypeBuffer_[consolePos_], type);
-    strcpy(consoleBuffer_[consolePos_], message);
-    consoleTypeColor_[consolePos_++] = color;
-
-    consolePos_ %= CONSOLE_LOG_COUNT;
+void Console::RemoveCommand(std::string name) {
+    if (commands_.find(name) != commands_.end())
+        commands_.erase(name);
 }
+
 void Console::Update(WPARAM wParam) {
     char input = MapVirtualKey(wParam, MAPVK_VK_TO_CHAR);
 

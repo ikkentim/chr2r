@@ -123,6 +123,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     manager->Add(player, MOVABLE);
 
     manager->background_ = SpriteSheet::Get(header.background_texture);
+    manager->backgroundWidth_ = header.background_width;
     lvl.close();
 
     return manager;

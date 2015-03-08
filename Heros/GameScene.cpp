@@ -128,9 +128,7 @@ bool GameScene::CheckStates()
 void GameScene::Render(HDC graphics) {
 
     /* Draw background */
-    /* FIXME: Make LevelManager decide background */
-    /* FIXME: backgrounds can have different widths */
-    const int image_width = 727;
+    const int image_width = level_->backgroundWidth();
     Texture tex = { 0, 0, image_width, viewport_.height };
     for (int skyx = -(viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {

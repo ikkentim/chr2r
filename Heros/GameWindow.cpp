@@ -7,9 +7,21 @@
 #include "GameScene.h"
 #include "LevelManager.h"
 #include <string>
+#include "EditorScene.h"
 
 #define MAX_HID_BUTTONS     (64)
+
+GameWindow *instance; // used in StartLevelEditorCommand 
+// todo: find a better way of doing that ^^^^^^
+bool StartLevelEditorCommand(Console * const console, const char *cmd) {
+    console->LogNotice("Loading level editor...");
+    instance->UpdateScene(new EditorScene(instance));
+
+    return true;
+}
+
 GameWindow::GameWindow() {
+    instance = this;
 }
 
 GameWindow::~GameWindow() {
@@ -74,6 +86,8 @@ void GameWindow::GameInit() {
     hasJoystick_ = !!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
 
     console_ = new Console(graphics_);
+    console_->RegisterCommand("startleveleditor", StartLevelEditorCommand);
+    console_->RegisterCommand("sle", StartLevelEditorCommand);
 }
 
 void GameWindow::GameEnd() {

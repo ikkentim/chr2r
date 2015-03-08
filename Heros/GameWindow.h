@@ -15,7 +15,9 @@ public:
     void UpdateScene(Scene *);
     irrklang::ISoundEngine *SoundEngine();
     LRESULT MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    Console *console();
+    Console *console() {
+        return console_;
+    }
 protected:
     void GameInit();
     bool GameLoop(double);

@@ -117,6 +117,9 @@
     <ClCompile Include="Console.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="EditorScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -212,8 +215,8 @@
     <ClInclude Include="Console.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DialogHUD.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="EditorScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
