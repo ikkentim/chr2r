@@ -15,6 +15,8 @@ GameScene::GameScene(GameWindow *window)
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
     hud_->push_back(new TestHUD);
+
+	state_ = PLAYING;
 }
 
 GameScene::~GameScene() {
@@ -28,31 +30,21 @@ void GameScene::Start() {
 void GameScene::Update(double delta, Keys keys) {
 
     /* Update viewport */
+	UpdateViewport();
 
-    /* Minimum distance between window edge and the player*/
-    const int borderOffset = 215; 
-    
+	CheckStates();
 
-    int minx = viewport_.x + borderOffset;
-    int maxx = viewport_.x - borderOffset + viewport_.width;
-
-    int miny = viewport_.y + borderOffset;
-    int maxy = viewport_.y - borderOffset + viewport_.height;
-
-    auto pos = player_->Position();
-    int posx = (int)floor(pos.x);
-    int posy = (int)floor(pos.y);
-
-    if (posx < minx) viewport_.x += posx - minx;
-    else if (posx > maxx) viewport_.x += posx - maxx;
-
-    if (posy < miny) viewport_.y += posy - miny;
-    else if (posy > maxy) viewport_.y += posy - maxy;
-
-	if (player()->GetState() == Actor::DEAD)
+	switch (state_)
 	{
-		window_->UpdateScene(new GameScene(window_));
+	case State::PAUSED:
 		return;
+	case State::PLAYER_DEAD:
+			window_->UpdateScene(new GameScene(window_));
+			return;
+		player()->SetState(Player::ALIVE);
+		return;
+	default:
+		break;
 	}
 
     /* playablelayer */
@@ -75,6 +67,39 @@ void GameScene::Update(double delta, Keys keys) {
         HUD *hud = *it;
         hud->Update(this, delta, keys);
     }
+}
+
+void GameScene::UpdateViewport()
+{
+	/* Minimum distance between window edge and the player*/
+	const int borderOffset = 215;
+
+	int minx = viewport_.x + borderOffset;
+	int maxx = viewport_.x - borderOffset + viewport_.width;
+
+	int miny = viewport_.y + borderOffset;
+	int maxy = viewport_.y - borderOffset + viewport_.height;
+
+	auto pos = player_->Position();
+	int posx = (int)floor(pos.x);
+	int posy = (int)floor(pos.y);
+
+	if (posx < minx) viewport_.x += posx - minx;
+	else if (posx > maxx) viewport_.x += posx - maxx;
+
+	if (posy < miny) viewport_.y += posy - miny;
+	else if (posy > maxy) viewport_.y += posy - maxy;
+}
+
+bool GameScene::CheckStates()
+{
+	if (player()->GetState() == Actor::DEAD)
+	{
+		state_ = PLAYER_DEAD;
+		return true;
+	}
+
+	return false;
 }
 
 void GameScene::Render(double delta, HDC graphics) {

@@ -25,10 +25,22 @@ public:
     LevelManager *level() {
         return level_;
     }
+
+	enum State {
+		PLAYING,
+		PLAYER_DEAD,
+		REACHED_END,
+		PAUSED
+	};
 private:
     GameWindow *window_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;
     Viewport viewport_;
+	void UpdateViewport();
+	bool CheckStates();
+	void SetState();
+	State GetState();
+	State state_;
 };

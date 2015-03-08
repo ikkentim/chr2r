@@ -24,7 +24,6 @@ public:
     Player(class GameScene *, Vector2);
     void Update(GameScene *, double, Keys) override;
 	void Render(Viewport &) override;
-
 private:
     Keys keys_ = KEY_NONE;
     bool isLastMovementLeft_ = false;
