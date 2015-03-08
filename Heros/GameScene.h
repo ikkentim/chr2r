@@ -26,7 +26,7 @@ public:
     LevelManager *level() {
         return level_;
     }
-	bool indialog_;
+	bool paused;
 	enum State {
 		PLAYING,
 		PLAYER_DEAD,

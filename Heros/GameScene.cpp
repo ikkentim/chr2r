@@ -5,6 +5,7 @@
 #include "EnnemyDog.h"
 #include <irrKlang.h>
 #include "DialogHUD.h"
+#include "MenuScene.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -37,9 +38,13 @@ void GameScene::Update(double delta, Keys keys) {
 	case State::PAUSED:
 		return;
 	case State::PLAYER_DEAD:
-			window_->UpdateScene(new GameScene(window_));
+		if (player()->Die())
+		{
+			window_->UpdateScene(new MenuScene(window_));
 			return;
+		}
 		player()->SetState(Player::ALIVE);
+		state_ = PLAYING;
 		return;
 	default:
 		break;

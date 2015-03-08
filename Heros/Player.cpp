@@ -201,3 +201,14 @@ void Player::Render(Viewport &vp) {
 
     SpriteSheet::Get(SpriteSheet::MARIO)->Draw(texture, position_, vp);
 }
+
+bool Player::Die()
+{
+	if (--lives_ <= 0)
+		return true;
+
+	position_.x = 0;
+	position_.y = 0;
+
+	return false;
+}
