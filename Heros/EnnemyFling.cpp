@@ -12,7 +12,7 @@
 #define TEXTURE_HEIGHT      (18) 
 
 
-EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(Vector2(18, 18)){
+EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(Vector2(18, 18), SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
@@ -50,7 +50,7 @@ void EnnemyFlying::Render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 */
 
-	SpriteSheet::Get(SpriteSheet::ENNEMY_2)->Draw(tex, position_, vp);
+	spriteSheet()->Draw(tex, position_, vp);
 
 }
 

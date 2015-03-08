@@ -5,10 +5,11 @@
 
 class Block : public GameObject {
 public:
-    Block(Texture);
-    Block(Texture, Vector2);
+    Block(SpriteSheet *, Texture);
+    Block(SpriteSheet *, Texture, Vector2);
     void Update(GameScene *, double, Keys) override;
     void Render(Viewport &) override;
 private:
+    SpriteSheet *spriteSheet_;
     Texture texture_;
 };

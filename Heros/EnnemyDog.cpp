@@ -10,7 +10,7 @@
 
 
 //TOFIX:: pass position when Enemie is create
-EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis( Vector2(36, 20)){
+EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(Vector2(36, 20), SpriteSheet::Get("spr/metalgearsheet.bmp")){
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
@@ -45,7 +45,7 @@ void EnnemyDog::Render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 
 
-	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(tex, position_, vp);
+	spriteSheet()->Draw(tex, position_, vp);
 		
 }
 

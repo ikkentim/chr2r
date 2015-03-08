@@ -9,5 +9,5 @@ public:
 	virtual ~Scene(){};
 	virtual void Start(){};
     virtual void Update(double, Keys) = 0;
-    virtual void Render(double, HDC graphics) = 0;
+    virtual void Render(HDC graphics) = 0;
 };

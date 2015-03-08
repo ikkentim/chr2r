@@ -11,7 +11,7 @@
 #include <algorithm>
 
 enum ActorType {
-	ENNEMIS,
+	//ENNEMIS,
 	DOG,
 	FLYING_ENEMIE,
 	JUMPING_ENEMIE,
@@ -23,14 +23,16 @@ enum ObjectType {
     COIN
 };
 struct LevelData {
-    unsigned int bottom;
-    unsigned int player_x;
-    unsigned int player_y;
-    unsigned int player_abilities_ph; /* placeholder */
-    unsigned int object_count;
-    unsigned int actor_count;
-    SpriteSheet::Type background;
-    char aligner_4bytes[4];/* aligner */
+    int bottom;
+    int player_x;
+    int player_y;
+    int player_abilities_ph;
+    char name[32];
+    char background_texture[32];
+    int background_width;
+    char terrain_texture[32];
+    int object_count;
+    int actor_count;
 };
 
 struct ObjectData {
@@ -44,14 +46,12 @@ struct ObjectData {
     Texture texture;
     ObjectType type;
     LevelManager::Layer layer;
-    char aligner_27bytes[27];/* aligner */
 };
 
 struct ActorData {
     int x;
     int y;
     ActorType type;
-    char aligner_12bytes[20];/* aligner */
 };
 using namespace std;
 
@@ -59,25 +59,7 @@ LevelManager::LevelManager() {
 }
 
 LevelManager::~LevelManager() {
-    /* FIXME: delete contents of each layer (mem leak) */
 }
-
-/* 
- * === LEVEL DATA FILE STRUCTURE ===
- * ! file is written in little endian
- *
- * 0x00000000 -                                 | header
- * 0x00000019                                   |
- * ---------------------------------------------+---------------------
- * 0x00000020 -                                 |
- * 0x00000020 +                                 | game objects
- * (header.object_count * sizeof(ObjectData))   |
- * ---------------------------------------------+---------------------
- * ...... + 1 -                                 |
- * ...... + 1 +                                 | actors
- * (header.actor_count * sizeof(ObjectData))    |
- */
-
 
 LevelManager *LevelManager::Load(const char * name, GameScene *scene, 
     Player *&player) {
@@ -89,6 +71,8 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     LevelData header;
     lvl.read((char *)&header, sizeof(header));
     
+    SpriteSheet *terrain = SpriteSheet::Get(header.terrain_texture);
+
     ObjectData object_buffer;
     for (unsigned int i = 0; i < header.object_count; i++) {
         lvl.read((char *)&object_buffer, sizeof(object_buffer));
@@ -97,7 +81,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 
         switch(object_buffer.type) {
         case BLOCK:
-            object = new Block(object_buffer.texture,
+            object = new Block(terrain, object_buffer.texture,
                 Vector2(object_buffer.x, object_buffer.y));
             break;
         case COIN:
@@ -115,9 +99,9 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
         Actor *actor = NULL;
 
         switch (actor_buffer.type) {
-        case ENNEMIS:
-            actor = new Ennemis(Vector2(actor_buffer.x, actor_buffer.y));
-            break;
+        //case ENNEMIS:
+        //    actor = new Ennemis(Vector2(actor_buffer.x, actor_buffer.y));
+        //    break;
 		case DOG:
 			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
@@ -138,6 +122,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     player = new Player(scene, Vector2(header.player_x, header.player_y));
     manager->Add(player, MOVABLE);
 
+    manager->background_ = SpriteSheet::Get(header.background_texture);
     lvl.close();
 
     return manager;
@@ -152,9 +137,12 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
-    lvl.actor_count = 5;
+    sprintf(lvl.name, "Level 01!");
+    sprintf(lvl.background_texture, "spr/background01.bmp");
+    lvl.background_width = 727;
+    sprintf(lvl.terrain_texture, "spr/terrain.bmp");
     lvl.object_count = 2160 + 16;
-    lvl.background = SpriteSheet::BACKGROUND01;
+    lvl.actor_count = 5;
 
     ofstream lvlout;
     lvlout.open("level01.dat", ios::out | ios::binary);
@@ -312,10 +300,10 @@ void LevelManager::WriteSimpleLevel()
 
 
 
-    actor.x = 80;
-    actor.y = 240;
-    actor.type = ENNEMIS;
-    lvlout.write((char *)&actor, sizeof(ActorData));
+    //actor.x = 80;
+    //actor.y = 240;
+    //actor.type = ENNEMIS;
+    //lvlout.write((char *)&actor, sizeof(ActorData));
 
     actor.x = 1000;
     actor.y = 240;

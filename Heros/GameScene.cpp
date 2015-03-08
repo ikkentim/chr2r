@@ -24,7 +24,6 @@ void GameScene::Start() {
 	SoundEngine()->play2D("snd/01-main-theme-overworld.mp3", true);
 }
 void GameScene::Update(double delta, Keys keys) {
-
     /* Update viewport */
 
     /* Minimum distance between window edge and the player*/
@@ -75,7 +74,7 @@ void GameScene::Update(double delta, Keys keys) {
     }
 }
 
-void GameScene::Render(double delta, HDC graphics) {
+void GameScene::Render(HDC graphics) {
 
     /* Draw background */
     /* FIXME: Make LevelManager decide background */
@@ -84,7 +83,7 @@ void GameScene::Render(double delta, HDC graphics) {
     Texture tex = { 0, 0, image_width, viewport_.height };
     for (int skyx = -(viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
-        SpriteSheet::Get(SpriteSheet::BACKGROUND01)->Draw(tex, skyx, 0);
+        level_->background()->Draw(tex, skyx, 0);
 	}
 
 	/* Render all layers */

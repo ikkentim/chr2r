@@ -73,9 +73,11 @@ void GameWindow::GameInit() {
 
     hasJoystick_ = !!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
 
+    console_ = new Console(graphics_);
 }
 
 void GameWindow::GameEnd() {
+    delete console_;
     SpriteSheet::Unload();
     soundEngine_->drop();
 }
@@ -84,10 +86,12 @@ bool GameWindow::GameLoop(double delta) {
 	/* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
 
+    
+
     if (timeSinceRender_ >= frameInterval_) {
         timeSinceRender_ -= frameInterval_;
 
-        scene_->Render(delta, graphics_);
+        scene_->Render(graphics_);
         fps.Update();
 
 #ifdef SHOW_FPS
@@ -98,22 +102,30 @@ bool GameWindow::GameLoop(double delta) {
         sprintf_s(buf, "UPS: %d", ups.GetFps());
         TextOut(graphics_, 5, 25, buf, strlen(buf));
 #endif
+
+        console_->Render(graphics_);
+
         /* Tell the window to repaint. */
         return true;
     }
 	else {
 		/* Handle key presses. */
+        if (console_->IsOpen()) {
+            keys_ = KEY_NONE;
+        }
+        else {
 #define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
 	keys_ |= map; } else if (keys_ & map) { \
 	keys_ ^= map; }
 
-		MAP_KEY(VK_LEFT, KEY_LEFT);
-		MAP_KEY(VK_RIGHT, KEY_RIGHT);
-		MAP_KEY(VK_UP, KEY_UP);
-		MAP_KEY(VK_DOWN, KEY_DOWN);
-		MAP_KEY(VK_SPACE, KEY_JUMP);
+            MAP_KEY(VK_LEFT, KEY_LEFT);
+            MAP_KEY(VK_RIGHT, KEY_RIGHT);
+            MAP_KEY(VK_UP, KEY_UP);
+            MAP_KEY(VK_DOWN, KEY_DOWN);
+            MAP_KEY(VK_SPACE, KEY_JUMP);
 
 #undef MAP_KEY
+        }
 
 		/* Simple statement for using ESCAPE to exit. If LSHIFT or LCONTROL is
 		* pressed, ESCAPE won't close the window.
@@ -144,6 +156,9 @@ bool GameWindow::GameLoop(double delta) {
 LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
     LPARAM lParam) {
     switch (uMsg) {
+    case WM_KEYDOWN:
+        console_->Update(wParam);
+        break;
     case WM_INPUT:
     {
         UINT bufferSize;

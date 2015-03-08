@@ -26,6 +26,7 @@ public:
 	void Render(Viewport &) override;
 
 private:
+    SpriteSheet *spriteSheet_;
     Keys keys_ = KEY_NONE;
     bool isLastMovementLeft_ = false;
     bool isDucking_ = false;

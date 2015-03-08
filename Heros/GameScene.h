@@ -16,7 +16,7 @@ public:
     virtual ~GameScene();
 	virtual void Start();
     void Update(double, Keys);
-    void Render(double, HDC graphics);
+    void Render(HDC graphics);
     irrklang::ISoundEngine *SoundEngine() {
         return window_->SoundEngine();
     }

@@ -4,7 +4,11 @@
 #define KEY_INTERVAL            (0.15)
 
 MenuScene::MenuScene(GameWindow *window) :window_(window) {
-	
+    spriteSheet_ = SpriteSheet::Get("spr/menu.bmp");
+    spriteSheetPlay_ = SpriteSheet::Get("spr/play_button.bmp");
+    spriteSheetOptions_ = SpriteSheet::Get("spr/options_button.bmp");
+    spriteSheetExit_ = SpriteSheet::Get("spr/exit_button.bmp");
+    spriteSheetArrow_ = SpriteSheet::Get("spr/arrow_button.bmp");
 }
 
 MenuScene::~MenuScene() {
@@ -45,14 +49,14 @@ void MenuScene::Update(double delta, Keys k) {
 	}
 }
 
-void MenuScene::Render(double delta, HDC graphics) {
+void MenuScene::Render(HDC graphics) {
 
 	int xoff = 100;
 	int yoff = 190;
 	int yspc = 50;
-	SpriteSheet::Get(SpriteSheet::MENU_SCREEN)->Draw(Texture(0, 0, 640, 480), 0, 0);
-	SpriteSheet::Get(SpriteSheet::PLAY_BUTTON)->Draw(Texture(0, 0, 126, 41), xoff, yoff);
-	SpriteSheet::Get(SpriteSheet::OPTIONS_BUTTON)->Draw(Texture(0, 0, 126, 41), xoff, yoff + yspc);
-	SpriteSheet::Get(SpriteSheet::EXIT_BUTTON)->Draw(Texture(0, 0, 126, 41), xoff, yoff + yspc * 2);
-	SpriteSheet::Get(SpriteSheet::ARROW)->Draw(Texture(0, 0, 63, 40), xoff-80, yoff + yspc * selectedOption_);//alter ypos for cursor
+	spriteSheet_->Draw(Texture(0, 0, 640, 480), 0, 0);
+    spriteSheetPlay_->Draw(Texture(0, 0, 126, 41), xoff, yoff);
+    spriteSheetOptions_->Draw(Texture(0, 0, 126, 41), xoff, yoff + yspc);
+    spriteSheetExit_->Draw(Texture(0, 0, 126, 41), xoff, yoff + yspc * 2);
+    spriteSheetArrow_->Draw(Texture(0, 0, 63, 40), xoff - 80, yoff + yspc * selectedOption_);//alter ypos for cursor
 }
