@@ -7,7 +7,6 @@
 #include <vector>
 #include "Character.h"
 
-
 typedef std::vector <class HUD *> HUDVector;
 
 class GameScene : public Scene {
@@ -16,7 +15,7 @@ public:
     virtual ~GameScene();
 	virtual void Start();
     void Update(double, Keys);
-    void Render(double, HDC graphics);
+	void Render(double, HDC graphics);
     irrklang::ISoundEngine *SoundEngine() {
         return window_->SoundEngine();
     }
@@ -31,8 +30,11 @@ public:
 		PLAYING,
 		PLAYER_DEAD,
 		REACHED_END,
-		PAUSED
+		PAUSED,
+		TALKING
 	};
+	virtual void SetState(State);
+	virtual State GetState();
 private:
 	GameWindow *window_;
     Player *player_;
@@ -41,7 +43,6 @@ private:
 	Viewport viewport_;
 	void UpdateViewport();
 	bool CheckStates();
-	void SetState();
-	State GetState();
 	State state_;
+	bool pausePressed_ = true;
 };

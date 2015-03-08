@@ -5,6 +5,7 @@
 #include "EnnemyDog.h"
 #include <irrKlang.h>
 #include "DialogHUD.h"
+#include "TestHUD.h"
 #include "MenuScene.h"
 
 GameScene::GameScene(GameWindow *window)
@@ -14,8 +15,9 @@ GameScene::GameScene(GameWindow *window)
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
 	state_ = PLAYING;
-
-    hud_->push_back(new DialogHUD(player_));
+	
+	hud_->push_back(new DialogHUD(player_, this));
+	hud_->push_back(new TestHUD());
 }
 
 GameScene::~GameScene() {
@@ -33,9 +35,17 @@ void GameScene::Update(double delta, Keys keys) {
 
 	CheckStates();
 
+	/* Update HUD */
+	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+		HUD *hud = *it;
+		hud->Update(this, delta, keys);
+	}
+
 	switch (state_)
 	{
 	case State::PAUSED:
+		return;
+	case State::TALKING:
 		return;
 	case State::PLAYER_DEAD:
 		if (player()->Die())
@@ -64,12 +74,6 @@ void GameScene::Update(double delta, Keys keys) {
         object->CheckForCollisions(this, level_->PlayableLayer(), delta);
         object->ApplyVelocity(delta);
     }
-	
-    /* Update HUD */
-    for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-        HUD *hud = *it;
-        hud->Update(this, delta, keys);
-    }
 }
 
 void GameScene::UpdateViewport()
@@ -96,9 +100,26 @@ void GameScene::UpdateViewport()
 
 bool GameScene::CheckStates()
 {
+	if (GetAsyncKeyState(VK_RETURN))
+	{
+		if (!pausePressed_)
+		{
+			if (GetState() == PLAYING)
+				SetState(PAUSED);
+			else
+				SetState(PLAYING);
+
+			pausePressed_ = true;
+		}
+	}
+	else
+	{
+		pausePressed_ = false;
+	}
+
 	if (player()->GetState() == Actor::DEAD)
 	{
-		state_ = PLAYER_DEAD;
+		SetState(PLAYER_DEAD);
 		return true;
 	}
 
@@ -141,4 +162,14 @@ void GameScene::Render(double delta, HDC graphics) {
         HUD *hud = *it;
         hud->Render(graphics);
     }
+}
+
+void GameScene::SetState(State state)
+{
+	state_ = state;
+}
+
+GameScene::State GameScene::GetState()
+{
+	return state_;
 }
