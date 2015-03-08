@@ -7,7 +7,6 @@
 #include <vector>
 #include "Character.h"
 
-
 typedef std::vector <class HUD *> HUDVector;
 
 class GameScene : public Scene {
@@ -26,11 +25,24 @@ public:
     LevelManager *level() {
         return level_;
     }
-	bool indialog_;
+	bool paused;
+	enum State {
+		PLAYING,
+		PLAYER_DEAD,
+		REACHED_END,
+		PAUSED,
+		TALKING
+	};
+	virtual void SetState(State);
+	virtual State GetState();
 private:
 	GameWindow *window_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;
     Viewport viewport_;
+	void UpdateViewport();
+	bool CheckStates();
+	State state_;
+	bool pausePressed_ = true;
 };

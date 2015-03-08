@@ -1,7 +1,8 @@
 #include "DialogHUD.h"
 
-DialogHUD::DialogHUD(Player* p) {
+DialogHUD::DialogHUD(Player* p, GameScene* scene) {
 	player = p;
+	scene_ = scene;
 	wait = 0;
 	//test data, probably gonna be moved to character or level
 	l1dialog.push_back(DialogLine(true, ""));
@@ -25,11 +26,17 @@ void DialogHUD::NextLine() {
 	if (dialogit == l1dialog.end())
 		activedialog = false;
 }
-void DialogHUD::Update(GameScene*, double, Keys k) {
+void DialogHUD::Update(GameScene *scene, double, Keys k) {
 	if (k & KEY_JUMP && wait == 0 && activedialog == true) {
 		NextLine();
 		wait = 30;
+
 	}
+
+	if (activedialog)
+		scene->SetState(GameScene::TALKING);
+	else
+		scene->SetState(GameScene::PLAYING);
 }
 
 void DialogHUD::Render(HDC hdc) {

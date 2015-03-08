@@ -5,6 +5,8 @@
 #include "EnnemyDog.h"
 #include <irrKlang.h>
 #include "DialogHUD.h"
+#include "TestHUD.h"
+#include "MenuScene.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -12,7 +14,10 @@ GameScene::GameScene(GameWindow *window)
     hud_ = new HUDVector;
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
-    hud_->push_back(new DialogHUD(player_));
+	state_ = PLAYING;
+	
+	hud_->push_back(new DialogHUD(player_, this));
+	hud_->push_back(new TestHUD());
 }
 
 GameScene::~GameScene() {
@@ -25,31 +30,33 @@ void GameScene::Start() {
 }
 void GameScene::Update(double delta, Keys keys) {
     /* Update viewport */
+	UpdateViewport();
 
-    /* Minimum distance between window edge and the player*/
-    const int borderOffset = 215; 
-    
+	CheckStates();
 
-    int minx = viewport_.x + borderOffset;
-    int maxx = viewport_.x - borderOffset + viewport_.width;
+	/* Update HUD */
+	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+		HUD *hud = *it;
+		hud->Update(this, delta, keys);
+	}
 
-    int miny = viewport_.y + borderOffset;
-    int maxy = viewport_.y - borderOffset + viewport_.height;
-
-    auto pos = player_->Position();
-    int posx = (int)floor(pos.x);
-    int posy = (int)floor(pos.y);
-
-    if (posx < minx) viewport_.x += posx - minx;
-    else if (posx > maxx) viewport_.x += posx - maxx;
-
-    if (posy < miny) viewport_.y += posy - miny;
-    else if (posy > maxy) viewport_.y += posy - maxy;
-
-	if (player()->GetState() == Actor::DEAD)
+	switch (state_)
 	{
-		window_->UpdateScene(new GameScene(window_));
+	case State::PAUSED:
 		return;
+	case State::TALKING:
+		return;
+	case State::PLAYER_DEAD:
+		if (player()->Die())
+		{
+			window_->UpdateScene(new MenuScene(window_));
+			return;
+		}
+		player()->SetState(Player::ALIVE);
+		state_ = PLAYING;
+		return;
+	default:
+		break;
 	}
 
     /* playablelayer */
@@ -66,12 +73,56 @@ void GameScene::Update(double delta, Keys keys) {
         object->CheckForCollisions(this, level_->PlayableLayer(), delta);
         object->ApplyVelocity(delta);
     }
-	
-    /* Update HUD */
-    for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-        HUD *hud = *it;
-        hud->Update(this, delta, keys);
-    }
+}
+
+void GameScene::UpdateViewport()
+{
+	/* Minimum distance between window edge and the player*/
+	const int borderOffset = 215;
+
+	int minx = viewport_.x + borderOffset;
+	int maxx = viewport_.x - borderOffset + viewport_.width;
+
+	int miny = viewport_.y + borderOffset;
+	int maxy = viewport_.y - borderOffset + viewport_.height;
+
+	auto pos = player_->Position();
+	int posx = (int)floor(pos.x);
+	int posy = (int)floor(pos.y);
+
+	if (posx < minx) viewport_.x += posx - minx;
+	else if (posx > maxx) viewport_.x += posx - maxx;
+
+	if (posy < miny) viewport_.y += posy - miny;
+	else if (posy > maxy) viewport_.y += posy - maxy;
+}
+
+bool GameScene::CheckStates()
+{
+	if (GetAsyncKeyState(VK_RETURN))
+	{
+		if (!pausePressed_)
+		{
+			if (GetState() == PLAYING)
+				SetState(PAUSED);
+			else
+				SetState(PLAYING);
+
+			pausePressed_ = true;
+		}
+	}
+	else
+	{
+		pausePressed_ = false;
+	}
+
+	if (player()->GetState() == Actor::DEAD)
+	{
+		SetState(PLAYER_DEAD);
+		return true;
+	}
+
+	return false;
 }
 
 void GameScene::Render(HDC graphics) {
@@ -110,4 +161,14 @@ void GameScene::Render(HDC graphics) {
         HUD *hud = *it;
         hud->Render(graphics);
     }
+}
+
+void GameScene::SetState(State state)
+{
+	state_ = state;
+}
+
+GameScene::State GameScene::GetState()
+{
+	return state_;
 }

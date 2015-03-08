@@ -143,7 +143,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SpriteSheet.h" />
-    <ClInclude Include="State.h" />
     <ClInclude Include="TestHUD.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />
