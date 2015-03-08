@@ -13,6 +13,7 @@ char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
 	"spr/exit_button.bmp",
 	"spr/arrow_button.bmp",
 	"spr/Zelda_Enemies_Sprite.bmp",
+	"spr/mario.bmp",
 	
 };
 

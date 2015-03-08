@@ -94,7 +94,9 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Character.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="DialogHUD.cpp" />
     <ClCompile Include="Ennemis.cpp" />
     <ClCompile Include="EnnemyDog.cpp" />
     <ClCompile Include="EnnemyFling.cpp" />
@@ -117,8 +119,10 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Alive.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Character.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Dead.h" />
+    <ClInclude Include="DialogHUD.h" />
     <ClInclude Include="Ennemis.h" />
     <ClInclude Include="EnnemyDog.h" />
     <ClInclude Include="EnnemyFlying.h" />

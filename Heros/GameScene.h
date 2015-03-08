@@ -1,11 +1,12 @@
 #pragma once
-
 #include <irrKlang.h>
 #include "Scene.h"
 #include "LevelManager.h"
 #include "Player.h"
 #include "GameWindow.h"
 #include <vector>
+#include "Character.h"
+
 
 typedef std::vector <class HUD *> HUDVector;
 
@@ -25,7 +26,7 @@ public:
     LevelManager *level() {
         return level_;
     }
-
+	bool indialog_;
 	enum State {
 		PLAYING,
 		PLAYER_DEAD,
@@ -33,11 +34,11 @@ public:
 		PAUSED
 	};
 private:
-    GameWindow *window_;
+	GameWindow *window_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;
-    Viewport viewport_;
+	Viewport viewport_;
 	void UpdateViewport();
 	bool CheckStates();
 	void SetState();
