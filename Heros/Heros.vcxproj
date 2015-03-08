@@ -97,7 +97,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Ennemis.cpp" />
     <ClCompile Include="EnnemyDog.cpp" />
-    <ClCompile Include="EnnemyFling.cpp" />
+    <ClCompile Include="EnnemyFlying.cpp" />
     <ClCompile Include="EnnemyJumping.cpp" />
     <ClCompile Include="Fps.cpp" />
     <ClCompile Include="GameObject.cpp" />

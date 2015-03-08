@@ -12,19 +12,19 @@
 #define TEXTURE_HEIGHT      (18) 
 
 
-EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(Vector2(18, 18)){
-	velocity_ = Vector2(WALK_SPEED, 0);
+EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(pos){
+	velocity_ = Vector2(/*WALK_SPEED*/0, 50);
 }
 
 EnnemyFlying :: ~EnnemyFlying(){}
 
 void EnnemyFlying::Render(Viewport &vp) {
 	Texture texture_left = { 
-		425, 503,
+		56, 241,
 		18, 18
 	};
 	Texture texture_right = {
-		425, 503,
+		56, 241,
 		18, 18
 	};
 
@@ -43,12 +43,12 @@ void EnnemyFlying::Render(Viewport &vp) {
 	}
 	//The Enemie don't have animation
 
-/*	int idx = animationIndex_ > 6
+	int idx = animationIndex_ > 6
 		? animationFrames_ - (2 * (animationIndex_ % animationFrames_) + 2)
 		: animationIndex_;
 
 	tex.left += idx * TEXTURE_WIDTH;
-*/
+
 
 	SpriteSheet::Get(SpriteSheet::ENNEMY_2)->Draw(tex, position_, vp);
 
@@ -56,22 +56,20 @@ void EnnemyFlying::Render(Viewport &vp) {
 
 void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
 	animationTime_ += delta;
-	//pattern of the enemie
-	int a = 250;
-	int b = 50;
-	if (position_.x > a){
-		nbTick_++;
-		GoLeft(delta,nbTick_);
-	}
-	if (position_.x < b){
-		nbTick_++; 
-		GoRight(delta,nbTick_);
+
+	nbTick_++;
+
+	if (position_.y>= 240){
+		GoLeft(delta, nbTick_);
 	}
 
+	if (position_.y <= 100){
+		GoRight(delta, nbTick_);
+	}
 	/* Update the player animation. */
 	AnimationState new_state = GetAnimationState(animationFrames_);
 
-	if (state_ != new_state) {
+/*	if (state_ != new_state) {
 		state_ = new_state;
 		animationIndex_ = 0;
 	}
@@ -80,7 +78,7 @@ void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
 
 		animationIndex_ = (animationIndex_ + 1) % 2;
 	}
-
+*/
 	/*There no falling fonction because the enemie fly*/
 }
 
@@ -99,12 +97,12 @@ EnnemyFlying::AnimationState EnnemyFlying::GetAnimationState(int &frames) {
 
 //TODO:: Testing
 void EnnemyFlying::GoLeft(double delta,int nbTick){
-	Vector2 hAccel = { -WALK_ACCEL, 250 * sin(nbTick*0.5*M_PI) };
+	Vector2 hAccel = { /*WALK_ACCEL*/0, (250 * sin(nbTick * 0.5 * M_PI)) - 50 };
 	velocity_ = hAccel;
 }
 
 void EnnemyFlying::GoRight(double delta,int nbTick){
 
-	Vector2 hAccel = { WALK_ACCEL, 250*sin(nbTick*0.5*M_PI ) };
+	Vector2 hAccel = { /*WALK_ACCEL*/0, (250*sin(nbTick * 0.5 * M_PI )) }; //(250 * sin(numberOfTicks * 0.5 * pi)) + 350
 	velocity_ = hAccel;
 }

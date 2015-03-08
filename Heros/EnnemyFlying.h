@@ -19,12 +19,13 @@ public:
 	void Render(Viewport &) override;
 	void Update(GameScene *, double, Keys) override;
 
+
 protected: //private ?
 	AnimationState state_;
 	double animationTime_ = 0;
 	int animationIndex_ = 0;
 	int animationFrames_ = 1;
-	int nbTick_ = 0;
+	float nbTick_ = 0;
 
 	AnimationState GetAnimationState(int &frames);
 };
