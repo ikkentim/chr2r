@@ -7,12 +7,12 @@
 #define CONSOLE_HEIGHT      (480)
 #define CONSOLE_TYPE_WIDTH  (64)
 
-bool commandscmd(Console * const console, const char *cmd) {
+bool CommandsCommand(Console * const console, const char *cmd) {
     console->LogAvailableCommands();
 
     return true;
 }
-bool exitcmd(Console * const console, const char *cmd) {
+bool QuitCommand(Console * const console, const char *cmd) {
     exit(0);
     return true;
 }
@@ -29,8 +29,8 @@ Console::Console(HDC hdc) {
 
     ClearInputBuffer();
 
-    RegisterCommand("exit", exitcmd);
-    RegisterCommand("commands", commandscmd);
+    RegisterCommand("quit", QuitCommand);
+    RegisterCommand("commands", CommandsCommand);
 }
 
 void Console::LogAvailableCommands() {

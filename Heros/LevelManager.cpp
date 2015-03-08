@@ -143,7 +143,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.background_width = 727;
     sprintf(lvl.terrain_texture, "spr/terrain.bmp");
     lvl.object_count = 2160 + 16;
-    lvl.actor_count = 5;
+    lvl.actor_count = 4;
 
     ofstream lvlout;
     lvlout.open("level01.dat", ios::out | ios::binary);
