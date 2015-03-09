@@ -91,7 +91,9 @@ EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
 	if (IsOnGround()){ /*Is Jumping.*/
 		frames = 3;
 		return JUMP_;
-	}
+    }
+
+    return RUN_RIGHT;/* todo: make an idle state? */
 }
 
 void EnnemyJumping::Jump(double delta){

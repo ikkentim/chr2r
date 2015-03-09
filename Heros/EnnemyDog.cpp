@@ -88,4 +88,6 @@ EnnemyDog::AnimationState EnnemyDog::GetAnimationState(int &frames) {
 		frames = 3;
 		return RUN_LEFT;
 	}
+
+    return RUN_RIGHT;/* todo: make an idle state? */
 }

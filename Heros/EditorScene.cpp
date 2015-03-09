@@ -9,7 +9,7 @@ EditorScene *instance;
 
 bool fileExists(const char * file)
 {
-    std::string fp = std::string(getcwd(NULL, 0)).append("/").append(file);
+    std::string fp = std::string(_getcwd(NULL, 0)).append("/").append(file);
 
     OutputDebugString(fp.c_str());
     std::ifstream ifile(fp.c_str());

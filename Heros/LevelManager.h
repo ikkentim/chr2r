@@ -28,12 +28,16 @@ public:
     int backgroundWidth() {
         return backgroundWidth_;
     }
+    int bottomY() {
+        return bottomY_;
+    }
 	enum Layer : char { MOVABLE, BACKGROUND, PLAYABLE, FOREGROUND };
 	void Add(GameObject *, LevelManager::Layer);
     static LevelManager *Load(const char *, class GameScene *, class Player *&);
     static void WriteSimpleLevel();/* TODO: TEMP! Delete soon! */
 private:
     int backgroundWidth_;
+    int bottomY_;
     SpriteSheet *background_;
     LevelLayer backgroundLayer_;
     LevelLayer playableLayer_;

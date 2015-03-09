@@ -94,7 +94,9 @@ EnnemyFlying::AnimationState EnnemyFlying::GetAnimationState(int &frames) {
 	if (velocity_.x < 0) { /* Is moving left. */
 		frames = 3;
 		return RUN_LEFT;
-	}
+    }
+
+    return RUN_RIGHT;/* todo: make an idle state? */
 }
 
 //TODO:: Testing
