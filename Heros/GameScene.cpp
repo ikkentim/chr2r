@@ -18,6 +18,16 @@ GameScene::GameScene(GameWindow *window)
 	
 	hud_->push_back(new DialogHUD(player_, this));
 	hud_->push_back(new TestHUD());
+
+	quadTree_ = new QuadTree(AABB(Vector2(10000, 10000), Vector2(10000, 10000)));
+
+	/* playablelayer */
+	LevelLayer *layer = level_->PlayableLayer();
+	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+		GameObject *object = *iter;
+
+		quadTree_->Insert(object);
+	}
 }
 
 GameScene::~GameScene() {
@@ -70,8 +80,14 @@ void GameScene::Update(double delta, Keys keys) {
     layer = level_->Movables();
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
-        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
+
+		std::vector<GameObject*>* test = &quadTree_->QueryRange(AABB(object->Position(), Vector2(32, 32)));
+
+		object->CheckForCollisions(this, test, delta);
+
+		quadTree_->Delete(object);
         object->ApplyVelocity(delta);
+		quadTree_->Insert(object);
     }
 }
 

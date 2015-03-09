@@ -6,6 +6,7 @@
 #include "GameWindow.h"
 #include <vector>
 #include "Character.h"
+#include "QuadTree.h"
 
 typedef std::vector <class HUD *> HUDVector;
 
@@ -35,6 +36,7 @@ public:
 	};
 	virtual void SetState(State);
 	virtual State GetState();
+	QuadTree *quadTree_;
 private:
 	GameWindow *window_;
     Player *player_;

@@ -43,7 +43,7 @@ public:
 
     /* Collision */
     bool IsCollidingWith(GameObject *, double);
-    void CheckForCollisions(GameScene *, LevelLayer *, double);
+    void CheckForCollisions(GameScene *, std::vector<GameObject*> *, double);
     virtual void EnteredCollision(GameScene *, GameObject *, Vector2);
 	void ClearStates();
 protected:
