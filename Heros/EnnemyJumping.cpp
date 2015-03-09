@@ -90,5 +90,5 @@ EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
 
 void EnnemyJumping::Jump(double delta){
 	Vector2 hAccel = { 0, -JUMP_ACCEL };
-	velocity_ += hAccel; /*I put a += otherwise the Ennemie will stop running*/
+	velocity_ += hAccel;
 }

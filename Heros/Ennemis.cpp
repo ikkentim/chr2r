@@ -7,20 +7,20 @@
 
 
 Ennemis::Ennemis(Vector2 pos) :Actor(pos, Vector2(16, 16)){
-	velocity_ = Vector2(WALK_SPEED, 0);
+//	velocity_ = Vector2(-WALK_SPEED, 0);
 }
 Ennemis :: ~Ennemis(){}
 
 void Ennemis::GoLeft(double delta){
 
-	Vector2 hAccel = { -WALK_ACCEL, 0 };
-	velocity_ = hAccel;
+	Vector2 hAccel = { -(WALK_ACCEL + abs(velocity_.x)),0};
+	velocity_ += hAccel*delta;
 }
 
 void Ennemis::GoRight(double delta){
 
-	Vector2 hAccel = { WALK_ACCEL, 0 };
-	velocity_ = hAccel;
+	Vector2 hAccel = { WALK_ACCEL + abs(velocity_.x), 0 };
+	velocity_ += hAccel*delta;
 }
 
 
@@ -53,10 +53,10 @@ void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 		{
 		
 			 if (velocity_.x < 0){
-				GoRight(12);
+				GoRight(0.6);
 			}
 			if (velocity_.x > 0){
-				GoLeft(12);
+				GoLeft(0.60);
 			} 
 		}
 	}
