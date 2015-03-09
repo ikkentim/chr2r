@@ -156,12 +156,13 @@ void Console::Update(WPARAM wParam) {
         input -= 'A' - 'a';
 
     if (!isOpen_) {
-        isOpen_ = input == '`';
+        if (isOpen_ = wParam == VK_TAB)
+            ClearInputBuffer();
 
         return;
     }
 
-    if (input == '`') {
+    if (wParam == VK_TAB) {
         isOpen_ = false;
         ClearInputBuffer();
     }

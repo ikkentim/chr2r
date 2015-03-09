@@ -100,8 +100,6 @@ bool GameWindow::GameLoop(double delta) {
 	/* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
 
-    
-
     if (timeSinceRender_ >= frameInterval_) {
         timeSinceRender_ -= frameInterval_;
 
@@ -131,14 +129,21 @@ bool GameWindow::GameLoop(double delta) {
 #define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
 	keys_ |= map; } else if (keys_ & map) { \
 	keys_ ^= map; }
+#define MAP_KEYCHAR(vk,map); if(GetAsyncKeyState(vk) & 0x8000) { \
+	keys_ |= map; } else if (keys_ & map) { \
+	keys_ ^= map; }
 
             MAP_KEY(VK_LEFT, KEY_LEFT);
             MAP_KEY(VK_RIGHT, KEY_RIGHT);
             MAP_KEY(VK_UP, KEY_UP);
             MAP_KEY(VK_DOWN, KEY_DOWN);
             MAP_KEY(VK_SPACE, KEY_JUMP);
+            MAP_KEY(VK_DELETE, KEY_DELETE);
+            MAP_KEYCHAR('L', KEY_L);
+            MAP_KEYCHAR('O', KEY_O);
 
 #undef MAP_KEY
+#undef MAP_KEYCHAR
         }
 
 		/* Simple statement for using ESCAPE to exit. If LSHIFT or LCONTROL is
@@ -159,7 +164,7 @@ bool GameWindow::GameLoop(double delta) {
 			UpdateScene(new GameScene(this));
 		}
 
-        scene_->Update(delta, keys_ | joystickKeys_);
+        if (!console_->IsOpen()) scene_->Update(delta, keys_ | joystickKeys_);
 		ups.Update();
 
         return false;
