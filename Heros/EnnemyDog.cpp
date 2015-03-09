@@ -10,7 +10,11 @@
 
 
 //TOFIX:: pass position when Enemie is create
+
+//EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos){}
+
 EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(Vector2(36, 20), SpriteSheet::Get("spr/metalgearsheet.bmp")){
+
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
@@ -51,17 +55,9 @@ void EnnemyDog::Render(Viewport &vp) {
 
 void EnnemyDog::Update(GameScene *scene, double delta, Keys keys){
 	animationTime_ += delta;
-	//pattern of the enemy
-	int a= 1000; 
-	int b=600;
-	if (position_.x > a){
-		GoLeft(delta);
-	}
-	if (position_.x < b){
-		GoRight(delta);
-	}
 
-	/* Update the player animation. */
+
+	/* Update the enemi animation. */
 	AnimationState new_state = GetAnimationState(animationFrames_);
 
 	if (state_ != new_state) {
