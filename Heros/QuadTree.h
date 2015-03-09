@@ -6,21 +6,21 @@
 
 using namespace std;
 
-#define QUAD_TREE_CAPACITY 10
+#define QUAD_TREE_CAPACITY 50
 
 class QuadTree
 {
 public:
 	QuadTree();
-	QuadTree(AABB);
+	QuadTree(AABB*);
 	bool Insert(GameObject*);
 	bool Delete(GameObject*);
 	void Subdivide();
-	vector<GameObject*> QueryRange(AABB);
+	int QueryRange(AABB, GameObject**, int);
 private:
 	// Axis-aligned bounding box stored as a center with half-dimensions
 	// to represent the boundaries of this quad tree
-	AABB boundary_;
+	AABB* boundary_;
 
 	// Points in this quad tree node
 	GameObject* points_[QUAD_TREE_CAPACITY];

@@ -39,12 +39,23 @@ bool GameObject::IsCollidingWith(GameObject *other, double delta) {
         position.y + size_.y / 2 < other_position.y - other->size_.y / 2);
 }
 
-void GameObject::CheckForCollisions(GameScene *scene, std::vector<GameObject*> *layer, double delta) {
+//void GameObject::Update(GameScene *, double, Keys){
+//	int c = 0;
+//}
+//void GameObject::Render(Viewport &){
+//	int c = 0;
+//}
+
+void GameObject::CheckForCollisions(GameScene *scene, GameObject** checks, int PossibleColliders, double delta) {
     bool has_touched_ground = false;
 
-    for (LevelLayer::iterator iter = layer->begin(); 
+	for (int i = 0; i < PossibleColliders; i++)
+	{
+		GameObject* check = checks[i];
+
+    /*for (LevelLayer::iterator iter = layer->begin(); 
         iter != layer->end(); ++iter) {
-        GameObject *check = *iter;
+        GameObject *check = *iter;*/
 
         /* Don't check collision with yourself. */
 		if (this == check) {

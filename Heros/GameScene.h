@@ -47,4 +47,5 @@ private:
 	bool CheckStates();
 	State state_;
 	bool pausePressed_ = true;
+	GameObject* collisionBuffer_[500];
 };

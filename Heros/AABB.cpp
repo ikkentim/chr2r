@@ -11,12 +11,12 @@ AABB::AABB(Vector2 center, Vector2 halfDimension)
 	halfDimension_ = halfDimension;
 }
 
-bool AABB::ContainsPoint(GameObject* position)
+bool AABB::ContainsPoint(GameObject* gameObject)
 {
-	bool tmp = !(center_.x - halfDimension_.x > position->Position().x ||
-		center_.x + halfDimension_.x < position->Position().x ||
-		center_.y - halfDimension_.y > position->Position().y ||
-		center_.y + halfDimension_.y < position->Position().y);
+	bool tmp = !(center_.x - halfDimension_.x > gameObject->Position().x ||
+		center_.x + halfDimension_.x < gameObject->Position().x ||
+		center_.y - halfDimension_.y > gameObject->Position().y ||
+		center_.y + halfDimension_.y < gameObject->Position().y);
 
 	return tmp;
 }

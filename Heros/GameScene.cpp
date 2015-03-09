@@ -19,12 +19,15 @@ GameScene::GameScene(GameWindow *window)
 	hud_->push_back(new DialogHUD(player_, this));
 	hud_->push_back(new TestHUD());
 
-	quadTree_ = new QuadTree(AABB(Vector2(10000, 10000), Vector2(10000, 10000)));
+	quadTree_ = new QuadTree(new AABB(Vector2(10000, 10000), Vector2(10000, 10000)));
 
 	/* playablelayer */
 	LevelLayer *layer = level_->PlayableLayer();
 	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
 		GameObject *object = *iter;
+
+		if (object == NULL)
+			continue;
 
 		quadTree_->Insert(object);
 	}
@@ -44,11 +47,11 @@ void GameScene::Update(double delta, Keys keys) {
 
 	CheckStates();
 
-	/* Update HUD */
-	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-		HUD *hud = *it;
-		hud->Update(this, delta, keys);
-	}
+	///* Update HUD */
+	//for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+	//	HUD *hud = *it;
+	//	hud->Update(this, delta, keys);
+	//}
 
 	switch (state_)
 	{
@@ -81,9 +84,9 @@ void GameScene::Update(double delta, Keys keys) {
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
 
-		std::vector<GameObject*>* test = &quadTree_->QueryRange(AABB(object->Position(), Vector2(32, 32)));
+		int count = quadTree_->QueryRange(AABB(object->Position(), Vector2(32, 32)), collisionBuffer_, 0);
 
-		object->CheckForCollisions(this, test, delta);
+		object->CheckForCollisions(this, collisionBuffer_, count, delta);
 
 		quadTree_->Delete(object);
         object->ApplyVelocity(delta);
