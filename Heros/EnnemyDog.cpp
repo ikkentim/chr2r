@@ -13,7 +13,7 @@
 
 //EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos){}
 
-EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(Vector2(36, 20), SpriteSheet::Get("spr/metalgearsheet.bmp")){
+EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/metalgearsheet.bmp")){
 
 	velocity_ = Vector2(WALK_SPEED, 0);
 }

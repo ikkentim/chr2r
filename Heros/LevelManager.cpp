@@ -325,7 +325,7 @@ void LevelManager::WriteSimpleLevel()
 
 	lvlout.write((char *)&actor, sizeof(ActorData));
 
-	lvlout.write((char*)&actor, sizeof(ActorData));
+//	lvlout.write((char*)&actor, sizeof(ActorData));
 
 
 	actor.x = 230;
@@ -336,7 +336,7 @@ void LevelManager::WriteSimpleLevel()
 	//lvlout.write((char *)&actor, sizeof(ActorData));
 
 	actor.x = 200;
-	actor.y = 100;
+	actor.y = 230;
 	actor.type = CHARACTER;
 	lvlout.write((char *)&actor, sizeof(ActorData));
 

@@ -13,7 +13,7 @@
 
 //EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos){
 
-EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(Vector2(12, 17), SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
+EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
 
 	velocity_ = Vector2(WALK_SPEED, 0);
 }

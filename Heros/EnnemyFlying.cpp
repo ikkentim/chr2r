@@ -17,7 +17,7 @@
 	velocity_ = Vector2(-WALK_SPEED, -WALK_SPEED);
 	start_position = pos;
 */
-	EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(Vector2(18, 18), SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
+	EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
 		velocity_ = Vector2(-WALK_SPEED, -WALK_SPEED);
 		start_position = pos;
 
