@@ -3,7 +3,7 @@
 #include "SpriteSheet.h"
 
 SplashScene::SplashScene(GameWindow *window) :time_(0.0f), window_(window) {
-    
+    spriteSheet_ = SpriteSheet::Get("spr/splash.bmp");
 }
 
 SplashScene::~SplashScene() {
@@ -20,6 +20,6 @@ void SplashScene::Update(double delta, Keys) {
     }
 }
 
-void SplashScene::Render(double delta, HDC graphics) {
-    SpriteSheet::Get(SpriteSheet::SPLASH_SCREEN)->Draw(Texture(0, 0, 640, 480), 0, 0);
+void SplashScene::Render(HDC graphics) {
+    spriteSheet_->Draw(Texture(0, 0, 640, 480), 0, 0);
 }

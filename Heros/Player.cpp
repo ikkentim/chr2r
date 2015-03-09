@@ -13,6 +13,7 @@
 #define TEXTURE_HEIGHT      (28)
 
 Player::Player(GameScene *scene, Vector2 pos) :Actor(pos, Vector2(14, 27)) {
+    spriteSheet_ = SpriteSheet::Get("spr/MainCharacter.bmp");
     soundEngine_ = scene->SoundEngine();
 }
 
@@ -199,5 +200,16 @@ void Player::Render(Viewport &vp) {
 
     texture.left += idx * TEXTURE_WIDTH;
 
-    SpriteSheet::Get(SpriteSheet::MARIO)->Draw(texture, position_, vp);
+    spriteSheet_->Draw(texture, position_, vp);
+}
+
+bool Player::Die()
+{
+	if (--lives_ <= 0)
+		return true;
+
+	position_.x = 0;
+	position_.y = 0;
+
+	return false;
 }

@@ -24,8 +24,9 @@ public:
     Player(class GameScene *, Vector2);
     void Update(GameScene *, double, Keys) override;
 	void Render(Viewport &) override;
-
+	bool Die();
 private:
+    SpriteSheet *spriteSheet_;
     Keys keys_ = KEY_NONE;
     bool isLastMovementLeft_ = false;
     bool isDucking_ = false;
@@ -36,4 +37,5 @@ private:
     irrklang::ISoundEngine *soundEngine_;
 
     AnimationState GetAnimationState(int &frames);
+	int lives_ = 3;
 };

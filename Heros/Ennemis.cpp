@@ -6,8 +6,14 @@
 #define WALK_SPEED  (150.0)
 
 
-Ennemis::Ennemis(Vector2 pos) :Actor(pos, Vector2(16, 16)){
+
+//Ennemis::Ennemis(Vector2 pos) :Actor(pos, Vector2(16, 16)){}
 //	velocity_ = Vector2(-WALK_SPEED, 0);
+
+Ennemis::Ennemis(Vector2 pos, SpriteSheet *spriteSheet) :Actor(pos, Vector2(16, 16)){
+	//velocity_ = Vector2(WALK_SPEED, 0);
+    spriteSheet_ = spriteSheet;
+
 }
 Ennemis :: ~Ennemis(){}
 
@@ -24,14 +30,14 @@ void Ennemis::GoRight(double delta){
 }
 
 
-void Ennemis::Render(Viewport &vp) {
+/*void Ennemis::Render(Viewport &vp) {
 	Texture texture = {
 		257, 247,
 		16, 16
 	};
 
 	SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture, position_, vp);
-}
+}*/
 
 void Ennemis::Update(GameScene *scene, double delta, Keys keys){
 	/*if (position_.x > 200){

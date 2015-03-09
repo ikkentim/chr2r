@@ -5,7 +5,7 @@
 #define ANIMATION_INTERVAL  (0.12)
 
 Coin::Coin(Vector2 pos) :GameObject(false, pos, Vector2(12, 16)){
-
+    spriteSheet_ = SpriteSheet::Get("spr/terrain.bmp");
 }
 
 void Coin::Update(GameScene *scene, double delta, Keys keys) {
@@ -34,16 +34,16 @@ void Coin::Render(Viewport &vp) {
 
     switch (animationIndex_) {
     case 0:
-        SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(t0, position_, vp);
+        spriteSheet_->Draw(t0, position_, vp);
         break;
     case 1:
-        SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(t1, position_, vp);
+        spriteSheet_->Draw(t1, position_, vp);
         break;
     case 2:
-        SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(t2, position_, vp);
+        spriteSheet_->Draw(t2, position_, vp);
         break;
     case 3:
-        SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(t3, position_, vp);
+        spriteSheet_->Draw(t3, position_, vp);
         break;
     }
 }

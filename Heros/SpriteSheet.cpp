@@ -1,5 +1,5 @@
 #include "SpriteSheet.h"
-
+/*
 SpriteSheet *SpriteSheet::spriteSheets_[SPRITE_SHEET_COUNT];
 char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
     "spr/terrain.bmp",
@@ -13,9 +13,11 @@ char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
 	"spr/exit_button.bmp",
 	"spr/arrow_button.bmp",
 	"spr/Zelda_Enemies_Sprite.bmp",
+	"spr/mario.bmp",
 	
-};
+};*/
 
+SpriteSheet::SpriteMap SpriteSheet::spriteSheets_;
 HWND SpriteSheet::hWnd_;
 HDC SpriteSheet::dcBuf_;
 
@@ -24,24 +26,34 @@ void SpriteSheet::SetWindow(HWND hWnd, HDC dcBuf) {
     dcBuf_ = dcBuf;
 }
 
-SpriteSheet *SpriteSheet::Get(Type type) {
-    if (!spriteSheets_[type]) {
-        spriteSheets_[type] = new SpriteSheet(spriteFileNames_[type]);
+SpriteSheet *SpriteSheet::Get(std::string sheet) {
+    if (spriteSheets_.find(sheet) != spriteSheets_.end()) {
+        return spriteSheets_[sheet];
     }
-
-    return spriteSheets_[type];
+    else {
+        auto sh = new SpriteSheet(sheet.c_str());
+        spriteSheets_[sheet] = sh;
+        return sh;
+    }
 }
 
 void SpriteSheet::Unload() {
-    for (int i = 0; i < SPRITE_SHEET_COUNT; i++) {
-        if (spriteSheets_[i]) {
-            delete spriteSheets_[i];
-        }
+    for (SpriteMap::iterator iterator = spriteSheets_.begin(); iterator != spriteSheets_.end(); iterator++) {
+        delete iterator->second;
     }
+
+    spriteSheets_.clear();
 }
 SpriteSheet::SpriteSheet(const char * file) {
     HBITMAP bitmap = (HBITMAP)LoadImage(NULL, file, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
     
+#ifdef _DEBUG
+    if (!bitmap) {
+        char buffer[256];
+        sprintf_s(buffer, "\n\n********************\nMissing texture: %s\n********************\n\n", file);
+        OutputDebugString(buffer);
+    }
+#endif
     assert(bitmap && "Bitmap cannot be loaded (asset missing?)");
 
     dcImage_ = CreateCompatibleDC(dcBuf_);
@@ -68,8 +80,8 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
     /* Shift the drawing location by half the texture size.
      * The given position is the center of the object.
      */
-    int x = floor(pos.x) - vp.x - texture.width / 2;
-    int y = floor(pos.y) - vp.y - texture.height / 2;
+    int x = (int)floor(pos.x) - vp.x - texture.width / 2;
+    int y = (int)floor(pos.y) - vp.y - texture.height / 2;
 
     Draw(texture, x, y);
 }

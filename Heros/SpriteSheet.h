@@ -1,33 +1,18 @@
 #pragma once
 
+#include <string>
+#include <map>
 #include <windows.h>
 #include "Texture.h"
 #include "Vector2.h"
 #include "Viewport.h"
 
-#define SPRITE_SHEET_COUNT      (11)
-
 class SpriteSheet
 {
 public:
-    enum Type {
-        TERRAIN,
-        SPLASH_SCREEN,
-        BACKGROUND01,
-        MARIO,
-		ENNEMY_1,
-		MENU_SCREEN,
-		PLAY_BUTTON,
-		OPTIONS_BUTTON,
-		EXIT_BUTTON,
-		ARROW,
-		ENNEMY_2,
-
-    };
-
     static void SetWindow(HWND, HDC);
     static void Unload();
-    static SpriteSheet *Get(Type);
+    static SpriteSheet *Get(std::string);
 
     SpriteSheet(const char *);
     ~SpriteSheet(void);
@@ -35,8 +20,8 @@ public:
     void Draw(Texture &, int offsetx, int offsety);
 
 private:
-    static SpriteSheet *spriteSheets_[SPRITE_SHEET_COUNT];
-    static char *spriteFileNames_[SPRITE_SHEET_COUNT];
+    typedef std::map<std::string, SpriteSheet *> SpriteMap;
+    static SpriteMap spriteSheets_;
     static HWND hWnd_;
     static HDC dcBuf_;
 

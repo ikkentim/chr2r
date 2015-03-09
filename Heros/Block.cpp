@@ -1,17 +1,19 @@
 #include "Block.h"
 #include "SpriteSheet.h"
 
-Block::Block(Texture tex) :texture_(tex), GameObject() {
+Block::Block(SpriteSheet *spriteSheet, Texture tex) 
+    :spriteSheet_(spriteSheet), texture_(tex), GameObject() {
 }
 
-Block::Block(Texture tex, Vector2 pos) : texture_(tex), GameObject(pos,	Vector2(tex.width, tex.height)) {
+Block::Block(SpriteSheet *spriteSheet, Texture tex, Vector2 pos) 
+    :spriteSheet_(spriteSheet), texture_(tex), GameObject(pos, Vector2(tex.width, tex.height)) {
 	
 }
 
 void Block::Update(GameScene *scene, double delta, Keys keys) {
-    /* TODO: update mechanism */
+    /* nothing to update. */
 }
 
 void Block::Render(Viewport &vp) {
-    SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture_, position_, vp);
+    spriteSheet_->Draw(texture_, position_, vp);
 }
