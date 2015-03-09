@@ -9,9 +9,6 @@
 #define TEXTURE_WIDTH       (12) 
 #define TEXTURE_HEIGHT      (17) 
 
-//TOFIX:: pass position when Enemie is create
-
-//EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos){
 
 EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
 

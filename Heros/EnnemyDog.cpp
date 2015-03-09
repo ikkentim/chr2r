@@ -9,10 +9,6 @@
 #define TEXTURE_HEIGHT      (28)
 
 
-//TOFIX:: pass position when Enemie is create
-
-//EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos){}
-
 EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/metalgearsheet.bmp")){
 
 	velocity_ = Vector2(WALK_SPEED, 0);
