@@ -21,12 +21,12 @@ bool AABB::ContainsPoint(GameObject* gameObject)
 	return tmp;
 }
 
-bool AABB::IntersectsWith(AABB box)
+bool AABB::IntersectsWith(AABB *box)
 {
-	bool tmp = !(box.Center().x - box.HalfDimension().x > Center().x + HalfDimension().x
-		|| box.Center().x + box.HalfDimension().x < Center().x - HalfDimension().x
-		|| box.Center().y - box.HalfDimension().y > Center().y + HalfDimension().y
-		|| box.Center().y + box.HalfDimension().y < Center().y - HalfDimension().y);
+	bool tmp = !(box->Center().x - box->HalfDimension().x > Center().x + HalfDimension().x
+		|| box->Center().x + box->HalfDimension().x < Center().x - HalfDimension().x
+		|| box->Center().y - box->HalfDimension().y > Center().y + HalfDimension().y
+		|| box->Center().y + box->HalfDimension().y < Center().y - HalfDimension().y);
 
 	return tmp;
 }

@@ -8,7 +8,7 @@ public:
 	AABB();
 	AABB(Vector2, Vector2);
 	bool ContainsPoint(GameObject*);
-	bool IntersectsWith(AABB);
+	bool IntersectsWith(AABB*);
 	Vector2 Center()
 	{
 		return center_;

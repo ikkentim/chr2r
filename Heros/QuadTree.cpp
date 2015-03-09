@@ -66,7 +66,7 @@ bool QuadTree::Delete(GameObject* position)
 	return false;
 }
 
-int QuadTree::QueryRange(AABB box, GameObject** objects, int count)
+int QuadTree::QueryRange(AABB *box, GameObject** objects, int count)
 {
 	// Automatically abort if the range does not intersect this quad
 	if (!boundary_->IntersectsWith(box))
@@ -74,7 +74,7 @@ int QuadTree::QueryRange(AABB box, GameObject** objects, int count)
 
 	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
 		if (points_[i] != NULL)
-			if (box.ContainsPoint(points_[i]))
+			if (box->ContainsPoint(points_[i]))
 				objects[count++] = points_[i];
 
 	// Terminate here, if there are no children

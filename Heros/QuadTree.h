@@ -16,7 +16,7 @@ public:
 	bool Insert(GameObject*);
 	bool Delete(GameObject*);
 	void Subdivide();
-	int QueryRange(AABB, GameObject**, int);
+	int QueryRange(AABB*, GameObject**, int);
 private:
 	// Axis-aligned bounding box stored as a center with half-dimensions
 	// to represent the boundaries of this quad tree
