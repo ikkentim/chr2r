@@ -39,7 +39,7 @@ void Console::LogAvailableCommands() {
         auto name = iterator->first;
 
         char buffer[CONSOLE_BUFFER_SIZE];
-        sprintf(buffer, "  %s", name.c_str());
+        sprintf_s(buffer, "  %s", name.c_str());
 
         LogNotice(buffer);
     }
@@ -118,13 +118,13 @@ void Console::LogUserInput(const char *message) {
 void Console::Log(const char *format, va_list args, char *type, COLORREF color) {
     char buffer[CONSOLE_BUFFER_SIZE];
 
-    vsnprintf(buffer, CONSOLE_BUFFER_SIZE, format, args);
+    vsnprintf_s(buffer, CONSOLE_BUFFER_SIZE, format, args);
     Log(buffer, type, color);
 }
 void Console::Log(const char *message, char *type, COLORREF color) {
 
-    strcpy(consoleTypeBuffer_[consolePos_], type);
-    strcpy(consoleBuffer_[consolePos_], message);
+    strcpy_s(consoleTypeBuffer_[consolePos_], type);
+    strcpy_s(consoleBuffer_[consolePos_], message);
     consoleTypeColor_[consolePos_++] = color;
 
     consolePos_ %= CONSOLE_LOG_COUNT;
@@ -139,6 +139,8 @@ bool Console::RegisterCommand(std::string name, ConsoleCommandHandler handler) {
     }
 
     commands_[name] = handler;
+
+    return true;
 }
 
 void Console::RemoveCommand(std::string name) {
@@ -200,7 +202,7 @@ void Console::Render(HDC hdc) {
         int rpos = ((CONSOLE_LOG_COUNT - i) + consolePos_ - 1) % CONSOLE_LOG_COUNT;
 
         char buffer[CONSOLE_TYPE_BUFFER_SIZE + 2];
-        sprintf(buffer, "[%s]", consoleTypeBuffer_[rpos]);
+        sprintf_s(buffer, "[%s]", consoleTypeBuffer_[rpos]);
 
         SetTextColor(dc_, consoleTypeColor_[rpos]);
         TextOut(dc_, 0, y, buffer, strlen(buffer));

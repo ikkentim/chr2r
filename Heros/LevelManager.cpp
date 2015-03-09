@@ -74,7 +74,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     SpriteSheet *terrain = SpriteSheet::Get(header.terrain_texture);
 
     ObjectData object_buffer;
-    for (unsigned int i = 0; i < header.object_count; i++) {
+    for (int i = 0; i < header.object_count; i++) {
         lvl.read((char *)&object_buffer, sizeof(object_buffer));
 
         GameObject *object = NULL;
@@ -93,7 +93,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     }
 
     ActorData actor_buffer;
-    for (unsigned int i = 0; i < header.actor_count; i++) {
+    for (int i = 0; i < header.actor_count; i++) {
         lvl.read((char *)&actor_buffer, sizeof(actor_buffer));
 
         Actor *actor = NULL;
@@ -124,6 +124,8 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 
     manager->background_ = SpriteSheet::Get(header.background_texture);
     manager->backgroundWidth_ = header.background_width;
+
+    manager->bottomY_ = header.bottom;
     lvl.close();
 
     return manager;
@@ -138,10 +140,10 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
-    sprintf(lvl.name, "Level 01!");
-    sprintf(lvl.background_texture, "spr/background01.bmp");
+    sprintf_s(lvl.name, "Level 01!");
+    sprintf_s(lvl.background_texture, "spr/background01.bmp");
     lvl.background_width = 727;
-    sprintf(lvl.terrain_texture, "spr/terrain.bmp");
+    sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
     lvl.object_count = 2160 + 16;
     lvl.actor_count = 4;
 

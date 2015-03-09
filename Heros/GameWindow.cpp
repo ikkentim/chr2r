@@ -330,4 +330,6 @@ LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam,
     default:
         return Window::MsgProc(hWnd, uMsg, wParam, lParam);
     }
+
+    return 0;
 }

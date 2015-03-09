@@ -50,7 +50,7 @@ SpriteSheet::SpriteSheet(const char * file) {
 #ifdef _DEBUG
     if (!bitmap) {
         char buffer[256];
-        sprintf(buffer, "\n\n********************\nMissing texture: %s\n********************\n\n", file);
+        sprintf_s(buffer, "\n\n********************\nMissing texture: %s\n********************\n\n", file);
         OutputDebugString(buffer);
     }
 #endif
@@ -80,8 +80,8 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
     /* Shift the drawing location by half the texture size.
      * The given position is the center of the object.
      */
-    int x = floor(pos.x) - vp.x - texture.width / 2;
-    int y = floor(pos.y) - vp.y - texture.height / 2;
+    int x = (int)floor(pos.x) - vp.x - texture.width / 2;
+    int y = (int)floor(pos.y) - vp.y - texture.height / 2;
 
     Draw(texture, x, y);
 }
