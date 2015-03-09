@@ -24,7 +24,7 @@ void Jumper::Update(GameScene *scene, double delta, Keys keys) {
 
 void Jumper::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 	if (!JumpON && obj == scene->player()){
-//TOFIX::		scene->SoundEngine()->play2D("snd/smb_coin.wav");
+	scene->SoundEngine()->play2D("snd/Jumper.mp3");
 
 		JumpON = true;
 		Vector2 Jump {0,-JUMP_POWER};
