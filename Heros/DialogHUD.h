@@ -22,6 +22,7 @@ private:
 	GameScene *scene_;
 	Character* character;
 	int wait;
+	bool done = false;
 };
 
 class DialogLine {
