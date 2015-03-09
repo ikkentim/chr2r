@@ -13,20 +13,8 @@
 
 #include "LevelHeader.h"
 #include "ObjectData.h"
+#include "ActorData.h"
 
-enum ActorType {
-	//ENNEMIS,
-	DOG,
-	FLYING_ENEMIE,
-	JUMPING_ENEMIE,
-	CHARACTER
-};
-
-struct ActorData {
-    int x;
-    int y;
-    ActorType type;
-};
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -76,9 +64,6 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
         Actor *actor = NULL;
 
         switch (actor_buffer.type) {
-        //case ENNEMIS:
-        //    actor = new Ennemis(Vector2(actor_buffer.x, actor_buffer.y));
-        //    break;
 		case DOG:
 			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
 			break;

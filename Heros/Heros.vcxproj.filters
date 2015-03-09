@@ -230,5 +230,8 @@
     <ClInclude Include="Jumper.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="ActorData.h">
+      <Filter>Header Files\LevelData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

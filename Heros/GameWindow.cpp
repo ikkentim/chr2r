@@ -8,6 +8,7 @@
 #include "LevelManager.h"
 #include <string>
 #include "EditorScene.h"
+#include "MenuScene.h"
 
 #define MAX_HID_BUTTONS     (64)
 
@@ -17,6 +18,16 @@ bool StartLevelEditorCommand(Console * const console, const char *cmd) {
     console->LogNotice("Loading level editor...");
     instance->UpdateScene(new EditorScene(instance));
 
+    return true;
+}
+
+bool QuitCommand(Console * const console, const char *cmd) {
+    exit(0);
+    return true;
+}
+
+bool MenuCommand(Console * const console, const char *cmd) {
+    instance->UpdateScene(new MenuScene(instance));
     return true;
 }
 
@@ -86,6 +97,8 @@ void GameWindow::GameInit() {
     hasJoystick_ = !!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
 
     console_ = new Console(graphics_);
+    console_->RegisterCommand("menu", MenuCommand);
+    console_->RegisterCommand("quit", QuitCommand);
     console_->RegisterCommand("startleveleditor", StartLevelEditorCommand);
     console_->RegisterCommand("sle", StartLevelEditorCommand);
 }
@@ -164,7 +177,7 @@ bool GameWindow::GameLoop(double delta) {
 			UpdateScene(new GameScene(this));
 		}
 
-        if (!console_->IsOpen()) scene_->Update(delta, keys_ | joystickKeys_);
+        scene_->Update(delta, keys_ | joystickKeys_);
 		ups.Update();
 
         return false;

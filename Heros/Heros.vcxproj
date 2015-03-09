@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="ActorData.h" />
     <ClInclude Include="Alive.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Character.h" />

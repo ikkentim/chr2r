@@ -328,7 +328,7 @@ void EditorScene::Save(const char *path) {
     lvl.background_width = backgroundWidth_;
     sprintf_s(lvl.terrain_texture, terrainPath_);
     sprintf_s(lvl.next_level, nextLevel_);
-    lvl.actor_count = 0;
+    lvl.actor_count = actors_.size();
     lvl.object_count = playableLayer_.size() + foregroundLayer_.size() +
         backgroundLayer_.size();
 
@@ -336,8 +336,6 @@ void EditorScene::Save(const char *path) {
     lvlout.open(path, std::ios::out | std::ios::binary);
 
     lvlout.write((char *)&lvl, sizeof(lvl));
-
-    /* todo: add objects and actors */
 
     for (ObjectData d : playableLayer_) {
         lvlout.write((char *)&d, sizeof(d));
@@ -349,6 +347,9 @@ void EditorScene::Save(const char *path) {
         lvlout.write((char *)&d, sizeof(d));
     }
 
+    for (ActorData d : actors_) {
+        lvlout.write((char *)&d, sizeof(d));
+    }
     lvlout.close();
 
 }
@@ -389,55 +390,95 @@ void EditorScene::Update(double delta, Keys keys) {
     if (!isKeyDown_) {
         if (keys & KEY_L) {
             switch (currentLayer_) {
-                case LevelManager::PLAYABLE:
-                    currentLayer_ = LevelManager::FOREGROUND;
+            case LevelManager::PLAYABLE:
+                currentLayer_ = LevelManager::FOREGROUND;
                 break;
-                case LevelManager::FOREGROUND:
-                    currentLayer_ = LevelManager::BACKGROUND;
+            case LevelManager::FOREGROUND:
+                currentLayer_ = LevelManager::BACKGROUND;
                 break;
-                case LevelManager::BACKGROUND:
-                    currentLayer_ = LevelManager::PLAYABLE;
+            case LevelManager::BACKGROUND:
+                currentLayer_ = LevelManager::MOVABLE;
+                break;
+            case LevelManager::MOVABLE:
+                currentLayer_ = LevelManager::PLAYABLE;
                 break;
             }
             isKeyDown_ = true;
         }
-        else if (keys & KEY_O) {/* TODO: put object types in an array for a 
+        else if (keys & KEY_O) {/* TODO: put object types in an array for a
                            little more dynimicness.*/
-            switch (currentObjectType_) {
-            case BLOCK:
-                currentObjectType_ = COIN;
-                break;
-            case COIN:
-                currentObjectType_ = BLOCK;
-                break;
-            }
-            isKeyDown_ = true;
-        }
-        else if (keys & KEY_JUMP) {
-            if (selectedTexture_.width > 0 && selectedTexture_.height > 0) {
-                ObjectData data;
-                GetCurrentPos(data.x, data.y);
-                data.layer = currentLayer_;
-                data.texture = selectedTexture_;
-                data.type = currentObjectType_;
-                data.width = selectedTexture_.width;
-                data.height = selectedTexture_.height;
 
-                AddObject(GetCurrentLayer(), data);
+            if (currentLayer_ == LevelManager::MOVABLE) {
+                switch (currentActorType_) {
+                case DOG:
+                    currentActorType_ = FLYING_ENEMIE;
+                    break;
+                case FLYING_ENEMIE:
+                    currentActorType_ = JUMPING_ENEMIE;
+                    break;
+                case JUMPING_ENEMIE:
+                    currentActorType_ = CHARACTER;
+                    break;
+                case CHARACTER:
+                    currentActorType_ = DOG;
+                    break;
+                }
             }
-            isKeyDown_ = true;
-        }
-        else if (keys & KEY_DELETE) {
-
-            int x, y;
-            GetCurrentPos(x, y);
-            RemoveObject(GetCurrentLayer(), Vector2(x, y));
+            else {
+                switch (currentObjectType_) {
+                case BLOCK:
+                    currentObjectType_ = COIN;
+                    break;
+                case COIN:
+                    currentObjectType_ = BLOCK;
+                    break;
+                }
+            }
             isKeyDown_ = true;
         }
     }
     else {
-        isKeyDown_ = (keys & KEY_L) || (keys & KEY_O) || (keys & KEY_JUMP) || (keys & KEY_DELETE);
+
+        isKeyDown_ = (keys & KEY_L) || (keys & KEY_O);
     }
+
+         if (keys & KEY_JUMP) {
+            if (currentLayer_ == LevelManager::MOVABLE) {
+                /* Actors */
+                ActorData data;
+                data.type = currentActorType_;
+                GetCurrentPos(data.x, data.y);
+
+                AddActor(data);
+            }
+            else {
+                /* Objects */
+                if (selectedTexture_.width > 0 && selectedTexture_.height > 0) {
+                    ObjectData data;
+                    GetCurrentPos(data.x, data.y);
+                    data.layer = currentLayer_;
+                    data.texture = selectedTexture_;
+                    data.type = currentObjectType_;
+                    data.width = selectedTexture_.width;
+                    data.height = selectedTexture_.height;
+
+                    AddObject(GetCurrentLayer(), data);
+                }
+            }
+            isKeyDown_ = true;
+        }
+        if (keys & KEY_DELETE) {
+            int x, y;
+            GetCurrentPos(x, y);
+            if (currentLayer_ == LevelManager::MOVABLE) {
+                RemoveActor(Vector2(x, y));
+            }
+            else {
+                RemoveObject(GetCurrentLayer(), Vector2(x, y));
+            }
+            isKeyDown_ = true;
+        }
+    
 
     /* Update viewport */
     UpdateViewport();
@@ -477,8 +518,62 @@ void EditorScene::RemoveObject(std::vector<ObjectData> *layer, Vector2 pos) {
         }
     }
 }
-void EditorScene::UpdateViewport()
-{
+Vector2 EditorScene::GetActorSize(ActorType type) {
+    /* TODO: improve this block */
+    return Vector2(16, 16);
+
+    switch (type) {
+    case DOG:
+        return Vector2();
+    case FLYING_ENEMIE:
+        return Vector2();
+    case JUMPING_ENEMIE:
+        return Vector2();
+    case CHARACTER:
+        return Vector2();
+    default:
+        return Vector2();
+    }
+}
+
+void EditorScene::AddActor(ActorData data) {
+    auto size = GetActorSize(data.type);
+    for (std::vector<ActorData>::iterator it = actors_.begin(); it != actors_.end();)
+    {
+        ActorData check = *it;
+        auto checksize = GetActorSize(check.type);
+        if (!(data.x - size.x / 2 >= check.x + checksize.x / 2 ||
+            data.x + size.x / 2 <= check.x - checksize.x / 2 ||
+            data.y - size.y / 2 >= check.y + checksize.y / 2 ||
+            data.y + size.y / 2 <= check.y - checksize.y / 2)) {
+            it = actors_.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+
+    actors_.push_back(data);
+}
+
+void EditorScene::RemoveActor(Vector2 pos) {
+    for (std::vector<ActorData>::iterator it = actors_.begin(); it != actors_.end();)
+    {
+        ActorData check = *it;
+        auto checksize = GetActorSize(check.type);
+        if (!(pos.x >= check.x + checksize.x / 2 ||
+            pos.x <= check.x - checksize.x / 2 ||
+            pos.y >= check.y + checksize.y / 2 ||
+            pos.y <= check.y - checksize.y / 2)) {
+            it = actors_.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+}
+
+void EditorScene::UpdateViewport() {
     /* Minimum distance between window edge and the player*/
     const int borderOffset = 215;
 
@@ -522,19 +617,33 @@ void EditorScene::Render(HDC graphics) {
     /* Draw terrain */
     if (terrain_) {
         if (showBackgroundLayer_) {
-            for (std::vector<ObjectData>::iterator it = backgroundLayer_.begin(); it != backgroundLayer_.end(); ++it) {
-                DrawObject(*it);
+            for (ObjectData object : backgroundLayer_) {
+                DrawObject(object);
             }
         }
         if (showPlayableLayer_) {
-            for (std::vector<ObjectData>::iterator it = playableLayer_.begin(); it != playableLayer_.end(); ++it) {
-                DrawObject(*it);
+            for (ObjectData object : playableLayer_) {
+                DrawObject(object);
             }
         }
         if (showForegroundLayer_) {
-            for (std::vector<ObjectData>::iterator it = foregroundLayer_.begin(); it != foregroundLayer_.end(); ++it) {
-                DrawObject(*it);
+            for (ObjectData object : foregroundLayer_) {
+                DrawObject(object);
             }
+        }
+    }
+
+    for (ActorData actor : actors_) {
+        //DrawObject(actor);
+        switch (actor.type) {
+        case DOG:
+            break;
+        case FLYING_ENEMIE:
+            break;
+        case JUMPING_ENEMIE:
+            break;
+        case CHARACTER:
+            break;
         }
     }
 
@@ -590,17 +699,39 @@ void EditorScene::Render(HDC graphics) {
         TextOut(graphics, 5, 70, "BACKGROUND", 10);
         sprintf_s(buf, "%d", backgroundLayer_.size());
         break;
+    case LevelManager::MOVABLE:
+        TextOut(graphics, 5, 70, "ACTORS", 6);
+        sprintf_s(buf, "%d", actors_.size());
+        break;
     }
 
     TextOut(graphics, 200, 70, buf, strlen(buf));
 
 
-    switch (currentObjectType_) {
-    case BLOCK:
-        TextOut(graphics, 5, 90, "BLOCK", 5);
-        break;
-    case COIN:
-        TextOut(graphics, 5, 90, "COIN", 4);
-        break;
+    if (currentLayer_ == LevelManager::MOVABLE) {
+        switch (currentActorType_) {
+        case DOG:
+            TextOut(graphics, 5, 90, "DOG", 3);
+            break;
+        case FLYING_ENEMIE:
+            TextOut(graphics, 5, 90, "FLYING_ENEMIE", 13);
+            break;
+        case JUMPING_ENEMIE:
+            TextOut(graphics, 5, 90, "JUMPING_ENEMIE", 14);
+            break;
+        case CHARACTER:
+            TextOut(graphics, 5, 90, "CHARACTER", 9);
+            break;
+        }
+    }
+    else {
+        switch (currentObjectType_) {
+        case BLOCK:
+            TextOut(graphics, 5, 90, "BLOCK", 5);
+            break;
+        case COIN:
+            TextOut(graphics, 5, 90, "COIN", 4);
+            break;
+        }
     }
 }

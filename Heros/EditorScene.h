@@ -7,6 +7,7 @@
 #include "LevelHeader.h"
 #include <vector>
 #include "ObjectData.h"
+#include "ActorData.h"
 
 class EditorScene : public Scene {
 public:
@@ -103,6 +104,7 @@ private:
     std::vector<ObjectData> playableLayer_;
     std::vector<ObjectData> foregroundLayer_;
     std::vector<ObjectData> backgroundLayer_;
+    std::vector<ActorData> actors_;
     
     std::vector<ObjectData> *GetCurrentLayer() {
         switch (currentLayer_) {
@@ -116,6 +118,9 @@ private:
     }
     void AddObject(std::vector<ObjectData> *, ObjectData);
     void RemoveObject(std::vector<ObjectData> *, Vector2);
+    Vector2 GetActorSize(ActorType type);
+    void AddActor(ActorData);
+    void RemoveActor(Vector2);
     void DrawObject(ObjectData);
     bool showPlayableLayer_ = true;
     bool showForegroundLayer_ = true;
@@ -123,7 +128,10 @@ private:
     bool isKeyDown_ = false;
     LevelManager::Layer currentLayer_ = LevelManager::PLAYABLE;
     ObjectType currentObjectType_ = BLOCK;
+    ActorType currentActorType_ = DOG;
     Texture selectedTexture_ = { 0, 0, 0, 0 };
 
     SpriteSheet *defaultTerrain_;
+    SpriteSheet *metalGearSpriteSheet_ = SpriteSheet::Get("spr/metalgearsheet.bmp");
+    SpriteSheet *zeldaEnemiesSpriteSheet = SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp");
 };
