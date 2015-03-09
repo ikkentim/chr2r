@@ -116,6 +116,12 @@ bool GameScene::CheckStates()
 		pausePressed_ = false;
 	}
 
+	if (level_->bottomY() < player()->Position().y)
+	{
+		player()->SetState(Actor::DEAD);
+		SetState(PLAYER_DEAD);
+	}
+
 	if (player()->GetState() == Actor::DEAD)
 	{
 		SetState(PLAYER_DEAD);

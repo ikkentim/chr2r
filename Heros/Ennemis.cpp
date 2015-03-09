@@ -1,26 +1,28 @@
 #include "Ennemis.h"
 #include "GameScene.h"
+#include "Actor.h"
 
 #define WALK_ACCEL  (150.0)
 #define WALK_SPEED  (150.0)
 
 
 Ennemis::Ennemis(Vector2 pos, SpriteSheet *spriteSheet) :Actor(pos, Vector2(16, 16)){
-	velocity_ = Vector2(WALK_SPEED, 0);
+	//velocity_ = Vector2(WALK_SPEED, 0);
     spriteSheet_ = spriteSheet;
+
 }
 Ennemis :: ~Ennemis(){}
 
 void Ennemis::GoLeft(double delta){
 
-	Vector2 hAccel = { -WALK_ACCEL, 0 };
-	velocity_ = hAccel;
+	Vector2 hAccel = { -(WALK_ACCEL + abs(velocity_.x)),0};
+	velocity_ += hAccel*delta;
 }
 
 void Ennemis::GoRight(double delta){
 
-	Vector2 hAccel = { WALK_ACCEL, 0 };
-	velocity_ = hAccel;
+	Vector2 hAccel = { WALK_ACCEL + abs(velocity_.x), 0 };
+	velocity_ += hAccel*delta;
 }
 
 
@@ -34,12 +36,12 @@ void Ennemis::GoRight(double delta){
 }*/
 
 void Ennemis::Update(GameScene *scene, double delta, Keys keys){
-	if (position_.x > 200){
+	/*if (position_.x > 200){
 		GoLeft(delta);
 	}
 	if (position_.x < 20){
 		GoRight(delta);
-	}
+	}*/
 
 	Falling(delta);
 }
@@ -48,4 +50,17 @@ void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 	if (obj == scene->player()){
 		scene->player()->SetState(Actor::DEAD);
 	}
+	if (obj != scene->player()){
+		if (abs(velocity_.y) < abs(velocity_.x))
+		{
+		
+			 if (velocity_.x < 0){
+				GoRight(0.6);
+			}
+			if (velocity_.x > 0){
+				GoLeft(0.60);
+			} 
+		}
+	}
 }
+

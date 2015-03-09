@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Player.h"
 #include "Character.h"
+#include "Jumper.h"
 #include <algorithm>
 
 #include "LevelHeader.h"
@@ -60,6 +61,9 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
         case COIN:
             object = new Coin(Vector2(object_buffer.x, object_buffer.y));
             break;
+		case JUMPER:
+			object = new Jumper(Vector2(object_buffer.x, object_buffer.y));
+			break;
         }
 
         manager->Add(object, object_buffer.layer);
@@ -78,9 +82,11 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 		case DOG:
 			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
+
 		case CHARACTER:
 			actor = new Character(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
+
 		case FLYING_ENEMIE:
 			actor = new EnnemyFlying(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
@@ -113,11 +119,15 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_x = 16;
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
+
+    lvl.actor_count = 4;
+
     sprintf_s(lvl.name, "Level 01!");
     sprintf_s(lvl.background_texture, "spr/background01.bmp");
     lvl.background_width = 727;
     sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
-    lvl.object_count = 2160 + 16;
+
+    lvl.object_count = 2160 + 16 + 1;
     lvl.actor_count = 4;
 
     ofstream lvlout;
@@ -272,6 +282,15 @@ void LevelManager::WriteSimpleLevel()
         lvlout.write((char *)&obj, sizeof(ObjectData));
     }
 
+	obj.x = 300;
+	obj.y= 240;
+	obj.height = 20;
+	obj.texture = { 0, 0, 0, 0 };
+	obj.layer = PLAYABLE;
+	obj.type = JUMPER;
+
+	lvlout.write((char *)&obj, sizeof(ObjectData));
+
     ActorData actor;
 
 
@@ -286,12 +305,16 @@ void LevelManager::WriteSimpleLevel()
     actor.type = DOG;
     lvlout.write((char *)&actor, sizeof(ActorData));
 
-	actor.x = 100;
-	actor.y = 300;
+	actor.x = 230;
+	actor.y = 150;
 	actor.type = FLYING_ENEMIE;
+
+	lvlout.write((char *)&actor, sizeof(ActorData));
+
 	lvlout.write((char*)&actor, sizeof(ActorData));
 
-	actor.x = 250;
+
+	actor.x = 230;
 	actor.y = 240;
 	actor.type = JUMPING_ENEMIE;
 	lvlout.write((char *)&actor, sizeof(ActorData));

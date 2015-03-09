@@ -2,15 +2,16 @@
 
 #define WALK_ACCEL  (150.0)
 #define WALK_SPEED  (150.0)
-#define JUMP_ACCEL	(100.0)
+#define JUMP_ACCEL	(400.0)
 
 
 #define ANIMATION_INTERVAL  (0.4)
 #define TEXTURE_WIDTH       (12) 
 #define TEXTURE_HEIGHT      (17) 
 
-//TOFIX:: pass position when Enemie is create
-EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(Vector2(12, 17), SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
+
+EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
+
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
@@ -49,15 +50,8 @@ void EnnemyJumping::Render(Viewport &vp) {
 void EnnemyJumping::Update(GameScene *scene, double delta, Keys keys){
 	animationTime_ += delta;
 	//pattern of the enemie
-	int a = 500;
-	int b = 240;
-	if (position_.x > a){
-		GoLeft(delta);
-	}
-	if (position_.x < b){
-		GoRight(delta);
-	}
-	if (position_.y <= 0){
+
+	if (IsOnGround()){
 		Jump(delta);
 	}
 
@@ -88,7 +82,7 @@ EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
 		frames = 3;
 		return RUN_LEFT;
 	}
-	if (IsOnGround()){ /*Is Jumping.*/
+	if (!IsOnGround()){ /*Is Jumping.*/
 		frames = 3;
 		return JUMP_;
     }
@@ -97,6 +91,6 @@ EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
 }
 
 void EnnemyJumping::Jump(double delta){
-	Vector2 hAccel = { 0, JUMP_ACCEL };
-	velocity_ += hAccel; /*I put a += otherwise the Ennemie will stop running*/
+	Vector2 hAccel = { 0, -JUMP_ACCEL };
+	velocity_ += hAccel;
 }

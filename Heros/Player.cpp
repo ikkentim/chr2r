@@ -213,3 +213,7 @@ bool Player::Die()
 
 	return false;
 }
+
+void Player::AddVelocity(Vector2 vec){
+	velocity_ += vec;
+}

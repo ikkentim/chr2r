@@ -24,19 +24,27 @@ void DialogHUD::EngageDialog(Character* c) {
 void DialogHUD::NextLine() {
 	dialogit++;
 	if (dialogit == l1dialog.end())
+	{
 		activedialog = false;
+	}
 }
 void DialogHUD::Update(GameScene *scene, double, Keys k) {
 	if (k & KEY_JUMP && wait == 0 && activedialog == true) {
 		NextLine();
 		wait = 30;
-
 	}
 
-	if (activedialog)
-		scene->SetState(GameScene::TALKING);
-	else
-		scene->SetState(GameScene::PLAYING);
+	if (!done)
+	{
+		if (activedialog)
+			scene->SetState(GameScene::TALKING);
+		else
+		{
+			scene->SetState(GameScene::PLAYING);
+			done = true;
+		}
+	}
+	
 }
 
 void DialogHUD::Render(HDC hdc) {

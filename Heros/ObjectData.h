@@ -4,7 +4,8 @@
 
 enum ObjectType {
     BLOCK,
-    COIN
+    COIN,
+    JUMPER
 };
 
 

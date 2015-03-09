@@ -117,20 +117,6 @@ void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double 
     onGround_ = has_touched_ground;
 }
 
-void GameObject::AddState(State * state)
-{
-	states_.push_back(state);
-}
-
-void GameObject::RemoveState(State * state)
-{
-	//for (std::vector<State *>::iterator it = states_.begin(); it != states_.end(); ++it) {
-	//	if (*it = state)
-
-	//	/* std::cout << *it; ... */
-	//}
-}
-
 void GameObject::EnteredCollision(GameScene *scene, GameObject *collider, Vector2 collision) {
 	
 }
