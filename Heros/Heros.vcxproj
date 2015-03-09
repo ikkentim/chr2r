@@ -107,6 +107,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
+    <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Observer.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="Jumper.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuScene.h" />

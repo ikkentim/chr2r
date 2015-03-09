@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Player.h"
 #include "Character.h"
+#include "Jumper.h"
 #include <algorithm>
 
 enum ActorType {
@@ -20,7 +21,8 @@ enum ActorType {
 
 enum ObjectType {
     BLOCK,
-    COIN
+    COIN,
+	JUMPER
 };
 struct LevelData {
     int bottom;
@@ -87,6 +89,9 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
         case COIN:
             object = new Coin(Vector2(object_buffer.x, object_buffer.y));
             break;
+		case JUMPER:
+			object = new Jumper(Vector2(object_buffer.x, object_buffer.y));
+			break;
         }
 
         manager->Add(object, object_buffer.layer);
@@ -150,7 +155,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.background_width = 727;
     sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
 
-    lvl.object_count = 2160 + 16;
+    lvl.object_count = 2160 + 16 + 1;
     lvl.actor_count = 4;
 
     ofstream lvlout;
@@ -304,6 +309,15 @@ void LevelManager::WriteSimpleLevel()
 
         lvlout.write((char *)&obj, sizeof(ObjectData));
     }
+
+	obj.x = 300;
+	obj.y= 240;
+	obj.height = 20;
+	obj.texture = { 0, 0, 0, 0 };
+	obj.layer = PLAYABLE;
+	obj.type = JUMPER;
+
+	lvlout.write((char *)&obj, sizeof(ObjectData));
 
     ActorData actor;
 

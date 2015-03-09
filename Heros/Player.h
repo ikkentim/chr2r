@@ -25,6 +25,7 @@ public:
     void Update(GameScene *, double, Keys) override;
 	void Render(Viewport &) override;
 	bool Die();
+	void AddVelocity(Vector2);
 private:
     SpriteSheet *spriteSheet_;
     Keys keys_ = KEY_NONE;
