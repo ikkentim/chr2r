@@ -39,7 +39,9 @@ void Jumper::Render(Viewport &vp){
 	Texture t2 = { 45, 12, 18, 20 }; //big
 
 
-	spriteSheet_->Draw(t1, position_, vp);
+	if (!JumpON){
+		spriteSheet_->Draw(t1, position_, vp);
+	}
 
 	if (JumpON){
 		switch (animationIndex_) {

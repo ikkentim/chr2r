@@ -26,6 +26,10 @@
 EnnemyFlying :: ~EnnemyFlying(){}
 
 void EnnemyFlying::Render(Viewport &vp) {
+	if (IsDeadState(GetState())){
+		return;
+	}
+
 	Texture texture_left = { 
 		56, 241,
 		18, 18
@@ -62,6 +66,10 @@ void EnnemyFlying::Render(Viewport &vp) {
 }
 
 void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
+	if (IsDeadState(GetState())){
+		return;
+	}
+
 	animationTime_ += delta;
 
 	nbTick_++;
