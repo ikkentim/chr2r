@@ -6,6 +6,7 @@
 #include "GameWindow.h"
 #include <vector>
 #include "Character.h"
+#include "Ennemis.h"
 
 typedef std::vector <class HUD *> HUDVector;
 
@@ -22,7 +23,8 @@ public:
     Player *player() {
         return player_;
     }
-    LevelManager *level() {
+	
+	LevelManager *level() {
         return level_;
     }
 	bool paused;

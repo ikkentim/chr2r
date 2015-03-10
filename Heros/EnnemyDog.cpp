@@ -17,6 +17,9 @@ EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/metalgears
 EnnemyDog :: ~EnnemyDog(){}
 
 void EnnemyDog::Render(Viewport &vp) {
+	if (IsDeadState(GetState())){
+		return;
+	}
 	Texture texture_left = {
 		75, 280,
 		33, 18
@@ -50,6 +53,9 @@ void EnnemyDog::Render(Viewport &vp) {
 }
 
 void EnnemyDog::Update(GameScene *scene, double delta, Keys keys){
+	if (IsDeadState(GetState())){
+		return;
+	}
 	animationTime_ += delta;
 
 

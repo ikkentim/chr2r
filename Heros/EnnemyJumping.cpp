@@ -18,6 +18,9 @@ EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Ze
 EnnemyJumping :: ~EnnemyJumping(){}
 
 void EnnemyJumping::Render(Viewport &vp) {
+	if (IsDeadState(GetState())){
+		return;
+	}
 	Texture texture_OnGround = { 
 		164, 288,
 		12, 17
@@ -48,6 +51,9 @@ void EnnemyJumping::Render(Viewport &vp) {
 }
 
 void EnnemyJumping::Update(GameScene *scene, double delta, Keys keys){
+	if (IsDeadState(GetState())){
+		return;
+	}
 	animationTime_ += delta;
 	//pattern of the enemie
 

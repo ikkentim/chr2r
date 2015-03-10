@@ -62,10 +62,12 @@ void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double 
             Vector2 collision =
                 offset_prevented - (position_ - check->position_);
 
+			/* Notify children. */
+			EnteredCollision(scene, check, collision);
+			check->EnteredCollision(scene, this, -collision);
+
             /* If not solid, just notify children and don't modify velocity. */
             if (!check->isSolid_) {
-                EnteredCollision(scene, check, collision);
-                check->EnteredCollision(scene, this, -collision);
                 continue;
             }
 
@@ -107,9 +109,7 @@ void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double 
                 velocity_.y = 0;
 			}
 
-			/* Notify children. */
-            EnteredCollision(scene, check, collision);
-            check->EnteredCollision(scene, this, -collision);
+
         }
     }
 

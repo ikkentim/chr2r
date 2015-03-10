@@ -50,8 +50,8 @@ protected:
 	Vector2 position_;
     Vector2 velocity_;
     Vector2 size_;
+    bool isSolid_ = true;
 
 private:
     bool onGround_ = false;
-    bool isSolid_ = true;
 };
