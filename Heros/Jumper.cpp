@@ -43,8 +43,6 @@ void Jumper::Render(Viewport &vp){
 	if (cooldown > 0)
 		cooldown--;
 
-	}
-
 		switch (animationIndex_) {
 		case 0:
 			spriteSheet_->Draw(t1, position_, vp);
