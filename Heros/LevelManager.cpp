@@ -112,7 +112,7 @@ void LevelManager::WriteSimpleLevel()
     lvl.background_width = 727;
     sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
 
-    lvl.object_count = 2160 + 16 + 1;
+    lvl.object_count = 2160 + 200 + 1;
     lvl.actor_count = 4;
 
     ofstream lvlout;
@@ -258,7 +258,7 @@ void LevelManager::WriteSimpleLevel()
     lvlout.write((char *)&obj, sizeof(ObjectData));
 
 
-    for (int x = 0; x < 16; x++) {
+    for (int x = 0; x < 200; x++) {
         obj.x = 96 + (32 * x);
         obj.y = 175;
         obj.texture = { 0, 0, 0, 0 };
