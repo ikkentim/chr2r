@@ -54,7 +54,7 @@ GameScene::GameScene(GameWindow *window)
 
 GameScene::~GameScene() {
     delete level_;
-    delete player_; /* FIXME: Should be deleted by level_ */
+	delete quadTree_;
 }
 void GameScene::Start() {
     /* Testing sound */

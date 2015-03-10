@@ -13,16 +13,16 @@ QuadTree::QuadTree(AABB* box)
 	}
 }
 
-bool QuadTree::Insert(GameObject *position)
+bool QuadTree::Insert(GameObject *object)
 {
 	// Ignore objects that do not belong in this quad tree
-	if (!boundary_->ContainsPoint(position))
+	if (!boundary_->ContainsPoint(object))
 		return false;
 
 	// If there is space in this quad tree, add the object here
 	if (reserved_ < QUAD_TREE_CAPACITY)
 	{
-		points_[reserved_++] = position;
+		points_[reserved_++] = object;
 		return true;
 	}
 
@@ -30,26 +30,35 @@ bool QuadTree::Insert(GameObject *position)
 	if (northWest_ == NULL)
 		Subdivide();
 
-	if (northWest_->Insert(position)) return true;
-	if (northEast_->Insert(position)) return true;
-	if (southWest_->Insert(position)) return true;
-	if (southEast_->Insert(position)) return true;
+	if (northWest_->Insert(object)) return true;
+	if (northEast_->Insert(object)) return true;
+	if (southWest_->Insert(object)) return true;
+	if (southEast_->Insert(object)) return true;
 
 	// Otherwise, the point cannot be inserted for some unknown reason (this should never happen)
 	return false;
 }
 
-bool QuadTree::Delete(GameObject* position)
+bool QuadTree::Delete(GameObject* object)
 {
 	// Ignore objects that do not belong in this quad tree
-	if (!boundary_->ContainsPoint(position))
+	if (!boundary_->ContainsPoint(object))
 		return false;
 
 	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
 	{
-		if (points_[i] == position)
+		if (points_[i] == object)
 		{
 			points_[i] = NULL;
+
+			// move all the objects back in the array, we could have deleted a middle one
+			while (i + 1 < QUAD_TREE_CAPACITY)
+			{
+				i++;
+				if (points_[i] != NULL)
+					points_[i - 1] = points_[i];
+			}
+			reserved_--;
 			return true;
 		}
 	}
@@ -57,10 +66,10 @@ bool QuadTree::Delete(GameObject* position)
 	if (northWest_ == NULL)
 		return false;
 
-	if (northWest_->Delete(position)) return true;
-	if (northEast_->Delete(position)) return true;
-	if (southWest_->Delete(position)) return true;
-	if (southEast_->Delete(position)) return true;
+	if (northWest_->Delete(object)) return true;
+	if (northEast_->Delete(object)) return true;
+	if (southWest_->Delete(object)) return true;
+	if (southEast_->Delete(object)) return true;
 
 	// Otherwise, the point cannot be deleted
 	return false;
@@ -112,4 +121,32 @@ void QuadTree::Subdivide()
 	northEast_ = new QuadTree(neBox);
 	southWest_ = new QuadTree(swBox);
 	southEast_ = new QuadTree(seBox);
+}
+
+QuadTree::~QuadTree()
+{
+	if (northWest_ != NULL)
+	{
+		delete northWest_;
+		delete northEast_;
+		delete southWest_;
+		delete southEast_;
+
+		northWest_ = NULL;
+		northEast_ = NULL;
+		southWest_ = NULL;
+		southEast_ = NULL;
+	}
+	
+	if (boundary_ != NULL)
+		delete boundary_;
+	
+	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
+	{
+		/*if (points_[i] != NULL)
+		{*/
+			delete points_[i];
+			points_[i] = NULL;
+		//}
+	}
 }
