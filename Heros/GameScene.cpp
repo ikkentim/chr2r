@@ -7,6 +7,7 @@
 #include "DialogHUD.h"
 #include "TestHUD.h"
 #include "MenuScene.h"
+#include <algorithm>
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -19,10 +20,28 @@ GameScene::GameScene(GameWindow *window)
 	hud_->push_back(new DialogHUD(player_, this));
 	hud_->push_back(new TestHUD());
 
-	quadTree_ = new QuadTree(new AABB(Vector2(10000, 10000), Vector2(10000, 10000)));
+	int minX = 0;
+	int maxX = 0;
+	int minY = 0;
+	int maxY = 0;
+
+	LevelLayer *layer = level_->PlayableLayer();
+	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+		GameObject *object = *iter;
+
+		minX = min(minX, object->Position().x);
+		maxX = max(maxX, object->Position().x);
+		minY = min(minY, object->Position().y);
+		maxY = max(maxY, object->Position().y);
+	}
+
+	int boxX = (minX + maxX) / 2;
+	int boxY = (minY + maxY) / 2;
+
+	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(boxX + 100, boxY + 100)));
 
 	/* playablelayer */
-	LevelLayer *layer = level_->PlayableLayer();
+	layer = level_->PlayableLayer();
 	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
 		GameObject *object = *iter;
 
