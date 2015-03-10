@@ -92,6 +92,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="SplashScene.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="TestHUD.cpp" />
@@ -141,11 +143,13 @@
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LevelHeader.h" />
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SplashScene.h" />

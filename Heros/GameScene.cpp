@@ -7,6 +7,7 @@
 #include "DialogHUD.h"
 #include "TestHUD.h"
 #include "MenuScene.h"
+#include <algorithm>
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -18,11 +19,42 @@ GameScene::GameScene(GameWindow *window)
 	
 	hud_->push_back(new DialogHUD(player_, this));
 	hud_->push_back(new TestHUD());
+
+	int minX = 0;
+	int maxX = 0;
+	int minY = 0;
+	int maxY = 0;
+
+	LevelLayer *layer = level_->PlayableLayer();
+	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+		GameObject *object = *iter;
+
+		minX = min(minX, object->Position().x);
+		maxX = max(maxX, object->Position().x);
+		minY = min(minY, object->Position().y);
+		maxY = max(maxY, object->Position().y);
+	}
+
+	int boxX = (minX + maxX) / 2;
+	int boxY = (minY + maxY) / 2;
+
+	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(boxX + 100, boxY + 100)));
+
+	/* playablelayer */
+	layer = level_->PlayableLayer();
+	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+		GameObject *object = *iter;
+
+		if (object == NULL || object == player())
+			continue;
+
+		quadTree_->Insert(object);
+	}
 }
 
 GameScene::~GameScene() {
     delete level_;
-    delete player_; /* FIXME: Should be deleted by level_ */
+	delete quadTree_;
 }
 void GameScene::Start() {
     /* Testing sound */
@@ -34,11 +66,11 @@ void GameScene::Update(double delta, Keys keys) {
 
 	CheckStates();
 
-	/* Update HUD */
-	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-		HUD *hud = *it;
-		hud->Update(this, delta, keys);
-	}
+	///* Update HUD */
+	//for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+	//	HUD *hud = *it;
+	//	hud->Update(this, delta, keys);
+	//}
 
 	switch (state_)
 	{
@@ -70,8 +102,18 @@ void GameScene::Update(double delta, Keys keys) {
     layer = level_->Movables();
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
-        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
+
+		AABB* queryBox = new AABB(object->Position(), Vector2(32, 32));
+
+		int count = quadTree_->QueryRange(queryBox, collisionBuffer_, 0);
+
+		delete queryBox;
+
+		object->CheckForCollisions(this, collisionBuffer_, count, delta);
+
+		quadTree_->Delete(object);
         object->ApplyVelocity(delta);
+		quadTree_->Insert(object);
     }
 }
 
