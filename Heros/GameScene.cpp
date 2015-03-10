@@ -103,7 +103,11 @@ void GameScene::Update(double delta, Keys keys) {
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
 
-		int count = quadTree_->QueryRange(new AABB(object->Position(), Vector2(32, 32)), collisionBuffer_, 0);
+		AABB* queryBox = new AABB(object->Position(), Vector2(32, 32));
+
+		int count = quadTree_->QueryRange(queryBox, collisionBuffer_, 0);
+
+		delete queryBox;
 
 		object->CheckForCollisions(this, collisionBuffer_, count, delta);
 
