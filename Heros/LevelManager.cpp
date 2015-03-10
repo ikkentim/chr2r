@@ -11,50 +11,10 @@
 #include "Jumper.h"
 #include <algorithm>
 
-enum ActorType {
-	//ENNEMIS,
-	DOG,
-	FLYING_ENEMIE,
-	JUMPING_ENEMIE,
-	CHARACTER
-};
+#include "LevelHeader.h"
+#include "ObjectData.h"
+#include "ActorData.h"
 
-enum ObjectType {
-    BLOCK,
-    COIN,
-	JUMPER
-};
-struct LevelData {
-    int bottom;
-    int player_x;
-    int player_y;
-    int player_abilities_ph;
-    char name[32];
-    char background_texture[32];
-    int background_width;
-    char terrain_texture[32];
-    int object_count;
-    int actor_count;
-};
-
-struct ObjectData {
-    ObjectData() :texture(Texture(0, 0, 0, 0)) {
-    }
-
-    int x;
-    int y;
-    int width;
-    int height;
-    Texture texture;
-    ObjectType type;
-    LevelManager::Layer layer;
-};
-
-struct ActorData {
-    int x;
-    int y;
-    ActorType type;
-};
 using namespace std;
 
 LevelManager::LevelManager() {
@@ -70,7 +30,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     ifstream lvl;
     lvl.open(name, ios::in | ios::binary);
 
-    LevelData header;
+    LevelHeader header;
     lvl.read((char *)&header, sizeof(header));
     
     SpriteSheet *terrain = SpriteSheet::Get(header.terrain_texture);
@@ -104,9 +64,6 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
         Actor *actor = NULL;
 
         switch (actor_buffer.type) {
-        //case ENNEMIS:
-        //    actor = new Ennemis(Vector2(actor_buffer.x, actor_buffer.y));
-        //    break;
 		case DOG:
 			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
@@ -142,7 +99,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 /* TEMPORARY FUNCTION! */
 void LevelManager::WriteSimpleLevel()
 {
-    LevelData lvl;
+    LevelHeader lvl;
     lvl.bottom = 500;
     lvl.player_x = 16;
     lvl.player_y = 240;

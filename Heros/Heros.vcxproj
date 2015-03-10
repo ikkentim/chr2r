@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="ActorData.h" />
     <ClInclude Include="Alive.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Character.h" />
@@ -139,8 +140,10 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="Keys.h" />
+    <ClInclude Include="LevelHeader.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />

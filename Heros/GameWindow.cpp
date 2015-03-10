@@ -8,6 +8,7 @@
 #include "LevelManager.h"
 #include <string>
 #include "EditorScene.h"
+#include "MenuScene.h"
 
 #define MAX_HID_BUTTONS     (64)
 
@@ -17,6 +18,16 @@ bool StartLevelEditorCommand(Console * const console, const char *cmd) {
     console->LogNotice("Loading level editor...");
     instance->UpdateScene(new EditorScene(instance));
 
+    return true;
+}
+
+bool QuitCommand(Console * const console, const char *cmd) {
+    exit(0);
+    return true;
+}
+
+bool MenuCommand(Console * const console, const char *cmd) {
+    instance->UpdateScene(new MenuScene(instance));
     return true;
 }
 
@@ -86,6 +97,8 @@ void GameWindow::GameInit() {
     hasJoystick_ = !!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
 
     console_ = new Console(graphics_);
+    console_->RegisterCommand("menu", MenuCommand);
+    console_->RegisterCommand("quit", QuitCommand);
     console_->RegisterCommand("startleveleditor", StartLevelEditorCommand);
     console_->RegisterCommand("sle", StartLevelEditorCommand);
 }
@@ -99,8 +112,6 @@ void GameWindow::GameEnd() {
 bool GameWindow::GameLoop(double delta) {
 	/* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
-
-    
 
     if (timeSinceRender_ >= frameInterval_) {
         timeSinceRender_ -= frameInterval_;
@@ -131,14 +142,21 @@ bool GameWindow::GameLoop(double delta) {
 #define MAP_KEY(vk,map); if(GetAsyncKeyState(vk)) { \
 	keys_ |= map; } else if (keys_ & map) { \
 	keys_ ^= map; }
+#define MAP_KEYCHAR(vk,map); if(GetAsyncKeyState(vk) & 0x8000) { \
+	keys_ |= map; } else if (keys_ & map) { \
+	keys_ ^= map; }
 
             MAP_KEY(VK_LEFT, KEY_LEFT);
             MAP_KEY(VK_RIGHT, KEY_RIGHT);
             MAP_KEY(VK_UP, KEY_UP);
             MAP_KEY(VK_DOWN, KEY_DOWN);
             MAP_KEY(VK_SPACE, KEY_JUMP);
+            MAP_KEY(VK_DELETE, KEY_DELETE);
+            MAP_KEYCHAR('L', KEY_L);
+            MAP_KEYCHAR('O', KEY_O);
 
 #undef MAP_KEY
+#undef MAP_KEYCHAR
         }
 
 		/* Simple statement for using ESCAPE to exit. If LSHIFT or LCONTROL is

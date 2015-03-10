@@ -42,6 +42,7 @@ int Window::Run() {
             INT64 tick;
             ::QueryPerformanceCounter((LARGE_INTEGER*)&tick);
 
+            ::QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
                 if (GetFocus() == hWnd_ &&
                 GameLoop((double)(tick - lastTick) / (double)frequency)) {
 

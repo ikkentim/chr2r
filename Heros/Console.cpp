@@ -12,10 +12,6 @@ bool CommandsCommand(Console * const console, const char *cmd) {
 
     return true;
 }
-bool QuitCommand(Console * const console, const char *cmd) {
-    exit(0);
-    return true;
-}
 
 Console::Console(HDC hdc) {
     dc_ = CreateCompatibleDC(hdc);
@@ -29,7 +25,6 @@ Console::Console(HDC hdc) {
 
     ClearInputBuffer();
 
-    RegisterCommand("quit", QuitCommand);
     RegisterCommand("commands", CommandsCommand);
 }
 
@@ -151,20 +146,21 @@ void Console::RemoveCommand(std::string name) {
 void Console::Update(WPARAM wParam) {
     char input = MapVirtualKey(wParam, MAPVK_VK_TO_CHAR);
 
-    if (input == 0) return; /* invalid keys */
-    if (input >= 'A' && input <= 'Z' && !GetAsyncKeyState(VK_SHIFT))
-        input -= 'A' - 'a';
-
     if (!isOpen_) {
-        isOpen_ = input == '`';
-
+        isOpen_ = wParam == VK_TAB || wParam == VK_OEM_3;
         return;
     }
 
-    if (input == '`') {
+    if (wParam == VK_TAB || wParam == VK_OEM_3) {
         isOpen_ = false;
         ClearInputBuffer();
+        return;
     }
+
+
+    if (input == '\0'|| input == '`') return; /* invalid keys */
+    if (input >= 'A' && input <= 'Z' && !GetAsyncKeyState(VK_SHIFT))
+        input -= 'A' - 'a';
 
     switch (wParam) {
     case VK_BACK:

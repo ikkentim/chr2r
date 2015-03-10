@@ -10,4 +10,8 @@
 #define KEY_UP          (8)
 #define KEY_DOWN        (16)
 
+#define KEY_L           (32)
+#define KEY_O           (64)
+#define KEY_DELETE      (128)
+
 typedef int Keys;
