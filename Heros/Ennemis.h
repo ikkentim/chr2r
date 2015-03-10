@@ -13,6 +13,7 @@ public:
 	//void Render(Viewport &) override; // This class is virtual now!
 	void Update(GameScene *, double, Keys) override;
 	void EnteredCollision(GameScene *, GameObject *, Vector2) override;
+	bool IsDeadState(State);
 protected:
     SpriteSheet *spriteSheet() {
         return spriteSheet_;

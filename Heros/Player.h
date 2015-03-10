@@ -26,6 +26,10 @@ public:
 	void Render(Viewport &) override;
 	bool Die();
 	void AddVelocity(Vector2);
+	Vector2 GetVelocity(){
+		return velocity_;
+	}
+
 private:
     SpriteSheet *spriteSheet_;
     Keys keys_ = KEY_NONE;

@@ -36,19 +36,32 @@ void Ennemis::GoRight(double delta){
 }*/
 
 void Ennemis::Update(GameScene *scene, double delta, Keys keys){
-	/*if (position_.x > 200){
-		GoLeft(delta);
+	if (IsDeadState(GetState())){
+		return;
 	}
-	if (position_.x < 20){
-		GoRight(delta);
-	}*/
 
 	Falling(delta);
 }
 
 void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
+	if (IsDeadState(GetState())){
+		return;
+	}
+	
 	if (obj == scene->player()){
-		scene->player()->SetState(Actor::DEAD);
+		if (scene->player()->GetVelocity().y > 0)
+			OutputDebugString("vel");
+		if (scene->player()->Position().y < position_.y)
+			OutputDebugString("pos");
+		if (scene->player()->GetVelocity().y > 0 && scene->player()->Position().y < position_.y){
+			OutputDebugString("dead");
+			SetState(Actor::DEAD);
+			isSolid_ = false;
+			scene->player()->AddVelocity(Vector2(0, -(scene->player()->GetVelocity().y )*2));
+		}
+		else{ 
+			scene->player()->SetState(Actor::DEAD);
+		}
 	}
 	if (obj != scene->player()){
 		if (abs(velocity_.y) < abs(velocity_.x))
@@ -64,3 +77,9 @@ void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 	}
 }
 
+bool Ennemis::IsDeadState(State state){
+	if (state == DEAD){
+		return true;
+	}
+	return false;
+}
