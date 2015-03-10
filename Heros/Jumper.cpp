@@ -29,6 +29,7 @@ void Jumper::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 		cooldown = 4000;
 		
 		Vector2 Jump {0,-JUMP_POWER};
+		//scene->player()->AddVelocity(Vector2(0, -(scene->player())))
 		scene->player()->AddVelocity(Jump);
 
 	}
