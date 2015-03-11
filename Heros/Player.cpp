@@ -4,13 +4,18 @@
 #include <stdio.h>
 
 #define WALK_ACCEL          (250.0)
+#define DASH_ACCEL          (5000.0)
 #define WALK_SPEED          (250.0)
 #define WALK_FRICTION	    (550.0)
 #define JUMP_SPEED		    (-400.0)
+#define DASH_SPEED			(400.0)
 
 #define ANIMATION_INTERVAL  (0.08)
 #define TEXTURE_WIDTH       (22)
 #define TEXTURE_HEIGHT      (28)
+
+#define TEX_WIDTH_SNEAK		(24)
+#define TEX_HEIGHT_SNEAK    (28)
 
 Player::Player(GameScene *scene, Vector2 pos) :Actor(pos, Vector2(14, 27)) {
     spriteSheet_ = SpriteSheet::Get("spr/MainCharacter.bmp");
@@ -23,7 +28,7 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
     /* Update movement according to keys pressed. */
     keys_ = keys;
     if (!(keys & KEY_DOWN) && keys & KEY_RIGHT) {
-        velocity_ += (Vector2(WALK_ACCEL, 0) * delta);
+		velocity_ += (Vector2((keys & KEY_DASH) ? DASH_ACCEL : WALK_ACCEL, 0) * delta);
 	} else if (velocity_.x > 0) {
         velocity_ += velocity_ < (Vector2(WALK_FRICTION, 0) * delta)
             ? -velocity_ 
@@ -31,13 +36,13 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
     }
 
     if (!(keys & KEY_DOWN) && keys & KEY_LEFT) {
-        velocity_ -= (Vector2(WALK_ACCEL, 0) * delta);
+		velocity_ -= (Vector2((keys & KEY_DASH) ? DASH_ACCEL : WALK_ACCEL, 0) * delta);
 	} else if (velocity_.x < 0) {
         velocity_ -= velocity_ < (Vector2(WALK_FRICTION, 0) * delta)
             ? velocity_ 
             : (Vector2(-WALK_FRICTION, 0) * delta);
     }
-    if (keys & KEY_JUMP && IsOnGround()) {
+    if (keys & KEY_JUMP && IsOnGround() && !isSneaking_) {
         velocity_.y = JUMP_SPEED;
 
         soundEngine_->play2D("snd/smb_jump-small.wav");
@@ -45,13 +50,25 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
 
     isDucking_ = !!(keys & KEY_DOWN);
 
+	isSplashing_ = !!(keys & KEY_SPLASH);
+
+	isSneaking_ = !!(keys & KEY_SNEAK);
+
+	if (isSneaking_){
+		spriteSheet_ = SpriteSheet::Get("spr/Box_Sprite.bmp");
+	}
+	else{
+		spriteSheet_ = SpriteSheet::Get("spr/MainCharacter.bmp");
+	}
+
+
 
     if (velocity_.x != 0.00)
         isLastMovementLeft_ = velocity_.x < 0;
 
     /* Process science */
     Falling(delta);
-    velocity_.TruncateX(WALK_SPEED);
+	velocity_.TruncateX((keys & KEY_DASH) ? DASH_SPEED:WALK_SPEED);
 
 
     /* Update the player animation. */
@@ -91,62 +108,75 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
 
 Player::AnimationState Player::GetAnimationState(int &frames) {
     frames = 1;
-    if (isDucking_) { /* Is ducking. */
-        if (velocity_.x < 0) { /* Is moving left. */
-            return DUCK_LEFT;
-        }
-        if (velocity_.x > 0) { /* Is moving right. */
-            return DUCK_RIGHT;
-        }
-        return isLastMovementLeft_ ? DUCK_LEFT : DUCK_RIGHT;
-    }
-    else if (velocity_.IsZero()){ /* Not moving at all. */
-        return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
-    }
-    else if (IsOnGround()) {/* Is on ground. */
 
-        if (velocity_.x > 0) { /* Is moving right. */
-            if (keys_ & KEY_LEFT) {
-                return SLIDE_RIGHT;
-            }
-            frames = 3;
-            return RUN_RIGHT;
-        }
-        if (velocity_.x < 0) { /* Is moving left. */
-            if (keys_ & KEY_RIGHT) {
-                return SLIDE_LEFT;
-            }
-            frames = 3;
-            return RUN_LEFT;
-        }
-        return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
-    }
-    else {
-        if (velocity_.y < -0.1f) { /* Jumping. */
-            if (velocity_.x > 0) { /* Is moving right or straight up. */
-                return JUMP_RIGHT;
-            }
-            if (velocity_.x < 0) { /* Is moving left. */
-                return JUMP_LEFT;
-            }
-            return isLastMovementLeft_ ? JUMP_LEFT : JUMP_RIGHT;
-        }
-        else { /* Falling */
-            if (velocity_.x > 0) { /* Is moving right or straight up. */
-                return FALL_RIGHT;
-            }
-            if (velocity_.x < 0) { /* Is moving left. */
-                return FALL_LEFT;
-            }
-            return isLastMovementLeft_ ? FALL_LEFT : FALL_RIGHT;
-        }
-    }
+		if (isDucking_) { /* Is ducking. */
+			if (velocity_.x < 0) { /* Is moving left. */
+				return DUCK_LEFT;
+			}
+			if (velocity_.x > 0) { /* Is moving right. */
+				return DUCK_RIGHT;
+			}
+			return isLastMovementLeft_ ? DUCK_LEFT : DUCK_RIGHT;
+		}
+		else if (isSplashing_){ /*SPLASH ATTACK*/
+			frames = 2;
+			return SPLASHING_;
+		}
+		else if (velocity_.IsZero()){ /* Not moving at all. */
+			return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
+		}
+		else if (IsOnGround()) {/* Is on ground. */
+
+			if (velocity_.x > 0) { /* Is moving right. */
+				if (keys_ & KEY_LEFT) {
+					return SLIDE_RIGHT;
+				}
+				frames = 3;
+				return RUN_RIGHT;
+			}
+			if (velocity_.x < 0) { /* Is moving left. */
+				if (keys_ & KEY_RIGHT) {
+					return SLIDE_LEFT;
+				}
+				frames = 3;
+				return RUN_LEFT;
+			}
+			return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
+		}
+		else {
+			if (velocity_.y < -0.1f) { /* Jumping. */
+				if (velocity_.x > 0) { /* Is moving right or straight up. */
+					return JUMP_RIGHT;
+				}
+				if (velocity_.x < 0) { /* Is moving left. */
+					return JUMP_LEFT;
+				}
+				return isLastMovementLeft_ ? JUMP_LEFT : JUMP_RIGHT;
+			}
+			else { /* Falling */
+				if (velocity_.x > 0) { /* Is moving right or straight up. */
+					return FALL_RIGHT;
+				}
+				if (velocity_.x < 0) { /* Is moving left. */
+					return FALL_LEFT;
+				}
+				return isLastMovementLeft_ ? FALL_LEFT : FALL_RIGHT;
+			}
+		}
 }
 
 void Player::Render(Viewport &vp) {
     Texture texture = { 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT };
 
     switch (state_) {
+	case SNAKE_:
+		texture.top = 3 * TEX_HEIGHT_SNEAK;
+		texture.left = 1 * TEX_WIDTH_SNEAK;
+
+	case SPLASHING_:
+		texture.top = 3 * TEXTURE_HEIGHT;
+		texture.left = 2 * TEXTURE_WIDTH + 6;
+		break;
     case DUCK_RIGHT:
         texture.left = 0 * TEXTURE_WIDTH;
         texture.top = 1 * TEXTURE_HEIGHT;
@@ -156,12 +186,24 @@ void Player::Render(Viewport &vp) {
         texture.top = 0 * TEXTURE_HEIGHT;
         break;
     case RUN_RIGHT:
-        texture.left = 2 * TEXTURE_WIDTH;
-        texture.top = 1 * TEXTURE_HEIGHT;
+		if (!isSneaking_){
+			texture.left = 2 * TEXTURE_WIDTH;
+			texture.top = 1 * TEXTURE_HEIGHT;
+		}
+		else{
+			texture.top = 0 * TEX_HEIGHT_SNEAK;
+			texture.left = 0 * TEX_WIDTH_SNEAK + 1;
+		}
         break;
     case RUN_LEFT:
-        texture.left = 2 * TEXTURE_WIDTH;
-        texture.top = 0 * TEXTURE_HEIGHT;
+		if (!isSneaking_){
+			texture.left = 2 * TEXTURE_WIDTH;
+			texture.top = 0 * TEXTURE_HEIGHT;
+		}
+		else{
+			texture.top = 1 * TEX_HEIGHT_SNEAK;
+			texture.left = 0 * TEX_WIDTH_SNEAK + 2;
+		}
         break;
     case JUMP_RIGHT:
     case FALL_RIGHT:
@@ -174,21 +216,45 @@ void Player::Render(Viewport &vp) {
         texture.top = 0 * TEXTURE_HEIGHT;
         break;
     case SLIDE_RIGHT:
+		if (!isSneaking_){
         texture.left = 1 * TEXTURE_WIDTH;
         texture.top = 2 * TEXTURE_HEIGHT;
+		}
+		else{
+			texture.top = 0 * TEX_HEIGHT_SNEAK;
+			texture.left = 3 * TEX_WIDTH_SNEAK;
+		}
         break;
     case SLIDE_LEFT:
-        texture.left = 1 * TEXTURE_WIDTH;
-        texture.top = 3 * TEXTURE_HEIGHT;
+		if (!isSneaking_){
+			texture.left = 1 * TEXTURE_WIDTH;
+			texture.top = 3 * TEXTURE_HEIGHT;
+		}
+		else{
+			texture.top = 0 * TEX_HEIGHT_SNEAK;
+			texture.left = 3 * TEX_WIDTH_SNEAK;
+		}
         break;
     case IDLE_LEFT:
-        texture.left = 4 * TEXTURE_WIDTH;
-        texture.top = 0 * TEXTURE_HEIGHT;
+		if (!isSneaking_){
+			texture.left = 4 * TEXTURE_WIDTH;
+			texture.top = 0 * TEXTURE_HEIGHT;
+		}
+		else{
+			texture.top = 0 * TEX_HEIGHT_SNEAK;
+			texture.left = 3 * TEX_WIDTH_SNEAK;
+		}
         break;
     case IDLE_RIGHT:
     default:
-        texture.left = 4 * TEXTURE_WIDTH;
-        texture.top = 1 * TEXTURE_HEIGHT;
+		if (!isSneaking_){
+			 texture.left = 4 * TEXTURE_WIDTH;
+			 texture.top = 1 * TEXTURE_HEIGHT;
+		}
+		else{
+			texture.top = 0 * TEX_HEIGHT_SNEAK;
+			texture.left = 3 * TEX_WIDTH_SNEAK;
+		}
         break;
     }
 
