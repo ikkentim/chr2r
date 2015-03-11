@@ -15,6 +15,6 @@ private:
 	SpriteSheet *spriteSheet_;
 	double 	animationTime_ = 0;
 	int animationIndex_ = 0;
-	bool JumpON = false;
+	int cooldown = 0;
 
 };

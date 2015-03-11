@@ -131,7 +131,9 @@ private:
     ActorType currentActorType_ = DOG;
     Texture selectedTexture_ = { 0, 0, 0, 0 };
 
-    SpriteSheet *defaultTerrain_;
+    SpriteSheet *defaultSpriteSheet_ = SpriteSheet::Get("spr/terrain.bmp");
+    SpriteSheet *bumperSpriteSheet_ = SpriteSheet::Get("spr/Bumper.bmp");
     SpriteSheet *metalGearSpriteSheet_ = SpriteSheet::Get("spr/metalgearsheet.bmp");
-    SpriteSheet *zeldaEnemiesSpriteSheet = SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp");
+    SpriteSheet *zeldaEnemiesSpriteSheet_ = SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp");
+    SpriteSheet *marioSpriteSheet_ = SpriteSheet::Get("spr/mario.bmp");
 };

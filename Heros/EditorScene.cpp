@@ -290,8 +290,6 @@ EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     instance = this;
 
-    defaultTerrain_ = SpriteSheet::Get("spr/terrain.bmp");
-
     ZeroMemory(levelName_, MAX_LEVEL_NAME);
     ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
@@ -430,6 +428,9 @@ void EditorScene::Update(double delta, Keys keys) {
                     currentObjectType_ = COIN;
                     break;
                 case COIN:
+                    currentObjectType_ = JUMPER;
+                    break;
+                case JUMPER:
                     currentObjectType_ = BLOCK;
                     break;
                 }
@@ -453,14 +454,26 @@ void EditorScene::Update(double delta, Keys keys) {
             }
             else {
                 /* Objects */
-                if (selectedTexture_.width > 0 && selectedTexture_.height > 0) {
+                if (currentObjectType_ != BLOCK || 
+                    (selectedTexture_.width > 0 && selectedTexture_.height > 0)) {
                     ObjectData data;
                     GetCurrentPos(data.x, data.y);
                     data.layer = currentLayer_;
                     data.texture = selectedTexture_;
                     data.type = currentObjectType_;
-                    data.width = selectedTexture_.width;
-                    data.height = selectedTexture_.height;
+
+                    if (currentObjectType_ == COIN) {
+                        data.width = 12;
+                        data.height = 16;
+                    }
+                    else if (currentObjectType_ == JUMPER) {
+                        data.width = 19;
+                        data.height = 20;
+                    }
+                    else {
+                        data.width = selectedTexture_.width;
+                        data.height = selectedTexture_.height;
+                    }
 
                     AddObject(GetCurrentLayer(), data);
                 }
@@ -600,7 +613,10 @@ void EditorScene::DrawObject(ObjectData data) {
         terrain_->Draw(data.texture, Vector2(data.x, data.y), viewport_);
         break;
     case COIN:
-        defaultTerrain_->Draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
+        defaultSpriteSheet_->Draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
+        break;
+    case JUMPER:
+        bumperSpriteSheet_->Draw(Texture(3, 11, 19, 20), Vector2(data.x, data.y), viewport_);
         break;
     }
 }
@@ -634,15 +650,19 @@ void EditorScene::Render(HDC graphics) {
     }
 
     for (ActorData actor : actors_) {
-        //DrawObject(actor);
         switch (actor.type) {
         case DOG:
+            metalGearSpriteSheet_->Draw(Texture(75, 280, 33, 18 ), Vector2(actor.x, actor.y), viewport_);
             break;
         case FLYING_ENEMIE:
+            zeldaEnemiesSpriteSheet_->Draw(Texture(56, 241, 18, 18), Vector2(actor.x, actor.y), viewport_);
             break;
         case JUMPING_ENEMIE:
+            zeldaEnemiesSpriteSheet_->Draw(Texture(164, 288, 12, 17), Vector2(actor.x, actor.y), viewport_);
             break;
         case CHARACTER:
+            marioSpriteSheet_->Draw(Texture(91, 0, 16, 28), Vector2(actor.x, actor.y), viewport_);
+
             break;
         }
     }
@@ -731,6 +751,9 @@ void EditorScene::Render(HDC graphics) {
             break;
         case COIN:
             TextOut(graphics, 5, 90, "COIN", 4);
+            break;
+        case JUMPER:
+            TextOut(graphics, 5, 90, "JUMPER", 6);
             break;
         }
     }
