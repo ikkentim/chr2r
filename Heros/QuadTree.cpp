@@ -143,13 +143,4 @@ QuadTree::~QuadTree()
 	
 	if (boundary_ != NULL)
 		delete boundary_;
-	
-	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
-	{
-		if (points_[i] != NULL)
-		{
-			delete points_[i];
-			points_[i] = NULL;
-		}
-	}
 }
