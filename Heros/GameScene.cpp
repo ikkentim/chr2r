@@ -8,6 +8,7 @@
 #include "TestHUD.h"
 #include "MenuScene.h"
 #include <algorithm>
+#include "EndGameScene.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -74,11 +75,11 @@ void GameScene::Update(double delta, Keys keys) {
 
 	switch (state_)
 	{
-	case State::PAUSED:
+	case PAUSED:
 		return;
-	case State::TALKING:
+	case TALKING:
 		return;
-	case State::PLAYER_DEAD:
+	case PLAYER_DEAD:
 		if (player()->Die())
 		{
 			window_->UpdateScene(new MenuScene(window_));
@@ -87,6 +88,17 @@ void GameScene::Update(double delta, Keys keys) {
 		player()->SetState(Player::ALIVE);
 		state_ = PLAYING;
 		return;
+    case REACHED_END:
+        
+        if (level_->isLastLevel()) {
+            window_->UpdateScene(new EndGameScene(window_));
+        }
+        else {
+            delete level_;
+            level_ = LevelManager::Load(level_->nextLevel(), this, player_);
+            SetState(PLAYING);
+        }
+        return;
 	default:
 		break;
 	}
@@ -98,6 +110,7 @@ void GameScene::Update(double delta, Keys keys) {
 
         object->Update(this, delta, keys);
     }
+
     /* Check collision on movableslayer */    
     layer = level_->Movables();
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
@@ -121,12 +134,14 @@ void GameScene::UpdateViewport()
 {
 	/* Minimum distance between window edge and the player*/
 	const int borderOffset = 215;
+    const int borderOffsetTop = 340;
+    const int borderOffsetBottom = 100;
 
 	int minx = viewport_.x + borderOffset;
 	int maxx = viewport_.x - borderOffset + viewport_.width;
 
-	int miny = viewport_.y + borderOffset;
-	int maxy = viewport_.y - borderOffset + viewport_.height;
+    int miny = viewport_.y + borderOffsetTop;
+    int maxy = viewport_.y - borderOffsetBottom + viewport_.height;
 
 	auto pos = player_->Position();
 	int posx = (int)floor(pos.x);
@@ -177,12 +192,18 @@ void GameScene::Render(HDC graphics) {
 
     /* Draw background */
     const int image_width = level_->backgroundWidth();
+    const int image2_width = level_->backgroundOverlayWidth();
     Texture tex = { 0, 0, image_width, viewport_.height };
+    Texture tex2 = { 0, 0, image2_width, viewport_.height };
     for (int skyx = -(viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
         level_->background()->Draw(tex, skyx, 0);
 	}
-
+    if (level_->backgroundOverlay())
+        for (int skyx = -(viewport_.x / 3) % image2_width - image2_width;
+            skyx <= viewport_.width; skyx += image2_width) {
+        level_->backgroundOverlay()->Draw(tex2, skyx, 0);
+    }
 	/* Render all layers */
 	LevelLayer *layer;
 

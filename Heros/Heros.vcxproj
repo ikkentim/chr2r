@@ -100,6 +100,7 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DialogHUD.cpp" />
     <ClCompile Include="EditorScene.cpp" />
+    <ClCompile Include="EndGameScene.cpp" />
     <ClCompile Include="Ennemis.cpp" />
     <ClCompile Include="EnnemyDog.cpp" />
     <ClCompile Include="EnnemyFlying.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="Dead.h" />
     <ClInclude Include="DialogHUD.h" />
     <ClInclude Include="EditorScene.h" />
+    <ClInclude Include="EndGameScene.h" />
     <ClInclude Include="Ennemis.h" />
     <ClInclude Include="EnnemyDog.h" />
     <ClInclude Include="EnnemyFlying.h" />

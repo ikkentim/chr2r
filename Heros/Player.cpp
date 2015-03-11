@@ -54,13 +54,19 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
 
 	isSneaking_ = !!(keys & KEY_SNEAK);
 
-	if (isSneaking_){
+    if (isSneaking_){/* todo:make this not happen every tick...*/
 		spriteSheet_ = SpriteSheet::Get("spr/Box_Sprite.bmp");
 	}
 	else{
 		spriteSheet_ = SpriteSheet::Get("spr/MainCharacter.bmp");
 	}
 
+    /* Check player at end of level? */
+    if (scene->level()->isEndGameRight() == 
+        position_.x > scene->level()->endGameX()) {
+        scene->SetState(GameScene::REACHED_END);
+        return;
+    }
 
 
     if (velocity_.x != 0.00)

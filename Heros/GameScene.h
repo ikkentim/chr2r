@@ -45,7 +45,7 @@ private:
     Viewport viewport_;
 	void UpdateViewport();
 	bool CheckStates();
-	State state_;
+    State state_ = PLAYING;
 	bool pausePressed_ = true;
 	GameObject* collisionBuffer_[500];
 };
