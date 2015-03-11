@@ -49,6 +49,7 @@ public:
     char *nextLevel() {
         return nextLevel_;
     }
+
 	enum Layer : char { MOVABLE, BACKGROUND, PLAYABLE, FOREGROUND };
 	void Add(GameObject *, LevelManager::Layer);
     static LevelManager *Load(const char *, class GameScene *, class Player *&);

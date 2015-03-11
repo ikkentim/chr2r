@@ -39,7 +39,7 @@ GameScene::GameScene(GameWindow *window)
 	int boxX = (minX + maxX) / 2;
 	int boxY = (minY + maxY) / 2;
 
-	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(boxX + 100, boxY + 100)));
+	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(maxX - minX + 100, maxY - minY + 100)));
 
 	/* playablelayer */
 	layer = level_->PlayableLayer();
