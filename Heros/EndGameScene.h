@@ -12,6 +12,7 @@ public:
     void Render(HDC graphics);
 private:
     SpriteSheet *spriteSheet_;
-    double time_;
+    double position_;
+    
     GameWindow *window_;
 };
