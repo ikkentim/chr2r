@@ -21,6 +21,14 @@ LevelManager::LevelManager() {
 }
 
 LevelManager::~LevelManager() {
+	for (std::vector<GameObject*>::iterator it = playableLayer_.begin(); it != playableLayer_.end(); ++it)
+		delete *it;
+
+	for (std::vector<GameObject*>::iterator it = backgroundLayer_.begin(); it != backgroundLayer_.end(); ++it)
+		delete *it;
+
+	for (std::vector<GameObject*>::iterator it = foregroundLayer_.begin(); it != foregroundLayer_.end(); ++it)
+		delete *it;
 }
 
 LevelManager *LevelManager::Load(const char * name, GameScene *scene, 
