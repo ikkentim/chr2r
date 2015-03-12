@@ -7,7 +7,7 @@
 #include "GameWindow.h"
 #include <vector>
 #include "Character.h"
-#include "Ennemis.h"
+#include "QuadTree.h"
 
 class DialogHUD;
 typedef std::vector <class HUD *> HUDVector;
@@ -25,7 +25,6 @@ public:
     Player *player() {
         return player_;
     }
-	
 	LevelManager *level() {
         return level_;
     }
@@ -39,6 +38,7 @@ public:
 	};
 	virtual void SetState(State);
 	virtual State GetState();
+	QuadTree *quadTree_;
 	DialogHUD *dialog_;
 private:
 	GameWindow *window_;
@@ -49,6 +49,7 @@ private:
 	
 	void UpdateViewport();
 	bool CheckStates();
-	State state_;
+    State state_ = PLAYING;
 	bool pausePressed_ = true;
+	GameObject* collisionBuffer_[500];
 };

@@ -16,11 +16,17 @@ public:
     virtual void Start();
     void Update(double, Keys);
     void Render(HDC graphics);
+    void Load(const char *);
     void Save(const char *);
 
     void SetBackground(const char *background) {
         strcpy_s(backgroundPath_, background);
         background_ = SpriteSheet::Get(background);
+    }
+
+    void SetBackgroundOverlay(const char *background) {
+        strcpy_s(backgroundOverlayPath_, background);
+        backgroundOverlay_ = SpriteSheet::Get(background);
     }
 
     void SetTerrain(const char *terrain) {
@@ -40,6 +46,10 @@ public:
         backgroundWidth_ = backgroundWidth;
     }
 
+    void SetBackgroundOverlayWidth(int backgroundWidth) {
+        backgroundOverlayWidth_ = backgroundWidth;
+    }
+
     void SetBottomY(int y) {
         bottomY_ = y;
     }
@@ -49,10 +59,15 @@ public:
         cursorPos_.y = y;
     }
 
+    void SetEndGameX(int x) {
+        endGameX_ = x;
+    }
+
     void SetPlayerSpawn(int x, int y) {
         playerX_ = x;
         playerY_ = y;
     }
+
     void GetCurrentPos(int &x, int &y) {
         x = ((int)cursorPos_.x / gridSize_) * gridSize_;
         y = ((int)cursorPos_.y / gridSize_) * gridSize_;
@@ -90,16 +105,20 @@ private:
 
     char levelName_[MAX_LEVEL_NAME];
     char backgroundPath_[MAX_TEXTURE_PATH];
+    char backgroundOverlayPath_[MAX_TEXTURE_PATH];
     char terrainPath_[MAX_TEXTURE_PATH];
     char nextLevel_[MAX_LEVEL_PATH];
 
+    int endGameX_ = 0;
     int backgroundWidth_ = 0;
+    int backgroundOverlayWidth_ = 0;
     int bottomY_ = 0;
     int playerX_ = 0;
     int playerY_ = 0;
     int gridSize_ = 1;
-    SpriteSheet *background_;
-    SpriteSheet *terrain_;
+    SpriteSheet *background_ = NULL;
+    SpriteSheet *backgroundOverlay_ = NULL;
+    SpriteSheet *terrain_ = NULL;
     
     std::vector<ObjectData> playableLayer_;
     std::vector<ObjectData> foregroundLayer_;
@@ -131,7 +150,9 @@ private:
     ActorType currentActorType_ = DOG;
     Texture selectedTexture_ = { 0, 0, 0, 0 };
 
-    SpriteSheet *defaultTerrain_;
+    SpriteSheet *defaultSpriteSheet_ = SpriteSheet::Get("spr/terrain.bmp");
+    SpriteSheet *bumperSpriteSheet_ = SpriteSheet::Get("spr/Bumper.bmp");
     SpriteSheet *metalGearSpriteSheet_ = SpriteSheet::Get("spr/metalgearsheet.bmp");
-    SpriteSheet *zeldaEnemiesSpriteSheet = SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp");
+    SpriteSheet *zeldaEnemiesSpriteSheet_ = SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp");
+    SpriteSheet *marioSpriteSheet_ = SpriteSheet::Get("spr/mario.bmp");
 };

@@ -54,5 +54,5 @@ void Jumper::Render(Viewport &vp){
 			spriteSheet_->Draw(t0, position_, vp);
 			break;
 		}
-		
+
 }

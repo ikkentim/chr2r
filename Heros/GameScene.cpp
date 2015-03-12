@@ -5,6 +5,8 @@
 #include "EnnemyDog.h"
 #include <irrKlang.h>
 #include "MenuScene.h"
+#include <algorithm>
+#include "EndGameScene.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -15,11 +17,45 @@ GameScene::GameScene(GameWindow *window)
 	state_ = PLAYING;
 	dialog_ = new DialogHUD(player_, this);
 	hud_->push_back(dialog_);
+	
+	hud_->push_back(new DialogHUD(player_, this));
+	hud_->push_back(new TestHUD());
+
+	int minX = 0;
+	int maxX = 0;
+	int minY = 0;
+	int maxY = 0;
+
+	LevelLayer *layer = level_->PlayableLayer();
+	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+		GameObject *object = *iter;
+
+		minX = min(minX, object->Position().x);
+		maxX = max(maxX, object->Position().x);
+		minY = min(minY, object->Position().y);
+		maxY = max(maxY, object->Position().y);
+}
+
+	int boxX = (minX + maxX) / 2;
+	int boxY = (minY + maxY) / 2;
+
+	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(maxX - minX + 100, maxY - minY + 100)));
+
+	/* playablelayer */
+	layer = level_->PlayableLayer();
+	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
+		GameObject *object = *iter;
+
+		if (object == NULL || object == player())
+			continue;
+
+		quadTree_->Insert(object);
+	}
 }
 
 GameScene::~GameScene() {
     delete level_;
-    delete player_; /* FIXME: Should be deleted by level_ */
+	delete quadTree_;
 }
 void GameScene::Start() {
     /* Testing sound */
@@ -31,19 +67,19 @@ void GameScene::Update(double delta, Keys keys) {
 
 	CheckStates();
 
-	/* Update HUD */
-	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-		HUD *hud = *it;
-		hud->Update(this, delta, keys);
-	}
+	///* Update HUD */
+	//for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+	//	HUD *hud = *it;
+	//	hud->Update(this, delta, keys);
+	//}
 
 	switch (state_)
 	{
-	case State::PAUSED:
+	case PAUSED:
 		return;
-	case State::TALKING:
+	case TALKING:
 		return;
-	case State::PLAYER_DEAD:
+	case PLAYER_DEAD:
 		if (player()->Die())
 		{
 			window_->UpdateScene(new MenuScene(window_));
@@ -52,6 +88,17 @@ void GameScene::Update(double delta, Keys keys) {
 		player()->SetState(Player::ALIVE);
 		state_ = PLAYING;
 		return;
+    case REACHED_END:
+        
+        if (level_->isLastLevel()) {
+            window_->UpdateScene(new EndGameScene(window_));
+        }
+        else {
+            delete level_;
+            level_ = LevelManager::Load(level_->nextLevel(), this, player_);
+            SetState(PLAYING);
+        }
+        return;
 	default:
 		break;
 	}
@@ -63,12 +110,23 @@ void GameScene::Update(double delta, Keys keys) {
 
         object->Update(this, delta, keys);
     }
+
     /* Check collision on movableslayer */    
     layer = level_->Movables();
     for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
         GameObject *object = *iter;
-        object->CheckForCollisions(this, level_->PlayableLayer(), delta);
+
+		AABB* queryBox = new AABB(object->Position(), Vector2(32, 32));
+
+		int count = quadTree_->QueryRange(queryBox, collisionBuffer_, 0);
+
+		delete queryBox;
+
+		object->CheckForCollisions(this, collisionBuffer_, count, delta);
+
+		quadTree_->Delete(object);
         object->ApplyVelocity(delta);
+		quadTree_->Insert(object);
     }
 }
 
@@ -76,12 +134,14 @@ void GameScene::UpdateViewport()
 {
 	/* Minimum distance between window edge and the player*/
 	const int borderOffset = 215;
+    const int borderOffsetTop = 340;
+    const int borderOffsetBottom = 100;
 
 	int minx = viewport_.x + borderOffset;
 	int maxx = viewport_.x - borderOffset + viewport_.width;
 
-	int miny = viewport_.y + borderOffset;
-	int maxy = viewport_.y - borderOffset + viewport_.height;
+    int miny = viewport_.y + borderOffsetTop;
+    int maxy = viewport_.y - borderOffsetBottom + viewport_.height;
 
 	auto pos = player_->Position();
 	int posx = (int)floor(pos.x);
@@ -132,12 +192,18 @@ void GameScene::Render(HDC graphics) {
 
     /* Draw background */
     const int image_width = level_->backgroundWidth();
+    const int image2_width = level_->backgroundOverlayWidth();
     Texture tex = { 0, 0, image_width, viewport_.height };
+    Texture tex2 = { 0, 0, image2_width, viewport_.height };
     for (int skyx = -(viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
         level_->background()->Draw(tex, skyx, 0);
 	}
-
+    if (level_->backgroundOverlay())
+        for (int skyx = -(viewport_.x / 3) % image2_width - image2_width;
+            skyx <= viewport_.width; skyx += image2_width) {
+        level_->backgroundOverlay()->Draw(tex2, skyx, 0);
+    }
 	/* Render all layers */
 	LevelLayer *layer;
 

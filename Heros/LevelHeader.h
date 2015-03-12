@@ -11,9 +11,13 @@ struct LevelHeader {
     int player_abilities_ph;
     char name[MAX_LEVEL_NAME];
     char background_texture[MAX_TEXTURE_PATH];
+    char background_overlay_texture[MAX_TEXTURE_PATH];
     char next_level[MAX_LEVEL_PATH];
     int background_width;
+    int background_overlay_width;
     char terrain_texture[MAX_TEXTURE_PATH];
     int object_count;
     int actor_count;
+    int end_game_x;
+    bool is_end_game_right;
 };

@@ -88,6 +88,15 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     manager->background_ = SpriteSheet::Get(header.background_texture);
     manager->backgroundWidth_ = header.background_width;
 
+    if (strlen(header.background_overlay_texture) > 0) {
+        manager->backgroundOverlay_ = SpriteSheet::Get(header.background_overlay_texture);
+        manager->backgroundOverlayWidth_ = header.background_overlay_width;
+    }
+
+    strcpy_s(manager->nextLevel_, header.next_level);
+    manager->endGameX_ = header.end_game_x;
+    manager->isEndGameRight_ = header.is_end_game_right;
+
     manager->bottomY_ = header.bottom;
     lvl.close();
 
@@ -104,15 +113,19 @@ void LevelManager::WriteSimpleLevel()
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
 
-    lvl.actor_count = 4;
-
     sprintf_s(lvl.name, "Level 01!");
     sprintf_s(lvl.background_texture, "spr/background01.bmp");
+    sprintf_s(lvl.background_overlay_texture, "spr/background02.bmp");
+    sprintf_s(lvl.next_level, "");
     lvl.background_width = 727;
+    lvl.background_overlay_width = 512;
     sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
 
     lvl.object_count = 2160 + 200 + 1;
     lvl.actor_count = 5;
+
+    lvl.end_game_x = 1000;
+    lvl.is_end_game_right = true;
 
     ofstream lvlout;
     lvlout.open("level01.dat", ios::out | ios::binary);
@@ -277,13 +290,6 @@ void LevelManager::WriteSimpleLevel()
 
     ActorData actor;
 
-
-
-    //actor.x = 80;
-    //actor.y = 240;
-    //actor.type = ENNEMIS;
-    //lvlout.write((char *)&actor, sizeof(ActorData));
-
     actor.x = 1000;
     actor.y = 240;
     actor.type = DOG;
@@ -295,7 +301,7 @@ void LevelManager::WriteSimpleLevel()
 
 	lvlout.write((char *)&actor, sizeof(ActorData));
 
-	lvlout.write((char*)&actor, sizeof(ActorData));
+	//lvlout.write((char*)&actor, sizeof(ActorData));
 
 
 	actor.x = 230;

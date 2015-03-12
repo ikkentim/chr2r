@@ -19,6 +19,9 @@ public:
         SLIDE_LEFT,
 		IDLE_RIGHT,
         IDLE_LEFT,
+		SPLASHING_,
+		SNAKE_,
+
 	};
 
     Player(class GameScene *, Vector2);
@@ -35,6 +38,8 @@ private:
     Keys keys_ = KEY_NONE;
     bool isLastMovementLeft_ = false;
     bool isDucking_ = false;
+	bool isSplashing_ = false;
+	bool isSneaking_ = false;
 	double animationTime_ = 0;
 	int animationIndex_ = 0;
     int animationFrames_ = 1;

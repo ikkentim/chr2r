@@ -154,6 +154,9 @@ bool GameWindow::GameLoop(double delta) {
             MAP_KEY(VK_DELETE, KEY_DELETE);
             MAP_KEYCHAR('L', KEY_L);
             MAP_KEYCHAR('O', KEY_O);
+			MAP_KEYCHAR('N', KEY_DASH);
+			MAP_KEYCHAR('S', KEY_SPLASH);
+			MAP_KEYCHAR('B', KEY_SNEAK);
 
 #undef MAP_KEY
 #undef MAP_KEYCHAR

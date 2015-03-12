@@ -74,6 +74,27 @@ bool SetBackgroundTextureCommand(Console * const console, const char *cmd) {
     return true;
 }
 
+bool SetBackgroundOverlayTextureCommand(Console * const console, const char *cmd) {
+    std::string command = cmd;
+
+    if (!isExtPath(cmd, ".bmp")) {
+        console->LogError("Given path is not a .bmp file.");
+        console->LogNotice("Usage: setbackgroundoverlaytexture [path]");
+        return true;
+    }
+
+    if (!fileExists(cmd)) {
+        console->LogError("File does not exist.");
+        console->LogNotice("Usage: setbackgroundoverlaytexture [path]");
+        return true;
+    }
+
+    console->LogNotice("Background overlay set to %s.", cmd);
+    instance->SetBackgroundOverlay(cmd);
+
+    return true;
+}
+
 bool SetTerrainTextureCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
@@ -110,6 +131,21 @@ bool SetBackgroundWidthCommand(Console * const console, const char *cmd) {
     return true;
 }
 
+bool SetBackgroundOverlayWidthCommand(Console * const console, const char *cmd) {
+    int width = atoi(cmd);
+
+    if (width < 100) {
+        console->LogError("Minimum width is 100. %d was given.", width);
+        console->LogNotice("Usage: setbackgroundoverlaywidth [width]");
+        return true;
+    }
+
+    console->LogNotice("Background overlay width set to %d.", width);
+    instance->SetBackgroundOverlayWidth(width);
+
+    return true;
+}
+
 bool SetGridSizeCommand(Console * const console, const char *cmd) {
     int size = atoi(cmd);
 
@@ -134,6 +170,15 @@ bool SetBottomYCommand(Console * const console, const char *cmd) {
     return true;
 }
 
+bool SetEndGameXCommand(Console * const console, const char *cmd) {
+    int x = atoi(cmd);
+
+    console->LogNotice("End game X set to %d", x);
+    instance->SetEndGameX(x);
+
+    return true;
+}
+
 bool SaveLevelCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
@@ -146,6 +191,22 @@ bool SaveLevelCommand(Console * const console, const char *cmd) {
     console->LogNotice("Saving to %s...", cmd);
     instance->Save(cmd);
     console->LogNotice("Level saved!", cmd);
+
+    return true;
+}
+
+bool LoadLevelCommand(Console * const console, const char *cmd) {
+    std::string command = cmd;
+
+    if (!isExtPath(cmd, ".dat")) {
+        console->LogError("Given path is not a .dat file.");
+        console->LogNotice("Usage: loadlevel [path]");
+        return true;
+    }
+
+    console->LogNotice("Loading from %s...", cmd);
+    instance->Load(cmd);
+    console->LogNotice("Level loaded!", cmd);
 }
 
 bool SetPlayerSpawnCommand(Console * const console, const char *cmd) {
@@ -290,8 +351,6 @@ EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     instance = this;
 
-    defaultTerrain_ = SpriteSheet::Get("spr/terrain.bmp");
-
     ZeroMemory(levelName_, MAX_LEVEL_NAME);
     ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
@@ -303,9 +362,15 @@ EditorScene::EditorScene(GameWindow *window)
         SetBackgroundTextureCommand);
     window->console()->RegisterCommand("setbackgroundwidth", 
         SetBackgroundWidthCommand);
+    window->console()->RegisterCommand("setbackgroundoverlaytexture",
+        SetBackgroundOverlayTextureCommand);
+    window->console()->RegisterCommand("setbackgroundoverlaywidth",
+        SetBackgroundOverlayWidthCommand);
     window->console()->RegisterCommand("goto", GoToCommand);
     window->console()->RegisterCommand("setbottomy", SetBottomYCommand);
+    window->console()->RegisterCommand("setendgamex", SetEndGameXCommand);
     window->console()->RegisterCommand("savelevel", SaveLevelCommand);
+    window->console()->RegisterCommand("loadlevel", LoadLevelCommand);
     window->console()->RegisterCommand("setplayerspawn", SetPlayerSpawnCommand);
     window->console()->RegisterCommand("setlevelname", SetLevelNameCommand);
     window->console()->RegisterCommand("setnextlevel", SetNextLevelCommand);
@@ -317,6 +382,54 @@ EditorScene::EditorScene(GameWindow *window)
 EditorScene::~EditorScene() {
 }
 
+void EditorScene::Load(const char *path) {
+    playableLayer_.clear();
+    foregroundLayer_.clear();
+    backgroundLayer_.clear();
+    actors_.clear();
+
+    std::ifstream lvl;
+    lvl.open(path, std::ios::in | std::ios::binary);
+
+    LevelHeader header;
+    lvl.read((char *)&header, sizeof(header));
+
+    bottomY_ = header.bottom;
+    playerX_ = header.player_x;
+    playerY_ = header.player_y;
+
+    SetLevelName(header.name);
+    SetBackground(header.background_texture);
+    SetBackgroundOverlay(header.background_overlay_texture);
+    SetBackgroundWidth(header.background_width);
+    SetBackgroundOverlayWidth(header.background_overlay_width);
+    SetNextLevel(header.next_level);
+    SetTerrain(header.terrain_texture);
+    SetEndGameX(header.end_game_x);
+
+    ObjectData object_buffer;
+    for (int i = 0; i < header.object_count; i++) {
+        lvl.read((char *)&object_buffer, sizeof(object_buffer));
+        switch (object_buffer.type){
+        case LevelManager::BACKGROUND:
+            backgroundLayer_.push_back(object_buffer);
+            break;
+        case LevelManager::FOREGROUND:
+            foregroundLayer_.push_back(object_buffer);
+            break;
+        default:
+            playableLayer_.push_back(object_buffer);
+            break;
+        }
+    }
+
+    ActorData actor_buffer;
+    for (int i = 0; i < header.actor_count; i++) {
+        lvl.read((char *)&actor_buffer, sizeof(actor_buffer));
+        actors_.push_back(actor_buffer);
+    }
+}
+
 void EditorScene::Save(const char *path) {
     LevelHeader lvl;
     lvl.bottom = bottomY_;
@@ -325,12 +438,16 @@ void EditorScene::Save(const char *path) {
     lvl.player_abilities_ph = 0;
     sprintf_s(lvl.name, levelName_);
     sprintf_s(lvl.background_texture, backgroundPath_);
-    lvl.background_width = backgroundWidth_;
-    sprintf_s(lvl.terrain_texture, terrainPath_);
+    sprintf_s(lvl.background_overlay_texture, backgroundOverlayPath_);
     sprintf_s(lvl.next_level, nextLevel_);
+    lvl.background_width = backgroundWidth_;
+    lvl.background_overlay_width = backgroundOverlayWidth_;
+    sprintf_s(lvl.terrain_texture, terrainPath_);
     lvl.actor_count = actors_.size();
     lvl.object_count = playableLayer_.size() + foregroundLayer_.size() +
         backgroundLayer_.size();
+    lvl.end_game_x = endGameX_;
+    lvl.is_end_game_right = endGameX_ > playerX_;
 
     std::ofstream lvlout;
     lvlout.open(path, std::ios::out | std::ios::binary);
@@ -430,6 +547,9 @@ void EditorScene::Update(double delta, Keys keys) {
                     currentObjectType_ = COIN;
                     break;
                 case COIN:
+                    currentObjectType_ = JUMPER;
+                    break;
+                case JUMPER:
                     currentObjectType_ = BLOCK;
                     break;
                 }
@@ -453,14 +573,26 @@ void EditorScene::Update(double delta, Keys keys) {
             }
             else {
                 /* Objects */
-                if (selectedTexture_.width > 0 && selectedTexture_.height > 0) {
+                if (currentObjectType_ != BLOCK || 
+                    (selectedTexture_.width > 0 && selectedTexture_.height > 0)) {
                     ObjectData data;
                     GetCurrentPos(data.x, data.y);
                     data.layer = currentLayer_;
                     data.texture = selectedTexture_;
                     data.type = currentObjectType_;
-                    data.width = selectedTexture_.width;
-                    data.height = selectedTexture_.height;
+
+                    if (currentObjectType_ == COIN) {
+                        data.width = 12;
+                        data.height = 16;
+                    }
+                    else if (currentObjectType_ == JUMPER) {
+                        data.width = 19;
+                        data.height = 20;
+                    }
+                    else {
+                        data.width = selectedTexture_.width;
+                        data.height = selectedTexture_.height;
+                    }
 
                     AddObject(GetCurrentLayer(), data);
                 }
@@ -600,18 +732,27 @@ void EditorScene::DrawObject(ObjectData data) {
         terrain_->Draw(data.texture, Vector2(data.x, data.y), viewport_);
         break;
     case COIN:
-        defaultTerrain_->Draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
+        defaultSpriteSheet_->Draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
+        break;
+    case JUMPER:
+        bumperSpriteSheet_->Draw(Texture(3, 11, 19, 20), Vector2(data.x, data.y), viewport_);
         break;
     }
 }
 void EditorScene::Render(HDC graphics) {
     /* Draw background */
-    if (background_ && backgroundWidth_ > 0) {
-        Texture tex = { 0, 0, backgroundWidth_, viewport_.height };
-        for (int skyx = -(viewport_.x / 2) % backgroundWidth_ - backgroundWidth_;
-            skyx <= viewport_.width; skyx += backgroundWidth_) {
-            background_->Draw(tex, skyx, 0);
-        }
+    const int image_width = backgroundWidth_;
+    const int image2_width = backgroundOverlayWidth_;
+    Texture tex = { 0, 0, image_width, viewport_.height };
+    Texture tex2 = { 0, 0, image2_width, viewport_.height };
+    for (int skyx = -(viewport_.x / 2) % image_width - image_width;
+        skyx <= viewport_.width; skyx += image_width) {
+        background_->Draw(tex, skyx, 0);
+    }
+    if (backgroundOverlay_)
+        for (int skyx = -(viewport_.x / 3) % image2_width - image2_width;
+            skyx <= viewport_.width; skyx += image2_width) {
+        backgroundOverlay_->Draw(tex2, skyx, 0);
     }
 
     /* Draw terrain */
@@ -634,15 +775,19 @@ void EditorScene::Render(HDC graphics) {
     }
 
     for (ActorData actor : actors_) {
-        //DrawObject(actor);
         switch (actor.type) {
         case DOG:
+            metalGearSpriteSheet_->Draw(Texture(75, 280, 33, 18 ), Vector2(actor.x, actor.y), viewport_);
             break;
         case FLYING_ENEMIE:
+            zeldaEnemiesSpriteSheet_->Draw(Texture(56, 241, 18, 18), Vector2(actor.x, actor.y), viewport_);
             break;
         case JUMPING_ENEMIE:
+            zeldaEnemiesSpriteSheet_->Draw(Texture(164, 288, 12, 17), Vector2(actor.x, actor.y), viewport_);
             break;
         case CHARACTER:
+            marioSpriteSheet_->Draw(Texture(91, 0, 16, 28), Vector2(actor.x, actor.y), viewport_);
+
             break;
         }
     }
@@ -650,6 +795,7 @@ void EditorScene::Render(HDC graphics) {
     /* Guidelines */
     HPEN hBlackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     HPEN hRedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
+    HPEN hBluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
     HPEN hPenOld = (HPEN)SelectObject(graphics, hBlackPen);
  
 
@@ -669,6 +815,10 @@ void EditorScene::Render(HDC graphics) {
     MoveToEx(graphics, 0, bottomY_ - viewport_.y, NULL);
     LineTo(graphics, viewport_.width, bottomY_ - viewport_.y);
 
+    SelectObject(graphics, hBluePen);
+    MoveToEx(graphics, endGameX_ - viewport_.x, 0, NULL);
+    LineTo(graphics, endGameX_ - viewport_.x, viewport_.height);
+
     /* Draw spawn */
     Ellipse(graphics, playerX_ - 10 - viewport_.x, playerY_ - 10 - viewport_.y,
         playerX_ + 10 - viewport_.x, playerY_ + 10 - viewport_.y);
@@ -678,6 +828,7 @@ void EditorScene::Render(HDC graphics) {
     /* END guidelines */
     SelectObject(graphics, hPenOld);
     DeleteObject(hRedPen);
+    DeleteObject(hBluePen);
     DeleteObject(hBlackPen);
 
     /* Draw cursor pos string */
@@ -731,6 +882,9 @@ void EditorScene::Render(HDC graphics) {
             break;
         case COIN:
             TextOut(graphics, 5, 90, "COIN", 4);
+            break;
+        case JUMPER:
+            TextOut(graphics, 5, 90, "JUMPER", 6);
             break;
         }
     }

@@ -27,25 +27,33 @@ void GameObject::ApplyVelocity(double delta) {
 
 bool GameObject::IsCollidingWith(GameObject *other, double delta) {
     /* Get the positions of both objects. */
-    Vector2 position = position_ + velocity_ * delta;
+	Vector2 position = position_ + velocity_ * delta;
     Vector2 other_position = other->position_;
+	Vector2 other_size = other->size_;
 
     /* Check whether object is not to the left, 
      * above, right or below this object.
      */
-    return !(position.x - size_.x / 2 > other_position.x + other->size_.x / 2 || 
-        position.x + size_.x / 2 < other_position.x - other->size_.x / 2 ||
-        position.y - size_.y / 2 > other_position.y + other->size_.y / 2 || 
-        position.y + size_.y / 2 < other_position.y - other->size_.y / 2);
+	return !(position.x - size_.x / 2 > other_position.x + other_size.x / 2 ||
+		position.x + size_.x / 2 < other_position.x - other_size.x / 2 ||
+		position.y - size_.y / 2 > other_position.y + other_size.y / 2 ||
+		position.y + size_.y / 2 < other_position.y - other_size.y / 2);
 }
 
-void GameObject::CheckForCollisions(GameScene *scene, LevelLayer *layer, double delta) {
+//void GameObject::Update(GameScene *, double, Keys){
+//	int c = 0;
+//}
+//void GameObject::Render(Viewport &){
+//	int c = 0;
+//}
+
+void GameObject::CheckForCollisions(GameScene *scene, GameObject** checks, int PossibleColliders, double delta) {
     bool has_touched_ground = false;
 
-    for (LevelLayer::iterator iter = layer->begin(); 
-        iter != layer->end(); ++iter) {
-        GameObject *check = *iter;
-
+	for (int i = 0; i < PossibleColliders; i++)
+	{
+		GameObject* check = checks[i];
+		
         /* Don't check collision with yourself. */
 		if (this == check) {
             continue;
