@@ -7,10 +7,9 @@
 #include "EnnemyJumping.h"
 #include "Coin.h"
 #include "Player.h"
-#include "Character.h"
+#include "Characters.h"
 #include "Jumper.h"
 #include <algorithm>
-
 #include "LevelHeader.h"
 #include "ObjectData.h"
 #include "ActorData.h"
@@ -69,7 +68,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 			break;
 
 		case CHARACTER:
-			actor = new Character(Vector2(actor_buffer.x, actor_buffer.y));
+			actor = new Mario(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
 
 		case FLYING_ENEMIE:
@@ -113,7 +112,7 @@ void LevelManager::WriteSimpleLevel()
     sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
 
     lvl.object_count = 2160 + 200 + 1;
-    lvl.actor_count = 4;
+    lvl.actor_count = 5;
 
     ofstream lvlout;
     lvlout.open("level01.dat", ios::out | ios::binary);
@@ -306,7 +305,7 @@ void LevelManager::WriteSimpleLevel()
 		
 	//lvlout.write((char *)&actor, sizeof(ActorData));
 
-	actor.x = 200;
+	actor.x = 1200;
 	actor.y = 100;
 	actor.type = CHARACTER;
 	lvlout.write((char *)&actor, sizeof(ActorData));

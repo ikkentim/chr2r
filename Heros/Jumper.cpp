@@ -2,7 +2,7 @@
 #include "SpriteSheet.h"
 #include "GameScene.h"
 
-#define JUMP_POWER (1000)
+#define JUMP_POWER (600)
 #define ANIMATION_INTERVAL  (0.25)
 
 Jumper::Jumper(Vector2 pos) :GameObject(false, pos, Vector2(12, 8)){
@@ -26,10 +26,10 @@ void Jumper::Update(GameScene *scene, double delta, Keys keys) {
 void Jumper::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 	if (cooldown == 0 && obj == scene->player()){
 	scene->SoundEngine()->play2D("snd/Jumper.mp3");
-		cooldown = 4000;
-
+		cooldown = 40;
+		Vector2 playervel = scene->player()->Velocity();
 		Vector2 Jump {0,-JUMP_POWER};
-		//scene->player()->AddVelocity(Vector2(0, -(scene->player())))
+		scene->player()->AddVelocity(Vector2(0, -abs(playervel.y)));
 		scene->player()->AddVelocity(Jump);
 
 	}
@@ -43,9 +43,7 @@ void Jumper::Render(Viewport &vp){
 	if (cooldown > 0)
 		cooldown--;
 
-	}
-
-		switch (animationIndex_) {
+	switch(animationIndex_) {
 		case 0:
 			spriteSheet_->Draw(t1, position_, vp);
 			break;
@@ -56,5 +54,5 @@ void Jumper::Render(Viewport &vp){
 			spriteSheet_->Draw(t0, position_, vp);
 			break;
 		}
-
+		
 }

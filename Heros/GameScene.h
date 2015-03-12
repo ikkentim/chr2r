@@ -1,5 +1,6 @@
 #pragma once
 #include <irrKlang.h>
+#include "DialogHUD.h"
 #include "Scene.h"
 #include "LevelManager.h"
 #include "Player.h"
@@ -8,6 +9,7 @@
 #include "Character.h"
 #include "Ennemis.h"
 
+class DialogHUD;
 typedef std::vector <class HUD *> HUDVector;
 
 class GameScene : public Scene {
@@ -37,12 +39,14 @@ public:
 	};
 	virtual void SetState(State);
 	virtual State GetState();
+	DialogHUD *dialog_;
 private:
 	GameWindow *window_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;
     Viewport viewport_;
+	
 	void UpdateViewport();
 	bool CheckStates();
 	State state_;

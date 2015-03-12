@@ -1,16 +1,16 @@
 #include "Character.h"
-
-Character::Character(Vector2 pos):Actor(pos, Vector2(16, 16)) {
-    spriteSheet_ = SpriteSheet::Get("spr/mario.bmp");
+#include "GameScene.h"
+#include "DialogHUD.h"
+Character::Character(Vector2 pos, Vector2 box): Actor(pos, box) {
+    
 }
-void Character::Update(GameScene*, double delta, Keys) {
+
+void Character::Update(GameScene* scene, double delta, Keys) {
+	if (!finisheddialog && scene->player()->Position().Distance(position_) < 50) {
+		scene->dialog_->EngageDialog(this);
+		finisheddialog = true;
+		//TODO: teach lesson
+	}
 	Falling(delta);
 }
-void Character::Render(Viewport &vp) {
-	Texture texture = {
-		91, 0,
-		16, 28
-	};
 
-    spriteSheet_->Draw(texture, position_, vp);
-}

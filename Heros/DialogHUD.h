@@ -1,9 +1,11 @@
 #pragma once
-
+#include "GameScene.h"
+#include "Player.h"
+#include "Character.h"
 #include "HUD.h"
 #include <string>
 #include <vector>
-#include "GameScene.h"
+
 
 class DialogLine;
 

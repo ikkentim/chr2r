@@ -4,8 +4,6 @@
 #include "Ennemis.h"
 #include "EnnemyDog.h"
 #include <irrKlang.h>
-#include "DialogHUD.h"
-#include "TestHUD.h"
 #include "MenuScene.h"
 
 GameScene::GameScene(GameWindow *window)
@@ -15,9 +13,8 @@ GameScene::GameScene(GameWindow *window)
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
 	state_ = PLAYING;
-	
-	hud_->push_back(new DialogHUD(player_, this));
-	hud_->push_back(new TestHUD());
+	dialog_ = new DialogHUD(player_, this);
+	hud_->push_back(dialog_);
 }
 
 GameScene::~GameScene() {
