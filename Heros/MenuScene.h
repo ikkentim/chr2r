@@ -15,7 +15,6 @@ public:
 private:
     SpriteSheet *spriteSheet_;
     SpriteSheet *spriteSheetPlay_;
-    SpriteSheet *spriteSheetOptions_;
     SpriteSheet *spriteSheetExit_;
     SpriteSheet *spriteSheetArrow_;
 	GameWindow *window_;
