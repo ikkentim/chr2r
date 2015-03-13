@@ -14,3 +14,7 @@ void Character::Update(GameScene* scene, double delta, Keys) {
 	Falling(delta);
 }
 
+DialogLine::DialogLine(bool plspoken, std::string str) {
+	playerspoken = plspoken;
+	sentence = str;
+}

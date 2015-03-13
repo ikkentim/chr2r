@@ -7,7 +7,7 @@
 #include <vector>
 
 
-class DialogLine;
+//class DialogLine;
 
 class DialogHUD : public HUD {
 public:
@@ -25,11 +25,4 @@ private:
 	Character* character;
 	int wait;
 	bool done = false;
-};
-
-class DialogLine {
-public:
-	DialogLine(bool, std::string);
-	bool playerspoken;
-	std::string sentence;
 };

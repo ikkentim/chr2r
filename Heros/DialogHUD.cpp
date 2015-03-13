@@ -2,18 +2,12 @@
 
 DialogHUD::DialogHUD(Player* p, GameScene* scene) : player(p), scene_(scene), wait(0) {
 	activedialog = false;
-	//test data, probably gonna be moved to character or level
-	l1dialog.push_back(DialogLine(true, "Hi There"));
-	l1dialog.push_back(DialogLine(false, "Hey"));
-	l1dialog.push_back(DialogLine(true, "Nice Weather, huh?"));
-	l1dialog.push_back(DialogLine(false, "Certainly, Sir, Myah"));
 	
-	dialogit = l1dialog.begin();
 }
 
 void DialogHUD::EngageDialog(Character* c) {
 	character = c;
-
+	l1dialog = character->dialog;
 	activedialog = true;
 	dialogit = l1dialog.begin();
 
@@ -64,7 +58,3 @@ void DialogHUD::Render(HDC hdc) {
 	}
 }
 
-DialogLine::DialogLine(bool plspoken, std::string str) {
-	playerspoken = plspoken;
-	sentence = str;
-}

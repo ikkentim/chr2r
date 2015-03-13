@@ -1,6 +1,8 @@
 #pragma once
 #include "Actor.h"
 #include "Ability.h"
+
+class DialogLine;
 class Character : public Actor {
 public:
 	Character(Vector2, Vector2);
@@ -9,5 +11,12 @@ public:
 	SpriteSheet *spriteSheet_;
 	bool finisheddialog = false;
 	Ability ability;
+	std::vector<DialogLine> dialog;
 };
 
+class DialogLine {
+public:
+	DialogLine(bool, std::string);
+	bool playerspoken;
+	std::string sentence;
+};
