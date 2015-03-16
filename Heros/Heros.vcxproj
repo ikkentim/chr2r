@@ -107,6 +107,7 @@
     <ClCompile Include="EnnemyJumping.cpp" />
     <ClCompile Include="Fps.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="Jumper.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="EnnemyJumping.h" />
     <ClInclude Include="Fps.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="HUD.h" />
