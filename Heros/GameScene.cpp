@@ -82,6 +82,7 @@ void GameScene::Update(double delta, Keys keys) {
 	case PLAYER_DEAD:
 		if (player()->Die())
 		{
+			
 			window_->UpdateScene(new MenuScene(window_));
 			return;
 		}
