@@ -54,7 +54,7 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
 
 	isSneaking_ = !!(keys & KEY_SNEAK);
 
-    if (isSneaking_){/* todo:make this not happen every tick...*/
+	if (isSneaking_&& !isSplashing_){
 		spriteSheet_ = SpriteSheet::Get("spr/Box_Sprite.bmp");
 	}
 	else{
@@ -67,7 +67,6 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
         scene->SetState(GameScene::REACHED_END);
         return;
     }
-
 
     if (velocity_.x != 0.00)
         isLastMovementLeft_ = velocity_.x < 0;
@@ -114,7 +113,7 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
 
 Player::AnimationState Player::GetAnimationState(int &frames) {
     frames = 1;
-
+	
 		if (isDucking_) { /* Is ducking. */
 			if (velocity_.x < 0) { /* Is moving left. */
 				return DUCK_LEFT;
@@ -123,6 +122,10 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
 				return DUCK_RIGHT;
 			}
 			return isLastMovementLeft_ ? DUCK_LEFT : DUCK_RIGHT;
+		}
+		else if (GetState() == GameScene ::PLAYER_DEAD){
+			OutputDebugString("dead");
+			return DEAD_;
 		}
 		else if (isSplashing_){ /*SPLASH ATTACK*/
 			frames = 2;
@@ -183,6 +186,11 @@ void Player::Render(Viewport &vp) {
 		texture.top = 3 * TEXTURE_HEIGHT;
 		texture.left = 2 * TEXTURE_WIDTH + 6;
 		break;
+	case DEAD_:
+		texture.top = 2 * TEXTURE_HEIGHT;
+		texture.left = 2 * TEXTURE_WIDTH;
+		break;
+	
     case DUCK_RIGHT:
         texture.left = 0 * TEXTURE_WIDTH;
         texture.top = 1 * TEXTURE_HEIGHT;
@@ -277,12 +285,25 @@ void Player::Render(Viewport &vp) {
 
 bool Player::Die()
 {
+	if (IsDeadState(GetState())){
+		OutputDebugString("dead !! 2");
+		
+		}
+	
 	if (--lives_ <= 0)
 		return true;
 
 	position_.x = 0;
 	position_.y = 0;
 
+	return false;
+}
+
+bool Player::IsDeadState(State state){
+	if (state == DEAD){
+		
+		return true;
+	}
 	return false;
 }
 

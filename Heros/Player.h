@@ -21,6 +21,7 @@ public:
         IDLE_LEFT,
 		SPLASHING_,
 		SNAKE_,
+		DEAD_,
 
 	};
 
@@ -31,6 +32,10 @@ public:
 	void AddVelocity(Vector2);
 	Vector2 GetVelocity(){
 		return velocity_;
+	}
+	bool Player::IsDeadState(State);
+	bool GetSneaking(){
+		return isSneaking_;
 	}
 
 private:

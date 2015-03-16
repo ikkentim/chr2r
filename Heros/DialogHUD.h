@@ -1,11 +1,13 @@
 #pragma once
-
+#include "GameScene.h"
+#include "Player.h"
+#include "Character.h"
 #include "HUD.h"
 #include <string>
 #include <vector>
-#include "GameScene.h"
 
-class DialogLine;
+
+//class DialogLine;
 
 class DialogHUD : public HUD {
 public:
@@ -22,12 +24,4 @@ private:
 	GameScene *scene_;
 	Character* character;
 	int wait;
-	bool done = false;
-};
-
-class DialogLine {
-public:
-	DialogLine(bool, std::string);
-	bool playerspoken;
-	std::string sentence;
 };

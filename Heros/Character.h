@@ -1,11 +1,22 @@
 #pragma once
 #include "Actor.h"
+#include "Ability.h"
 
+class DialogLine;
 class Character : public Actor {
 public:
-	Character(Vector2);
+	Character(Vector2, Vector2);
 	void Update(GameScene*, double, Keys);
-	void Render(Viewport &vp);
-private:
-    SpriteSheet *spriteSheet_;
+	virtual void Render(Viewport &vp) = 0;
+	SpriteSheet *spriteSheet_;
+	bool finisheddialog = false;
+	Ability ability;
+	std::vector<DialogLine> dialog;
+};
+
+class DialogLine {
+public:
+	DialogLine(bool, std::string);
+	bool playerspoken;
+	std::string sentence;
 };

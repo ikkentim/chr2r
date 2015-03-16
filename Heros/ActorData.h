@@ -4,7 +4,7 @@ enum ActorType {
     DOG,
     FLYING_ENEMIE,
     JUMPING_ENEMIE,
-    CHARACTER
+    CHARACTER,
 };
 
 struct ActorData {

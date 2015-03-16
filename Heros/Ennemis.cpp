@@ -56,7 +56,7 @@ void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 			isSolid_ = false;
 			scene->player()->AddVelocity(Vector2(0, -(scene->player()->GetVelocity().y )*2));
 		}
-		else{ 
+		else if (!scene->player()->GetSneaking()){ 
 			scene->player()->SetState(Actor::DEAD);
 		}
 	}
