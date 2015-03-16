@@ -1,22 +1,13 @@
 #include "DialogHUD.h"
 
-DialogHUD::DialogHUD(Player* p, GameScene* scene) {
-	player = p;
-	scene_ = scene;
-	wait = 0;
-	//test data, probably gonna be moved to character or level
-	l1dialog.push_back(DialogLine(true, ""));
-	l1dialog.push_back(DialogLine(true, "Hi There"));
-	l1dialog.push_back(DialogLine(false, "Hey"));
-	l1dialog.push_back(DialogLine(true, "Nice Weather, huh?"));
-	l1dialog.push_back(DialogLine(false, "Certainly, Sir, Myah"));
+DialogHUD::DialogHUD(Player* p, GameScene* scene) : player(p), scene_(scene), wait(0) {
+	activedialog = false;
 	
-	dialogit = l1dialog.begin();
-	activedialog = true; //turn off or on for now
 }
 
 void DialogHUD::EngageDialog(Character* c) {
 	character = c;
+	l1dialog = character->dialog;
 	activedialog = true;
 	dialogit = l1dialog.begin();
 
@@ -26,6 +17,7 @@ void DialogHUD::NextLine() {
 	if (dialogit == l1dialog.end())
 	{
 		activedialog = false;
+		done = true;
 	}
 }
 void DialogHUD::Update(GameScene *scene, double, Keys k) {
@@ -41,9 +33,10 @@ void DialogHUD::Update(GameScene *scene, double, Keys k) {
 		else
 		{
 			scene->SetState(GameScene::PLAYING);
-			done = true;
 		}
 	}
+	else
+		scene->SetState(GameScene::PLAYING);
 	
 }
 
@@ -65,7 +58,3 @@ void DialogHUD::Render(HDC hdc) {
 	}
 }
 
-DialogLine::DialogLine(bool plspoken, std::string str) {
-	playerspoken = plspoken;
-	sentence = str;
-}

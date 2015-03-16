@@ -1,5 +1,4 @@
 #include "TestHUD.h"
-
 void TestHUD::Update(GameScene *scene , double delta, Keys keys) {
 
 }

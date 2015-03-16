@@ -4,8 +4,6 @@
 #include "Ennemis.h"
 #include "EnnemyDog.h"
 #include <irrKlang.h>
-#include "DialogHUD.h"
-#include "TestHUD.h"
 #include "MenuScene.h"
 #include <algorithm>
 #include "EndGameScene.h"
@@ -17,9 +15,9 @@ GameScene::GameScene(GameWindow *window)
 	level_ = LevelManager::Load("lvl/level01.dat", this, player_);
 
 	state_ = PLAYING;
-	
-	hud_->push_back(new DialogHUD(player_, this));
-	hud_->push_back(new TestHUD());
+	dialog_ = new DialogHUD(player_, this);
+	hud_->push_back(dialog_);
+
 
 	int minX = 0;
 	int maxX = 0;
@@ -34,7 +32,7 @@ GameScene::GameScene(GameWindow *window)
 		maxX = max(maxX, object->Position().x);
 		minY = min(minY, object->Position().y);
 		maxY = max(maxY, object->Position().y);
-	}
+}
 
 	int boxX = (minX + maxX) / 2;
 	int boxY = (minY + maxY) / 2;
@@ -56,6 +54,7 @@ GameScene::GameScene(GameWindow *window)
 GameScene::~GameScene() {
     delete level_;
 	delete quadTree_;
+	delete dialog_;
 }
 void GameScene::Start() {
     /* Testing sound */
@@ -67,12 +66,11 @@ void GameScene::Update(double delta, Keys keys) {
 
 	CheckStates();
 
-	///* Update HUD */
-	//for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-	//	HUD *hud = *it;
-	//	hud->Update(this, delta, keys);
-	//}
 
+	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
+		HUD *hud = *it;
+		hud->Update(this, delta, keys);
+	}
 	switch (state_)
 	{
 	case PAUSED:
@@ -129,6 +127,7 @@ void GameScene::Update(double delta, Keys keys) {
         object->ApplyVelocity(delta);
 		quadTree_->Insert(object);
     }
+	
 }
 
 void GameScene::UpdateViewport()

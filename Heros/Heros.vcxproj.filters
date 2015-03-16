@@ -123,6 +123,9 @@
     <ClCompile Include="Jumper.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Characters.cpp">
+      <Filter>Source Files\Actors</Filter>
+    </ClCompile>
     <ClCompile Include="AABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -250,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="EndGameScene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Ability.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters.h">
+      <Filter>Header Files\Actors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

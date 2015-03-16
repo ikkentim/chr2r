@@ -7,10 +7,9 @@
 #include "EnnemyJumping.h"
 #include "Coin.h"
 #include "Player.h"
-#include "Character.h"
+#include "Characters.h"
 #include "Jumper.h"
 #include <algorithm>
-
 #include "LevelHeader.h"
 #include "ObjectData.h"
 #include "ActorData.h"
@@ -69,9 +68,9 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 			break;
 
 		case CHARACTER:
-			actor = new Character(Vector2(actor_buffer.x, actor_buffer.y));
+			//maybe a switch case for different characters or something?
+			actor = new Sanic(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
-
 		case FLYING_ENEMIE:
 			actor = new EnnemyFlying(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
@@ -123,7 +122,7 @@ void LevelManager::WriteSimpleLevel()
     sprintf_s(lvl.terrain_texture, "spr/terrain.bmp");
 
     lvl.object_count = 2160 + 200 + 1;
-    lvl.actor_count = 4;
+    lvl.actor_count = 5;
 
     lvl.end_game_x = 1000;
     lvl.is_end_game_right = true;
@@ -310,7 +309,9 @@ void LevelManager::WriteSimpleLevel()
 	actor.type = JUMPING_ENEMIE;
 	lvlout.write((char *)&actor, sizeof(ActorData));
 		
-	actor.x = 200;
+	//lvlout.write((char *)&actor, sizeof(ActorData));
+
+	actor.x = 1200;
 	actor.y = 100;
 	actor.type = CHARACTER;
 	lvlout.write((char *)&actor, sizeof(ActorData));
