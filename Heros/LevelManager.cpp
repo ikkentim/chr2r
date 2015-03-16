@@ -69,7 +69,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 
 		case CHARACTER:
 			//maybe a switch case for different characters or something?
-			actor = new Sanic(Vector2(actor_buffer.x, actor_buffer.y));
+			actor = new Magikarp(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
 		case FLYING_ENEMIE:
 			actor = new EnnemyFlying(Vector2(actor_buffer.x, actor_buffer.y));
