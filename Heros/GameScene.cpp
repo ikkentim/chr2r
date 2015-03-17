@@ -7,6 +7,7 @@
 #include "MenuScene.h"
 #include <algorithm>
 #include "EndGameScene.h"
+#include "GameOverScene.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -80,8 +81,12 @@ void GameScene::Update(double delta, Keys keys) {
 	case PLAYER_DEAD:
 		if (player()->Die())
 		{
+<<<<<<< HEAD
+			window_->UpdateScene(new GameOverScene(window_));
+=======
 			
 			window_->UpdateScene(new MenuScene(window_));
+>>>>>>> 2d1ea3cb5b848067932476aa2a19b010ccb4e1e0
 			return;
 		}
 		player()->SetState(Player::ALIVE);

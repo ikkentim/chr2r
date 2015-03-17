@@ -5,7 +5,7 @@
 #define JUMP_POWER (600)
 #define ANIMATION_INTERVAL  (0.25)
 
-Jumper::Jumper(Vector2 pos) :GameObject(false, pos, Vector2(12, 8)){
+Jumper::Jumper(Vector2 pos) :GameObject(false, pos, Vector2(16, 16)){
 	spriteSheet_ = SpriteSheet::Get("spr/Bumper.bmp");
 }
 
