@@ -6,12 +6,12 @@ Fps::Fps() :lastframetime_(time(0))
 
 }
 
-void Fps::Update()
+void Fps::update()
 {
 	frames_++;
 }
 
-int Fps::GetFps()
+int Fps::fps()
 {
 	time_t currenttime = time(0);
 

@@ -7,13 +7,13 @@ class AABB {
 public:
 	AABB();
 	AABB(Vector2, Vector2);
-	bool ContainsPoint(GameObject*);
-	bool IntersectsWith(AABB*);
-	Vector2 Center()
+	bool contains_point(Vector2);
+	bool intersects_with(AABB*);
+	Vector2 center()
 	{
 		return center_;
 	}
-	Vector2 HalfDimension()
+	Vector2 half_dimension()
 	{
 		return halfDimension_;
 	}

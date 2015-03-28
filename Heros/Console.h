@@ -14,27 +14,29 @@ class Console
 public:
     Console(HDC);
 
-    void Update(WPARAM);
-    void Render(HDC);
-    bool IsOpen() {
+    void update(WPARAM);
+    void render(HDC);
+    bool is_open() {
         return isOpen_;
     }
-    void LogNotice(const char *, ...);
-    void LogWarn(const char *, ...);
-    void LogError(const char *, ...);
-    void LogAvailableCommands();
-    bool RegisterCommand(std::string, ConsoleCommandHandler);
-    void RemoveCommand(std::string);
+    void log_notice(const char *, ...);
+    void log_warn(const char *, ...);
+    void log_error(const char *, ...);
+    void log_available_commands();
+    bool register_command(std::string, ConsoleCommandHandler);
+    void remove_command(std::string);
+
 private:
-    void LogUserInput(const char *);
-    void Log(const char *format, va_list args, char *type, COLORREF color);
-    void Log(const char *message, char *type, COLORREF color);
+    void log_user_input(const char *);
+    void log(const char *format, va_list args, char *type, COLORREF color);
+    void log(const char *message, char *type, COLORREF color);
+    void process_command(char *);
+    void send_input_command();
+    void clear_input_buffer();
+
     HDC dc_ = NULL;
     HBITMAP bitmap_;
     HANDLE oldHandle_;
-    void ProcessCommand(char *);
-    void SendInputCommand();
-    void ClearInputBuffer();
 
     COLORREF consoleTypeColor_[CONSOLE_LOG_COUNT];
     char consoleTypeBuffer_[CONSOLE_LOG_COUNT][CONSOLE_TYPE_BUFFER_SIZE];

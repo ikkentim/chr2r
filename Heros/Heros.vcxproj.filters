@@ -212,12 +212,6 @@
     <ClInclude Include="EnnemyJumping.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="Alive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -260,11 +254,11 @@
     <ClInclude Include="GameOverScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Ability.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Characters.h">
       <Filter>Header Files\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Ability.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,13 +13,13 @@ Ennemis::Ennemis(Vector2 pos, SpriteSheet *spriteSheet) :Actor(pos, Vector2(16, 
 }
 Ennemis :: ~Ennemis(){}
 
-void Ennemis::GoLeft(double delta){
+void Ennemis::go_left(double delta){
 
 	Vector2 hAccel = { -(WALK_ACCEL + abs(velocity_.x)),0};
 	velocity_ += hAccel*delta;
 }
 
-void Ennemis::GoRight(double delta){
+void Ennemis::go_right(double delta){
 
 	Vector2 hAccel = { WALK_ACCEL + abs(velocity_.x), 0 };
 	velocity_ += hAccel*delta;
@@ -35,29 +35,29 @@ void Ennemis::GoRight(double delta){
 	SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture, position_, vp);
 }*/
 
-void Ennemis::Update(GameScene *scene, double delta, Keys keys){
-	if (IsDeadState(GetState())){
+void Ennemis::update(GameScene *scene, double delta, Keys keys){
+	if (is_dead_state(state())){
 		return;
 	}
 
-	Falling(delta);
+	process_gravity(delta);
 }
 
-void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
-	if (IsDeadState(GetState())){
+void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) {
+	if (is_dead_state(state())){
 		return;
 	}
 	
 	if (obj == scene->player()){
 		
-		if (scene->player()->GetVelocity().y > 0 && scene->player()->Position().y < position_.y){
+		if (scene->player()->velocity().y > 0 && scene->player()->position().y < position_.y){
 		//	OutputDebugString("dead");
-			SetState(Actor::DEAD);
+			state(Actor::DEAD);
 			isSolid_ = false;
-			scene->player()->AddVelocity(Vector2(0, -(scene->player()->GetVelocity().y )*2));
+			scene->player()->add_velocity(Vector2(0, -(scene->player()->velocity().y )*2));
 		}
-		else if (!scene->player()->GetSneaking()){ 
-			scene->player()->SetState(Actor::DEAD);
+        else if (!scene->player()->is_sneaking()){
+			scene->player()->state(Actor::DEAD);
 		}
 	}
 	if (obj != scene->player()){
@@ -65,16 +65,16 @@ void Ennemis::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
 		{
 		
 			 if (velocity_.x < 0){
-				GoRight(0.6);
+				go_right(0.6);
 			}
 			if (velocity_.x > 0){
-				GoLeft(0.60);
+				go_left(0.60);
 			} 
 		}
 	}
 }
 
-bool Ennemis::IsDeadState(State state){
+bool Ennemis::is_dead_state(State state){
 	if (state == DEAD){
 		return true;
 	}

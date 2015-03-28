@@ -10,7 +10,7 @@ static Window *window = NULL;
 HINSTANCE Window::instance_ = GetModuleHandle(NULL);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	return window->MsgProc(hWnd, uMsg, wParam, lParam);
+	return window->msg_proc(hWnd, uMsg, wParam, lParam);
 }
 
 Window::Window() {
@@ -23,7 +23,7 @@ Window::Window() {
 	this->strWindowTitle_		= _T("Classic Heroes Redefined 2: Revengeance, The Presequel REMASTERED - 2015 Special Edition pre-proloque");
 }
 
-int Window::Run() {
+int Window::run() {
     MSG msg = { 0 };
     INT64 frequency;
     INT64 lastTick;
@@ -44,7 +44,7 @@ int Window::Run() {
 
             ::QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
                 if (GetFocus() == hWnd_ &&
-                GameLoop((double)(tick - lastTick) / (double)frequency)) {
+                game_loop((double)(tick - lastTick) / (double)frequency)) {
 
 #ifdef FULLSCREEN_MODE //bitblp is faster but we need stretchblp for fullscreen
 					StretchBlt(dc_, drawRect_.left, drawRect_.top,
@@ -61,7 +61,7 @@ int Window::Run() {
 
     }
 
-    GameEnd();
+    game_end();
 
 	SelectObject(graphics_, oldHandle_);
 	DeleteObject(bitmap_);
@@ -70,7 +70,7 @@ int Window::Run() {
     return msg.wParam;
 }
 
-HRESULT Window::Create() {
+HRESULT Window::create() {
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX); 
@@ -156,7 +156,7 @@ HRESULT Window::Create() {
 	SelectObject(graphics_, CreatePen(PS_NULL, 0, 0));
 	SelectObject(graphics_, CreateSolidBrush(0xffffff));
 
-    GameInit();
+    game_init();
 
 	::ShowWindow(hWnd_, dwCreationFlags_);
 	::UpdateWindow(hWnd_);
@@ -164,7 +164,7 @@ HRESULT Window::Create() {
 	return true;
 }
 
-LRESULT Window::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT Window::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	if (!hWnd_)
 		hWnd_ = hWnd;
 

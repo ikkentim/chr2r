@@ -10,14 +10,15 @@
 class SpriteSheet
 {
 public:
-    static void SetWindow(HWND, HDC);
-    static void Unload();
-    static SpriteSheet *Get(std::string);
-
     SpriteSheet(const char *);
     ~SpriteSheet(void);
-    void Draw(Texture &, Vector2 &pos, Viewport &);
-    void Draw(Texture &, int offsetx, int offsety);
+
+    static void set_window(HWND, HDC);
+    static void unload();
+    static SpriteSheet *get(std::string);
+
+    void draw(Texture &, Vector2 &pos, Viewport &);
+    void draw(Texture &, int offsetx, int offsety);
 
 private:
     typedef std::map<std::string, SpriteSheet *> SpriteMap;

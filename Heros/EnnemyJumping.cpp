@@ -10,15 +10,15 @@
 #define TEXTURE_HEIGHT      (17) 
 
 
-EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
+EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp")){
 
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
 EnnemyJumping :: ~EnnemyJumping(){}
 
-void EnnemyJumping::Render(Viewport &vp) {
-	if (IsDeadState(GetState())){
+void EnnemyJumping::render(Viewport &vp) {
+	if (is_dead_state(state())){
 		return;
 	}
 	Texture texture_OnGround = { 
@@ -46,23 +46,23 @@ void EnnemyJumping::Render(Viewport &vp) {
 
 	tex.left += idx * TEXTURE_WIDTH;
 
-	spriteSheet()->Draw(tex, position_, vp);
+	spriteSheet()->draw(tex, position_, vp);
 
 }
 
-void EnnemyJumping::Update(GameScene *scene, double delta, Keys keys){
-	if (IsDeadState(GetState())){
+void EnnemyJumping::update(GameScene *scene, double delta, Keys keys){
+	if (is_dead_state(state())){
 		return;
 	}
 	animationTime_ += delta;
 	//pattern of the enemie
 
-	if (IsOnGround()){
+	if (is_on_ground()){
 		Jump(delta);
 	}
 
 	/* Update the player animation. */
-	AnimationState new_state = GetAnimationState(animationFrames_);
+	AnimationState new_state = get_animation_state(animationFrames_);
 
 	if (state_ != new_state) {
 		state_ = new_state;
@@ -74,10 +74,10 @@ void EnnemyJumping::Update(GameScene *scene, double delta, Keys keys){
 		animationIndex_ = (animationIndex_ + 1) % 2;
 	}
 
-	Falling(delta);
+	process_gravity(delta);
 }
 
-EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
+EnnemyJumping::AnimationState EnnemyJumping::get_animation_state(int &frames) {
 	frames = 1;
 
 	if (velocity_.x > 0) { /* Is moving right. */
@@ -88,7 +88,7 @@ EnnemyJumping::AnimationState EnnemyJumping::GetAnimationState(int &frames) {
 		frames = 3;
 		return RUN_LEFT;
 	}
-	if (!IsOnGround()){ /*Is Jumping.*/
+	if (!is_on_ground()){ /*Is Jumping.*/
 		frames = 3;
 		return JUMP_;
     }

@@ -2,23 +2,26 @@
 #include "Character.h"
 class Mario : public Character {
 public:
-	void Update(GameScene*, double, Keys);
-	void Render(Viewport &vp);
 	Mario(Vector2);
+
+    void update(GameScene*, double, Keys) override;
+    void render(Viewport &vp) override;
 };
 
 class Sanic : public Character {
 public:
-	void Update(GameScene*, double, Keys);
-	void Render(Viewport &vp);
 	Sanic(Vector2);
+
+	void update(GameScene*, double, Keys);
+	void render(Viewport &vp);
 };
 
 class Magikarp : public Character {
 public:
-	void Update(GameScene*, double, Keys);
-	void Render(Viewport &vp);
 	Magikarp(Vector2);
+
+	void update(GameScene*, double, Keys);
+	void render(Viewport &vp);
 
 private:
 	int animationIndex_ = 0;

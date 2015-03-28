@@ -4,11 +4,11 @@
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow) {
 
-    LevelManager::WriteSimpleLevel();/* TODO: Remove */
+    LevelManager::write_simple_level();/* TODO: Remove */
     GameWindow app;
 
-    if (!app.Create())
+    if (!app.create())
         return 0;
 
-    return app.Run();
+    return app.run();
 }

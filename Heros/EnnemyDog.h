@@ -13,14 +13,14 @@ public:
 	};
 	EnnemyDog(Vector2);
 	~EnnemyDog();
-	void Render(Viewport &) override;
-	void Update(GameScene *, double, Keys) override;
+	void render(Viewport &) override;
+	void update(GameScene *, double, Keys) override;
 
-protected: //private ?
+private:
 	AnimationState state_;
 	double animationTime_ = 0;
 	int animationIndex_ = 0;
 	int animationFrames_ = 1;
 
-	AnimationState GetAnimationState(int &frames);
+    AnimationState get_animation_state(int &frames);
 };

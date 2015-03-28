@@ -6,12 +6,17 @@ class DialogLine;
 class Character : public Actor {
 public:
 	Character(Vector2, Vector2);
-	void Update(GameScene*, double, Keys);
-	virtual void Render(Viewport &vp) = 0;
+
+    void update(GameScene*, double, Keys) override;
+	virtual void render(Viewport &vp) = 0;
+
+
+	std::vector<DialogLine> dialog;
+protected:
+	Ability ability;
 	SpriteSheet *spriteSheet_;
 	bool finisheddialog = false;
-	Ability ability;
-	std::vector<DialogLine> dialog;
+
 };
 
 class DialogLine {

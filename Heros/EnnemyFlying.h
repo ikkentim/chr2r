@@ -13,14 +13,14 @@ public:
 	EnnemyFlying(Vector2);
 	~EnnemyFlying();
 
-	void GoDown(double,int); //Go down
-	void GoUp(double,int);// Go Up
+	void go_down(double,int); //Go down
+	void go_up(double,int);// Go Up
 
-	void Render(Viewport &) override;
-	void Update(GameScene *, double, Keys) override;
+	void render(Viewport &) override;
+	void update(GameScene *, double, Keys) override;
 
 
-protected: //private ?
+private:
 	AnimationState state_;
 	double animationTime_ = 0;
 	int animationIndex_ = 0;
@@ -28,5 +28,5 @@ protected: //private ?
 	int nbTick_ = 0;
 	Vector2 start_position;
 
-	AnimationState GetAnimationState(int &frames);
+    AnimationState get_animation_state(int &frames);
 };

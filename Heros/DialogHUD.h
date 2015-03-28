@@ -6,16 +6,14 @@
 #include <string>
 #include <vector>
 
-
-//class DialogLine;
-
 class DialogHUD : public HUD {
 public:
 	DialogHUD(Player*, GameScene*);
-	void EngageDialog(Character*);
-	void NextLine();
-	void Update(GameScene*, double, Keys);
-	void Render(HDC);
+
+	void engage_dialog(Character*);
+	void next_line();
+    void update(GameScene*, double, Keys) override;
+	void render(HDC) override;
 private:
 	std::vector<DialogLine> l1dialog;
 	std::vector<DialogLine>::iterator dialogit;

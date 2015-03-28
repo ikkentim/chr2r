@@ -10,10 +10,10 @@ Block::Block(SpriteSheet *spriteSheet, Texture tex, Vector2 pos)
 	
 }
 
-void Block::Update(GameScene *scene, double delta, Keys keys) {
+void Block::update(GameScene *scene, double delta, Keys keys) {
     /* nothing to update. */
 }
 
-void Block::Render(Viewport &vp) {
-    spriteSheet_->Draw(texture_, position_, vp);
+void Block::render(Viewport &vp) {
+    spriteSheet_->draw(texture_, position_, vp);
 }

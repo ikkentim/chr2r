@@ -5,10 +5,10 @@
 #define ANIMATION_INTERVAL  (0.12)
 
 Coin::Coin(Vector2 pos) :GameObject(false, pos, Vector2(12, 16)){
-    spriteSheet_ = SpriteSheet::Get("spr/terrain.bmp");
+    spriteSheet_ = SpriteSheet::get("spr/terrain.bmp");
 }
 
-void Coin::Update(GameScene *scene, double delta, Keys keys) {
+void Coin::update(GameScene *scene, double delta, Keys keys) {
     animationTime_ += delta;
 
     if (!pickedUp_ && animationTime_ >= ANIMATION_INTERVAL) {
@@ -17,14 +17,14 @@ void Coin::Update(GameScene *scene, double delta, Keys keys) {
     }
 }
 
-void Coin::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
+void Coin::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) {
     if (!pickedUp_ && obj == scene->player()){
-        scene->SoundEngine()->play2D("snd/smb_coin.wav");
+        scene->sound_engine()->play2D("snd/smb_coin.wav");
 
         pickedUp_ = true;
     }
 }
-void Coin::Render(Viewport &vp) {
+void Coin::render(Viewport &vp) {
     if (pickedUp_) return;
 
     Texture t0 = { 219, 28, 12, 16 };
@@ -34,16 +34,16 @@ void Coin::Render(Viewport &vp) {
 
     switch (animationIndex_) {
     case 0:
-        spriteSheet_->Draw(t0, position_, vp);
+        spriteSheet_->draw(t0, position_, vp);
         break;
     case 1:
-        spriteSheet_->Draw(t1, position_, vp);
+        spriteSheet_->draw(t1, position_, vp);
         break;
     case 2:
-        spriteSheet_->Draw(t2, position_, vp);
+        spriteSheet_->draw(t2, position_, vp);
         break;
     case 3:
-        spriteSheet_->Draw(t3, position_, vp);
+        spriteSheet_->draw(t3, position_, vp);
         break;
     }
 }

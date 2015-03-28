@@ -12,16 +12,16 @@ public:
     GameWindow();
 	~GameWindow();
 
-    void UpdateScene(Scene *);
-    irrklang::ISoundEngine *SoundEngine();
-    LRESULT MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    void update_scene(Scene *);
+    irrklang::ISoundEngine *sound_engine();
+    LRESULT msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     Console *console() {
         return console_;
     }
 protected:
-    void GameInit();
-    bool GameLoop(double);
-    void GameEnd();
+    void game_init() override;
+    bool game_loop(double) override;
+    void game_end() override;
 
 private:
     irrklang::ISoundEngine *soundEngine_;

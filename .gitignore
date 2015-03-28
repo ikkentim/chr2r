@@ -194,3 +194,4 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+/Heros.sln.GhostDoc.xml

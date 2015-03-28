@@ -15,12 +15,12 @@ typedef std::vector <class HUD *> HUDVector;
 class GameScene : public Scene {
 public:
     GameScene(GameWindow *);
-    virtual ~GameScene();
-	virtual void Start();
-    void Update(double, Keys);
-    void Render(HDC graphics);
-    irrklang::ISoundEngine *SoundEngine() {
-        return window_->SoundEngine();
+    ~GameScene() override;
+    void start() override;
+    void update(double, Keys) override;
+    void render(HDC graphics) override;
+    irrklang::ISoundEngine *sound_engine() {
+        return window_->sound_engine();
     }
     Player *player() {
         return player_;
@@ -36,19 +36,21 @@ public:
 		PAUSED,
 		TALKING
 	};
-	virtual void SetState(State);
-	virtual State GetState();
+	virtual void state(State);
+    virtual State state();
+
 	QuadTree *quadTree_;
 	DialogHUD *dialog_;
+
 private:
+	void update_viewport();
+	bool check_states();
+
 	GameWindow *window_;
     Player *player_;
     HUDVector *hud_;
     LevelManager *level_;
     Viewport viewport_;
-	
-	void UpdateViewport();
-	bool CheckStates();
     State state_ = PLAYING;
 	bool pausePressed_ = true;
 	GameObject* collisionBuffer_[500];

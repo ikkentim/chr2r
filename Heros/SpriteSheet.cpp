@@ -21,12 +21,12 @@ SpriteSheet::SpriteMap SpriteSheet::spriteSheets_;
 HWND SpriteSheet::hWnd_;
 HDC SpriteSheet::dcBuf_;
 
-void SpriteSheet::SetWindow(HWND hWnd, HDC dcBuf) {
+void SpriteSheet::set_window(HWND hWnd, HDC dcBuf) {
     hWnd_ = hWnd;
     dcBuf_ = dcBuf;
 }
 
-SpriteSheet *SpriteSheet::Get(std::string sheet) {
+SpriteSheet *SpriteSheet::get(std::string sheet) {
     if (spriteSheets_.find(sheet) != spriteSheets_.end()) {
         return spriteSheets_[sheet];
     }
@@ -37,7 +37,7 @@ SpriteSheet *SpriteSheet::Get(std::string sheet) {
     }
 }
 
-void SpriteSheet::Unload() {
+void SpriteSheet::unload() {
     for (SpriteMap::iterator iterator = spriteSheets_.begin(); iterator != spriteSheets_.end(); iterator++) {
         delete iterator->second;
     }
@@ -66,8 +66,8 @@ SpriteSheet::~SpriteSheet(void) {
     ::ReleaseDC(hWnd_, dcImage_);
 }
 
-void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
-	Vector2 offset = pos - vp.Position();
+void SpriteSheet::draw(Texture &texture, Vector2 &pos, Viewport &vp) {
+	Vector2 offset = pos - vp.position();
 
     /* Don't draw if outside of viewport */
     if (offset.x < -texture.width / 2
@@ -83,10 +83,10 @@ void SpriteSheet::Draw(Texture &texture, Vector2 &pos, Viewport &vp) {
     int x = (int)floor(pos.x) - vp.x - texture.width / 2;
     int y = (int)floor(pos.y) - vp.y - texture.height / 2;
 
-    Draw(texture, x, y);
+    draw(texture, x, y);
 }
 
-void SpriteSheet::Draw(Texture &texture, int x, int y) {
+void SpriteSheet::draw(Texture &texture, int x, int y) {
     TransparentBlt(dcBuf_, x, y,
         texture.width, texture.height, dcImage_,
         texture.left, texture.top,

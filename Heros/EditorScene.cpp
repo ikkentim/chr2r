@@ -24,31 +24,31 @@ bool isExtPath(std::string const &fullString, const char *ext) {
 
 bool SetLevelNameCommand(Console * const console, const char *cmd) {
     if (strlen(cmd) == 0) {
-        console->LogNotice("Usage: setlevelname [name]");
+        console->log_notice("Usage: setlevelname [name]");
         return true;
     }
 
-    console->LogNotice("Level name set to %s.", cmd);
-    instance->SetLevelName(cmd);
+    console->log_notice("Level name set to %s.", cmd);
+    instance->level_name(cmd);
     return true;
 }
 bool SetNextLevelCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
     if (!isExtPath(cmd, ".dat")) {
-        console->LogError("Given path is not a .dat file.");
-        console->LogNotice("Usage: setnextlevel [path]");
+        console->log_error("Given path is not a .dat file.");
+        console->log_notice("Usage: setnextlevel [path]");
         return true;
     }
 
     if (!fileExists(cmd)) {
-        console->LogError("File does not exist.");
-        console->LogNotice("Usage: setnextlevel [path]");
+        console->log_error("File does not exist.");
+        console->log_notice("Usage: setnextlevel [path]");
         return true;
     }
 
-    console->LogNotice("Next level set to %s.", cmd);
-    instance->SetNextLevel(cmd);
+    console->log_notice("Next level set to %s.", cmd);
+    instance->next_level(cmd);
 
     return true;
 }
@@ -57,19 +57,19 @@ bool SetBackgroundTextureCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
     if (!isExtPath(cmd, ".bmp")) {
-        console->LogError("Given path is not a .bmp file.");
-        console->LogNotice("Usage: setbackgroundtexture [path]");
+        console->log_error("Given path is not a .bmp file.");
+        console->log_notice("Usage: setbackgroundtexture [path]");
         return true;
     }
 
     if (!fileExists(cmd)) {
-        console->LogError("File does not exist.");
-        console->LogNotice("Usage: setbackgroundtexture [path]");
+        console->log_error("File does not exist.");
+        console->log_notice("Usage: setbackgroundtexture [path]");
         return true;
     }
 
-    console->LogNotice("Background set to %s.", cmd);
-    instance->SetBackground(cmd);
+    console->log_notice("Background set to %s.", cmd);
+    instance->background(cmd);
 
     return true;
 }
@@ -78,19 +78,19 @@ bool SetBackgroundOverlayTextureCommand(Console * const console, const char *cmd
     std::string command = cmd;
 
     if (!isExtPath(cmd, ".bmp")) {
-        console->LogError("Given path is not a .bmp file.");
-        console->LogNotice("Usage: setbackgroundoverlaytexture [path]");
+        console->log_error("Given path is not a .bmp file.");
+        console->log_notice("Usage: setbackgroundoverlaytexture [path]");
         return true;
     }
 
     if (!fileExists(cmd)) {
-        console->LogError("File does not exist.");
-        console->LogNotice("Usage: setbackgroundoverlaytexture [path]");
+        console->log_error("File does not exist.");
+        console->log_notice("Usage: setbackgroundoverlaytexture [path]");
         return true;
     }
 
-    console->LogNotice("Background overlay set to %s.", cmd);
-    instance->SetBackgroundOverlay(cmd);
+    console->log_notice("Background overlay set to %s.", cmd);
+    instance->background_overlay(cmd);
 
     return true;
 }
@@ -99,19 +99,19 @@ bool SetTerrainTextureCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
     if (!isExtPath(cmd, ".bmp")) {
-        console->LogError("Given path is not a .bmp file.");
-        console->LogNotice("Usage: setterraintexture [path]");
+        console->log_error("Given path is not a .bmp file.");
+        console->log_notice("Usage: setterraintexture [path]");
         return true;
     }
 
     if (!fileExists(cmd)) {
-        console->LogError("File does not exist.");
-        console->LogNotice("Usage: setterraintexture [path]");
+        console->log_error("File does not exist.");
+        console->log_notice("Usage: setterraintexture [path]");
         return true;
     }
 
-    console->LogNotice("Terrain set to %s.", cmd);
-    instance->SetTerrain(cmd);
+    console->log_notice("Terrain set to %s.", cmd);
+    instance->terrain(cmd);
 
     return true;
 }
@@ -120,13 +120,13 @@ bool SetBackgroundWidthCommand(Console * const console, const char *cmd) {
     int width = atoi(cmd);
 
     if (width < 100) {
-        console->LogError("Minimum width is 100. %d was given.", width);
-        console->LogNotice("Usage: setbackgroundwidth [width]");
+        console->log_error("Minimum width is 100. %d was given.", width);
+        console->log_notice("Usage: setbackgroundwidth [width]");
         return true;
     }
 
-    console->LogNotice("Background width set to %d.", width);
-    instance->SetBackgroundWidth(width);
+    console->log_notice("Background width set to %d.", width);
+    instance->background_width(width);
 
     return true;
 }
@@ -135,13 +135,13 @@ bool SetBackgroundOverlayWidthCommand(Console * const console, const char *cmd) 
     int width = atoi(cmd);
 
     if (width < 100) {
-        console->LogError("Minimum width is 100. %d was given.", width);
-        console->LogNotice("Usage: setbackgroundoverlaywidth [width]");
+        console->log_error("Minimum width is 100. %d was given.", width);
+        console->log_notice("Usage: setbackgroundoverlaywidth [width]");
         return true;
     }
 
-    console->LogNotice("Background overlay width set to %d.", width);
-    instance->SetBackgroundOverlayWidth(width);
+    console->log_notice("Background overlay width set to %d.", width);
+    instance->background_overlay_width(width);
 
     return true;
 }
@@ -150,13 +150,13 @@ bool SetGridSizeCommand(Console * const console, const char *cmd) {
     int size = atoi(cmd);
 
     if (size < 1) {
-        console->LogError("Minimum grid size is 1. %d was given.", size);
-        console->LogNotice("Usage: setgridsize [size]");
+        console->log_error("Minimum grid size is 1. %d was given.", size);
+        console->log_notice("Usage: setgridsize [size]");
         return true;
     }
 
-    console->LogNotice("Grid size set to %d.", size);
-    instance->SetGridSize(size);
+    console->log_notice("Grid size set to %d.", size);
+    instance->grid_size(size);
 
     return true;
 }
@@ -164,8 +164,8 @@ bool SetGridSizeCommand(Console * const console, const char *cmd) {
 bool SetBottomYCommand(Console * const console, const char *cmd) {
     int y = atoi(cmd);
 
-    console->LogNotice("Bottom Y set to %d", y);
-    instance->SetBottomY(y);
+    console->log_notice("Bottom Y set to %d", y);
+    instance->bottom_y(y);
 
     return true;
 }
@@ -173,8 +173,8 @@ bool SetBottomYCommand(Console * const console, const char *cmd) {
 bool SetEndGameXCommand(Console * const console, const char *cmd) {
     int x = atoi(cmd);
 
-    console->LogNotice("End game X set to %d", x);
-    instance->SetEndGameX(x);
+    console->log_notice("End game X set to %d", x);
+    instance->end_game_x(x);
 
     return true;
 }
@@ -183,14 +183,14 @@ bool SaveLevelCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
     if (!isExtPath(cmd, ".dat")) {
-        console->LogError("Given path is not a .dat file.");
-        console->LogNotice("Usage: savelevel [path]");
+        console->log_error("Given path is not a .dat file.");
+        console->log_notice("Usage: savelevel [path]");
         return true;
     }
 
-    console->LogNotice("Saving to %s...", cmd);
-    instance->Save(cmd);
-    console->LogNotice("Level saved!", cmd);
+    console->log_notice("Saving to %s...", cmd);
+    instance->save(cmd);
+    console->log_notice("Level saved!", cmd);
 
     return true;
 }
@@ -199,22 +199,22 @@ bool LoadLevelCommand(Console * const console, const char *cmd) {
     std::string command = cmd;
 
     if (!isExtPath(cmd, ".dat")) {
-        console->LogError("Given path is not a .dat file.");
-        console->LogNotice("Usage: loadlevel [path]");
+        console->log_error("Given path is not a .dat file.");
+        console->log_notice("Usage: loadlevel [path]");
         return true;
     }
 
-    console->LogNotice("Loading from %s...", cmd);
-    instance->Load(cmd);
-    console->LogNotice("Level loaded!", cmd);
+    console->log_notice("Loading from %s...", cmd);
+    instance->load(cmd);
+    console->log_notice("Level loaded!", cmd);
 }
 
 bool SetPlayerSpawnCommand(Console * const console, const char *cmd) {
     int x, y;
-    instance->GetCurrentPos(x, y);
-    instance->SetPlayerSpawn(x, y);
+    instance->current_pos(x, y);
+    instance->player_spawn(x, y);
 
-    console->LogNotice("Player spawn set to (%d, %d).", x, y);
+    console->log_notice("Player spawn set to (%d, %d).", x, y);
     return true;
 }
 
@@ -234,12 +234,12 @@ bool GoToCommand(Console * const console, const char *cmd) {
     std::string yvalue = command.substr(0, sp);
 
     if (xvalue.length() == 0 || yvalue.length() == 0) {
-        console->LogNotice("Invalid parameters.");
-        console->LogNotice("Usage: goto [x] [y]");
+        console->log_notice("Invalid parameters.");
+        console->log_notice("Usage: goto [x] [y]");
         return true;
     }
 
-    instance->GoTo(atoi(xvalue.c_str()), atoi(yvalue.c_str()));
+    instance->go_to(atoi(xvalue.c_str()), atoi(yvalue.c_str()));
 
     return true;
 }
@@ -249,28 +249,28 @@ bool ToggleLayerCommand(Console * const console, const char *cmd) {
     {
     case 'P':
     case 'p':
-        if (instance->ToggleLayerVisible(LevelManager::PLAYABLE))
-            console->LogNotice("The playable layer is now visible.");
+        if (instance->toggle_layer_visible(LevelManager::PLAYABLE))
+            console->log_notice("The playable layer is now visible.");
         else
-            console->LogNotice("The playable layer is now invisible.");
+            console->log_notice("The playable layer is now invisible.");
         break;
     case 'B':
     case 'b':
-        if (instance->ToggleLayerVisible(LevelManager::BACKGROUND))
-            console->LogNotice("The background layer is now visible.");
+        if (instance->toggle_layer_visible(LevelManager::BACKGROUND))
+            console->log_notice("The background layer is now visible.");
         else
-            console->LogNotice("The background layer is now invisible.");
+            console->log_notice("The background layer is now invisible.");
         break;
     case 'F':
     case 'f':
-        if (instance->ToggleLayerVisible(LevelManager::FOREGROUND))
-            console->LogNotice("The foreground layer is now visible.");
+        if (instance->toggle_layer_visible(LevelManager::FOREGROUND))
+            console->log_notice("The foreground layer is now visible.");
         else
-            console->LogNotice("The foreground layer is now invisible.");
+            console->log_notice("The foreground layer is now invisible.");
         break;
     default:
-        console->LogNotice("Invalid parameters.");
-        console->LogNotice("Usage: togglelayer [layer]");
+        console->log_notice("Invalid parameters.");
+        console->log_notice("Usage: togglelayer [layer]");
         break;
     }
 
@@ -308,8 +308,8 @@ bool SelectTextureCommand(Console * const console, const char *cmd) {
 
     if (xvalue.length() == 0 || yvalue.length() == 0 || 
         wvalue.length() == 0 || hvalue.length() == 0) {
-        console->LogNotice("Invalid parameters.");
-        console->LogNotice("Usage: selecttexture [left] [top] [width] [height]");
+        console->log_notice("Invalid parameters.");
+        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
         return true;
     }
 
@@ -319,30 +319,30 @@ bool SelectTextureCommand(Console * const console, const char *cmd) {
     int height = atoi(hvalue.c_str());
 
     if (x < 0) {
-        console->LogNotice("Minimum left value is 0. %d was given", x);
-        console->LogNotice("Usage: selecttexture [left] [top] [width] [height]");
+        console->log_notice("Minimum left value is 0. %d was given", x);
+        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
         return true;
     }
 
     if (y < 0) {
-        console->LogNotice("Minimum top value is 0. %d was given", y);
-        console->LogNotice("Usage: selecttexture [left] [top] [width] [height]");
+        console->log_notice("Minimum top value is 0. %d was given", y);
+        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
         return true;
     }
 
     if (width < 1) {
-        console->LogNotice("Minimum width value is 1. %d was given", width);
-        console->LogNotice("Usage: selecttexture [left] [top] [width] [height]");
+        console->log_notice("Minimum width value is 1. %d was given", width);
+        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
         return true;
     }
 
     if (height < 1) {
-        console->LogNotice("Minimum height value is 1. %d was given", height);
-        console->LogNotice("Usage: selecttexture [left] [top] [width] [height]");
+        console->log_notice("Minimum height value is 1. %d was given", height);
+        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
         return true;
     }
 
-    instance->SelectTexture(x, y, width, height);
+    instance->select_texture(x, y, width, height);
 
     return true;
 }
@@ -356,33 +356,33 @@ EditorScene::EditorScene(GameWindow *window)
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
 
-    window->console()->RegisterCommand("setterraintexture",
+    window->console()->register_command("setterraintexture",
         SetTerrainTextureCommand);
-    window->console()->RegisterCommand("setbackgroundtexture", 
+    window->console()->register_command("setbackgroundtexture",
         SetBackgroundTextureCommand);
-    window->console()->RegisterCommand("setbackgroundwidth", 
+    window->console()->register_command("setbackgroundwidth",
         SetBackgroundWidthCommand);
-    window->console()->RegisterCommand("setbackgroundoverlaytexture",
+    window->console()->register_command("setbackgroundoverlaytexture",
         SetBackgroundOverlayTextureCommand);
-    window->console()->RegisterCommand("setbackgroundoverlaywidth",
+    window->console()->register_command("setbackgroundoverlaywidth",
         SetBackgroundOverlayWidthCommand);
-    window->console()->RegisterCommand("goto", GoToCommand);
-    window->console()->RegisterCommand("setbottomy", SetBottomYCommand);
-    window->console()->RegisterCommand("setendgamex", SetEndGameXCommand);
-    window->console()->RegisterCommand("savelevel", SaveLevelCommand);
-    window->console()->RegisterCommand("loadlevel", LoadLevelCommand);
-    window->console()->RegisterCommand("setplayerspawn", SetPlayerSpawnCommand);
-    window->console()->RegisterCommand("setlevelname", SetLevelNameCommand);
-    window->console()->RegisterCommand("setnextlevel", SetNextLevelCommand);
-    window->console()->RegisterCommand("togglelayer", ToggleLayerCommand);
-    window->console()->RegisterCommand("setgridsize", SetGridSizeCommand);
-    window->console()->RegisterCommand("selecttexture", SelectTextureCommand);
+    window->console()->register_command("goto", GoToCommand);
+    window->console()->register_command("setbottomy", SetBottomYCommand);
+    window->console()->register_command("setendgamex", SetEndGameXCommand);
+    window->console()->register_command("savelevel", SaveLevelCommand);
+    window->console()->register_command("loadlevel", LoadLevelCommand);
+    window->console()->register_command("setplayerspawn", SetPlayerSpawnCommand);
+    window->console()->register_command("setlevelname", SetLevelNameCommand);
+    window->console()->register_command("setnextlevel", SetNextLevelCommand);
+    window->console()->register_command("togglelayer", ToggleLayerCommand);
+    window->console()->register_command("setgridsize", SetGridSizeCommand);
+    window->console()->register_command("selecttexture", SelectTextureCommand);
 }
 
 EditorScene::~EditorScene() {
 }
 
-void EditorScene::Load(const char *path) {
+void EditorScene::load(const char *path) {
     playableLayer_.clear();
     foregroundLayer_.clear();
     backgroundLayer_.clear();
@@ -398,14 +398,14 @@ void EditorScene::Load(const char *path) {
     playerX_ = header.player_x;
     playerY_ = header.player_y;
 
-    SetLevelName(header.name);
-    SetBackground(header.background_texture);
-    SetBackgroundOverlay(header.background_overlay_texture);
-    SetBackgroundWidth(header.background_width);
-    SetBackgroundOverlayWidth(header.background_overlay_width);
-    SetNextLevel(header.next_level);
-    SetTerrain(header.terrain_texture);
-    SetEndGameX(header.end_game_x);
+    level_name(header.name);
+    background(header.background_texture);
+    background_overlay(header.background_overlay_texture);
+    background_width(header.background_width);
+    background_overlay_width(header.background_overlay_width);
+    next_level(header.next_level);
+    terrain(header.terrain_texture);
+    end_game_x(header.end_game_x);
 
     ObjectData object_buffer;
     for (int i = 0; i < header.object_count; i++) {
@@ -430,7 +430,7 @@ void EditorScene::Load(const char *path) {
     }
 }
 
-void EditorScene::Save(const char *path) {
+void EditorScene::save(const char *path) {
     LevelHeader lvl;
     lvl.bottom = bottomY_;
     lvl.player_x = playerX_;
@@ -471,14 +471,14 @@ void EditorScene::Save(const char *path) {
 
 }
 
-void EditorScene::Start() {
-    /* temporary defaults */
-    SetBackground("spr/background01.bmp");
-    SetTerrain("spr/terrain.bmp");
-    SetBackgroundWidth(727);
+void EditorScene::start() {
+    /* useful defaults */
+    background("spr/background01.bmp");
+    terrain("spr/terrain.bmp");
+    background_width(727);
 }
 
-void EditorScene::Update(double delta, Keys keys) {
+void EditorScene::update(double delta, Keys keys) {
 
     auto accel = MOVEMENT_ACCEL * max(1, gridSize_ / 4) * delta;
     /* Movement keys */
@@ -567,16 +567,16 @@ void EditorScene::Update(double delta, Keys keys) {
                 /* Actors */
                 ActorData data;
                 data.type = currentActorType_;
-                GetCurrentPos(data.x, data.y);
+                current_pos(data.x, data.y);
 
-                AddActor(data);
+                add_actor(data);
             }
             else {
                 /* Objects */
                 if (currentObjectType_ != BLOCK || 
                     (selectedTexture_.width > 0 && selectedTexture_.height > 0)) {
                     ObjectData data;
-                    GetCurrentPos(data.x, data.y);
+                    current_pos(data.x, data.y);
                     data.layer = currentLayer_;
                     data.texture = selectedTexture_;
                     data.type = currentObjectType_;
@@ -594,29 +594,29 @@ void EditorScene::Update(double delta, Keys keys) {
                         data.height = selectedTexture_.height;
                     }
 
-                    AddObject(GetCurrentLayer(), data);
+                    add_object(current_layer(), data);
                 }
             }
             isKeyDown_ = true;
         }
         if (keys & KEY_DELETE) {
             int x, y;
-            GetCurrentPos(x, y);
+            current_pos(x, y);
             if (currentLayer_ == LevelManager::MOVABLE) {
-                RemoveActor(Vector2(x, y));
+                remove_actor(Vector2(x, y));
             }
             else {
-                RemoveObject(GetCurrentLayer(), Vector2(x, y));
+                remove_object(current_layer(), Vector2(x, y));
             }
             isKeyDown_ = true;
         }
     
 
     /* Update viewport */
-    UpdateViewport();
+    update_viewport();
 }
 
-void EditorScene::AddObject(std::vector<ObjectData> *layer, ObjectData data) {
+void EditorScene::add_object(std::vector<ObjectData> *layer, ObjectData data) {
     for (std::vector<ObjectData>::iterator it = layer->begin(); it != layer->end();)
     {
         ObjectData check = *it;
@@ -635,7 +635,7 @@ void EditorScene::AddObject(std::vector<ObjectData> *layer, ObjectData data) {
     layer->push_back(data);
 }
 
-void EditorScene::RemoveObject(std::vector<ObjectData> *layer, Vector2 pos) {
+void EditorScene::remove_object(std::vector<ObjectData> *layer, Vector2 pos) {
     for (std::vector<ObjectData>::iterator it = layer->begin(); it != layer->end();)
     {
         ObjectData check = *it;
@@ -650,30 +650,17 @@ void EditorScene::RemoveObject(std::vector<ObjectData> *layer, Vector2 pos) {
         }
     }
 }
-Vector2 EditorScene::GetActorSize(ActorType type) {
+Vector2 EditorScene::actor_size_for_actor(ActorType type) {
     /* TODO: improve this block */
     return Vector2(16, 16);
-
-    switch (type) {
-    case DOG:
-        return Vector2();
-    case FLYING_ENEMIE:
-        return Vector2();
-    case JUMPING_ENEMIE:
-        return Vector2();
-    case CHARACTER:
-        return Vector2();
-    default:
-        return Vector2();
-    }
 }
 
-void EditorScene::AddActor(ActorData data) {
-    auto size = GetActorSize(data.type);
+void EditorScene::add_actor(ActorData data) {
+    auto size = actor_size_for_actor(data.type);
     for (std::vector<ActorData>::iterator it = actors_.begin(); it != actors_.end();)
     {
         ActorData check = *it;
-        auto checksize = GetActorSize(check.type);
+        auto checksize = actor_size_for_actor(check.type);
         if (!(data.x - size.x / 2 >= check.x + checksize.x / 2 ||
             data.x + size.x / 2 <= check.x - checksize.x / 2 ||
             data.y - size.y / 2 >= check.y + checksize.y / 2 ||
@@ -688,11 +675,11 @@ void EditorScene::AddActor(ActorData data) {
     actors_.push_back(data);
 }
 
-void EditorScene::RemoveActor(Vector2 pos) {
+void EditorScene::remove_actor(Vector2 pos) {
     for (std::vector<ActorData>::iterator it = actors_.begin(); it != actors_.end();)
     {
         ActorData check = *it;
-        auto checksize = GetActorSize(check.type);
+        auto checksize = actor_size_for_actor(check.type);
         if (!(pos.x >= check.x + checksize.x / 2 ||
             pos.x <= check.x - checksize.x / 2 ||
             pos.y >= check.y + checksize.y / 2 ||
@@ -705,7 +692,7 @@ void EditorScene::RemoveActor(Vector2 pos) {
     }
 }
 
-void EditorScene::UpdateViewport() {
+void EditorScene::update_viewport() {
     /* Minimum distance between window edge and the player*/
     const int borderOffset = 215;
 
@@ -726,20 +713,20 @@ void EditorScene::UpdateViewport() {
     else if (posy > maxy) viewport_.y += posy - maxy;
 }
 
-void EditorScene::DrawObject(ObjectData data) {
+void EditorScene::draw_object(ObjectData data) {
     switch (data.type) {
     case BLOCK:
-        terrain_->Draw(data.texture, Vector2(data.x, data.y), viewport_);
+        terrain_->draw(data.texture, Vector2(data.x, data.y), viewport_);
         break;
     case COIN:
-        defaultSpriteSheet_->Draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
+        defaultSpriteSheet_->draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
         break;
     case JUMPER:
-        bumperSpriteSheet_->Draw(Texture(3, 11, 19, 20), Vector2(data.x, data.y), viewport_);
+        bumperSpriteSheet_->draw(Texture(3, 11, 19, 20), Vector2(data.x, data.y), viewport_);
         break;
     }
 }
-void EditorScene::Render(HDC graphics) {
+void EditorScene::render(HDC graphics) {
     /* Draw background */
     const int image_width = backgroundWidth_;
     const int image2_width = backgroundOverlayWidth_;
@@ -747,29 +734,29 @@ void EditorScene::Render(HDC graphics) {
     Texture tex2 = { 0, 0, image2_width, viewport_.height };
     for (int skyx = -(viewport_.x / 2) % image_width - image_width;
         skyx <= viewport_.width; skyx += image_width) {
-        background_->Draw(tex, skyx, 0);
+        background_->draw(tex, skyx, 0);
     }
     if (backgroundOverlay_)
         for (int skyx = -(viewport_.x / 3) % image2_width - image2_width;
             skyx <= viewport_.width; skyx += image2_width) {
-        backgroundOverlay_->Draw(tex2, skyx, 0);
+        backgroundOverlay_->draw(tex2, skyx, 0);
     }
 
     /* Draw terrain */
     if (terrain_) {
         if (showBackgroundLayer_) {
             for (ObjectData object : backgroundLayer_) {
-                DrawObject(object);
+                draw_object(object);
             }
         }
         if (showPlayableLayer_) {
             for (ObjectData object : playableLayer_) {
-                DrawObject(object);
+                draw_object(object);
             }
         }
         if (showForegroundLayer_) {
             for (ObjectData object : foregroundLayer_) {
-                DrawObject(object);
+                draw_object(object);
             }
         }
     }
@@ -777,16 +764,16 @@ void EditorScene::Render(HDC graphics) {
     for (ActorData actor : actors_) {
         switch (actor.type) {
         case DOG:
-            metalGearSpriteSheet_->Draw(Texture(75, 280, 33, 18 ), Vector2(actor.x, actor.y), viewport_);
+            metalGearSpriteSheet_->draw(Texture(75, 280, 33, 18 ), Vector2(actor.x, actor.y), viewport_);
             break;
         case FLYING_ENEMIE:
-            zeldaEnemiesSpriteSheet_->Draw(Texture(56, 241, 18, 18), Vector2(actor.x, actor.y), viewport_);
+            zeldaEnemiesSpriteSheet_->draw(Texture(56, 241, 18, 18), Vector2(actor.x, actor.y), viewport_);
             break;
         case JUMPING_ENEMIE:
-            zeldaEnemiesSpriteSheet_->Draw(Texture(164, 288, 12, 17), Vector2(actor.x, actor.y), viewport_);
+            zeldaEnemiesSpriteSheet_->draw(Texture(164, 288, 12, 17), Vector2(actor.x, actor.y), viewport_);
             break;
         case CHARACTER:
-            marioSpriteSheet_->Draw(Texture(91, 0, 16, 28), Vector2(actor.x, actor.y), viewport_);
+            marioSpriteSheet_->draw(Texture(91, 0, 16, 28), Vector2(actor.x, actor.y), viewport_);
 
             break;
         }
@@ -801,7 +788,7 @@ void EditorScene::Render(HDC graphics) {
 
     /* Draw cursor */
     int cx, cy;
-    GetCurrentPos(cx, cy);
+    current_pos(cx, cy);
     int x = cx - viewport_.x;
     int y = cy - viewport_.y;
 

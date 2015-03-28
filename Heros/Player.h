@@ -26,19 +26,21 @@ public:
 	};
 
     Player(class GameScene *, Vector2);
-    void Update(GameScene *, double, Keys) override;
-	void Render(Viewport &) override;
-	bool Die();
-	void AddVelocity(Vector2);
-	Vector2 GetVelocity(){
+    void update(GameScene *, double, Keys) override;
+	void render(Viewport &) override;
+	bool die();
+	void add_velocity(Vector2);
+
+	Vector2 velocity(){
 		return velocity_;
 	}
-	bool Player::IsDeadState(State);
-	bool GetSneaking(){
+	bool is_sneaking(){
 		return isSneaking_;
 	}
 
 private:
+	bool Player::is_dead_state(State);
+
     SpriteSheet *spriteSheet_;
     Keys keys_ = KEY_NONE;
     bool isLastMovementLeft_ = false;
@@ -51,6 +53,6 @@ private:
     AnimationState state_;
     irrklang::ISoundEngine *soundEngine_;
 
-    AnimationState GetAnimationState(int &frames);
+    AnimationState get_animation_state(int &frames);
 	int lives_ = 3;
 };

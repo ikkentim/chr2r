@@ -11,10 +11,8 @@ AABB::AABB(Vector2 center, Vector2 halfDimension)
 	halfDimension_ = halfDimension;
 }
 
-bool AABB::ContainsPoint(GameObject* gameObject)
+bool AABB::contains_point(Vector2 position)
 {
-	Vector2 position = gameObject->Position();
-
 	bool tmp = !(center_.x - halfDimension_.x > position.x ||
 		center_.x + halfDimension_.x < position.x ||
 		center_.y - halfDimension_.y > position.y ||
@@ -23,18 +21,16 @@ bool AABB::ContainsPoint(GameObject* gameObject)
 	return tmp;
 }
 
-bool AABB::IntersectsWith(AABB *box)
+bool AABB::intersects_with(AABB *box)
 {
 	// PERFORMANCE
-	Vector2 boxCenter = box->Center();
-	Vector2 boxHalfDimension = box->HalfDimension();
-	Vector2 center = Center();
-	Vector2 halfDimension = HalfDimension();
+	Vector2 boxCenter = box->center();
+	Vector2 boxHalfDimension = box->half_dimension();
 
-	bool tmp = !(boxCenter.x - boxHalfDimension.x > center.x + halfDimension.x
-		|| boxCenter.x + boxHalfDimension.x < center.x - halfDimension.x
-		|| boxCenter.y - boxHalfDimension.y > center.y + halfDimension.y
-		|| boxCenter.y + boxHalfDimension.y < center.y - halfDimension.y);
+	bool tmp = !(boxCenter.x - boxHalfDimension.x > center_.x + halfDimension_.x
+		|| boxCenter.x + boxHalfDimension.x < center_.x - halfDimension_.x
+		|| boxCenter.y - boxHalfDimension.y > center_.y + halfDimension_.y
+		|| boxCenter.y + boxHalfDimension.y < center_.y - halfDimension_.y);
 
 	return tmp;
 }

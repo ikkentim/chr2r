@@ -9,15 +9,15 @@
 #define TEXTURE_HEIGHT      (28)
 
 
-EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/metalgearsheet.bmp")){
+EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos, SpriteSheet::get("spr/metalgearsheet.bmp")){
 
 	velocity_ = Vector2(WALK_SPEED, 0);
 }
 
 EnnemyDog :: ~EnnemyDog(){}
 
-void EnnemyDog::Render(Viewport &vp) {
-	if (IsDeadState(GetState())){
+void EnnemyDog::render(Viewport &vp) {
+	if (is_dead_state(state())){
 		return;
 	}
 	Texture texture_left = {
@@ -32,12 +32,9 @@ void EnnemyDog::Render(Viewport &vp) {
 
 	switch (state_) {
 	case RUN_RIGHT:
-	//	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(texture_right, position_, vp);
 		tex = texture_right;
 		break;
 	case RUN_LEFT:
-
-	//	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(texture_left, position_, vp);
 		tex = texture_left;
 		break;
 	}
@@ -48,19 +45,19 @@ void EnnemyDog::Render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 
 
-	spriteSheet()->Draw(tex, position_, vp);
+	spriteSheet()->draw(tex, position_, vp);
 		
 }
 
-void EnnemyDog::Update(GameScene *scene, double delta, Keys keys){
-	if (IsDeadState(GetState())){
+void EnnemyDog::update(GameScene *scene, double delta, Keys keys){
+	if (is_dead_state(state())){
 		return;
 	}
 	animationTime_ += delta;
 
 
 	/* Update the enemi animation. */
-	AnimationState new_state = GetAnimationState(animationFrames_);
+	AnimationState new_state = get_animation_state(animationFrames_);
 
 	if (state_ != new_state) {
 		state_ = new_state;
@@ -72,10 +69,10 @@ void EnnemyDog::Update(GameScene *scene, double delta, Keys keys){
 		animationIndex_ = (animationIndex_ + 1) % 2;
 }
 
-	Falling(delta);
+	process_gravity(delta);
 }
 
-EnnemyDog::AnimationState EnnemyDog::GetAnimationState(int &frames) {
+EnnemyDog::AnimationState EnnemyDog::get_animation_state(int &frames) {
 	frames = 1;
 
 	if (velocity_.x > 0) { /* Is moving right. */

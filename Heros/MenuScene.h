@@ -7,10 +7,10 @@
 class MenuScene : public Scene {
 public:
 	MenuScene(GameWindow *);
-	virtual ~MenuScene();
-	virtual void Start();
-	void Update(double, Keys);
-    void Render(HDC graphics);
+    ~MenuScene() override;
+    void start() override;
+    void update(double, Keys) override;
+    void render(HDC graphics) override;
 
 private:
     SpriteSheet *spriteSheet_;

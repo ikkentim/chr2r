@@ -10,6 +10,6 @@ private:
 	double fps_ = 0.0;
 public:
 	Fps();
-	void Update();
-	int GetFps();
+	void update();
+	int fps();
 };

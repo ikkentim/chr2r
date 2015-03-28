@@ -6,15 +6,14 @@
 class GameOverScene : public Scene {
 public:
 	GameOverScene(GameWindow *);
-	virtual ~GameOverScene();
-	virtual void Start();
-	void Update(double, Keys);
-	void Render(HDC graphics);
+    ~GameOverScene() override;
+    void start() override;
+    void update(double, Keys) override;
+	void render(HDC graphics) override;
+
 private:
 	SpriteSheet *spriteSheet_;
 	double position_;
-
 	GameWindow *window_;
-
 	double time_ = 0;
 };

@@ -18,11 +18,11 @@
 #define TEX_HEIGHT_SNEAK    (28)
 
 Player::Player(GameScene *scene, Vector2 pos) :Actor(pos, Vector2(14, 27)) {
-    spriteSheet_ = SpriteSheet::Get("spr/MainCharacter.bmp");
-    soundEngine_ = scene->SoundEngine();
+    spriteSheet_ = SpriteSheet::get("spr/MainCharacter.bmp");
+    soundEngine_ = scene->sound_engine();
 }
 
-void Player::Update(GameScene *scene, double delta, Keys keys) {
+void Player::update(GameScene *scene, double delta, Keys keys) {
 	animationTime_ += delta;
 
     /* Update movement according to keys pressed. */
@@ -42,7 +42,7 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
             ? velocity_ 
             : (Vector2(-WALK_FRICTION, 0) * delta);
     }
-    if (keys & KEY_JUMP && IsOnGround() && !isSneaking_) {
+    if (keys & KEY_JUMP && is_on_ground() && !isSneaking_) {
         velocity_.y = JUMP_SPEED;
 
         soundEngine_->play2D("snd/smb_jump-small.wav");
@@ -55,16 +55,16 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
 	isSneaking_ = !!(keys & KEY_SNEAK);
 
 	if (isSneaking_&& !isSplashing_){
-		spriteSheet_ = SpriteSheet::Get("spr/Box_Sprite.bmp");
+		spriteSheet_ = SpriteSheet::get("spr/Box_Sprite.bmp");
 	}
 	else{
-		spriteSheet_ = SpriteSheet::Get("spr/MainCharacter.bmp");
+		spriteSheet_ = SpriteSheet::get("spr/MainCharacter.bmp");
 	}
 
     /* Check player at end of level? */
-    if (scene->level()->isEndGameRight() == 
-        position_.x > scene->level()->endGameX()) {
-        scene->SetState(GameScene::REACHED_END);
+    if (scene->level()->is_end_game_right() == 
+        position_.x > scene->level()->end_game_x()) {
+        scene->state(GameScene::REACHED_END);
         return;
     }
 
@@ -72,12 +72,12 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
         isLastMovementLeft_ = velocity_.x < 0;
 
     /* Process science */
-    Falling(delta);
-	velocity_.TruncateX((keys & KEY_DASH) ? DASH_SPEED:WALK_SPEED);
+    process_gravity(delta);
+	velocity_.truncate_x((keys & KEY_DASH) ? DASH_SPEED:WALK_SPEED);
 
 
     /* Update the player animation. */
-    AnimationState new_state = GetAnimationState(animationFrames_);
+    AnimationState new_state = get_animation_state(animationFrames_);
 
     if (state_ != new_state) {
         state_ = new_state;
@@ -111,7 +111,7 @@ void Player::Update(GameScene *scene, double delta, Keys keys) {
     }
 }
 
-Player::AnimationState Player::GetAnimationState(int &frames) {
+Player::AnimationState Player::get_animation_state(int &frames) {
     frames = 1;
 	
 		if (isDucking_) { /* Is ducking. */
@@ -123,7 +123,7 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
 			}
 			return isLastMovementLeft_ ? DUCK_LEFT : DUCK_RIGHT;
 		}
-		else if (GetState() == GameScene ::PLAYER_DEAD){
+		else if (state() == GameScene::PLAYER_DEAD){
 			OutputDebugString("dead");
 			return DEAD_;
 		}
@@ -131,10 +131,10 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
 			frames = 2;
 			return SPLASHING_;
 		}
-		else if (velocity_.IsZero()){ /* Not moving at all. */
+		else if (velocity_.is_zero()){ /* Not moving at all. */
 			return isLastMovementLeft_ ? IDLE_LEFT : IDLE_RIGHT;
 		}
-		else if (IsOnGround()) {/* Is on ground. */
+		else if (is_on_ground()) {/* Is on ground. */
 
 			if (velocity_.x > 0) { /* Is moving right. */
 				if (keys_ & KEY_LEFT) {
@@ -174,7 +174,7 @@ Player::AnimationState Player::GetAnimationState(int &frames) {
 		}
 }
 
-void Player::Render(Viewport &vp) {
+void Player::render(Viewport &vp) {
     Texture texture = { 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT };
 
     switch (state_) {
@@ -280,16 +280,11 @@ void Player::Render(Viewport &vp) {
 
     texture.left += idx * TEXTURE_WIDTH;
 
-    spriteSheet_->Draw(texture, position_, vp);
+    spriteSheet_->draw(texture, position_, vp);
 }
 
-bool Player::Die()
+bool Player::die()
 {
-	if (IsDeadState(GetState())){
-		OutputDebugString("dead !! 2");
-		
-		}
-	
 	if (--lives_ <= 0)
 		return true;
 
@@ -299,7 +294,7 @@ bool Player::Die()
 	return false;
 }
 
-bool Player::IsDeadState(State state){
+bool Player::is_dead_state(State state){
 	if (state == DEAD){
 		
 		return true;
@@ -307,6 +302,6 @@ bool Player::IsDeadState(State state){
 	return false;
 }
 
-void Player::AddVelocity(Vector2 vec){
+void Player::add_velocity(Vector2 vec){
 	velocity_ += vec;
 }

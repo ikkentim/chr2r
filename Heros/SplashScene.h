@@ -6,10 +6,11 @@
 class SplashScene : public Scene {
 public:
     SplashScene(GameWindow *);
-    virtual ~SplashScene();
-	virtual void Start();
-    void Update(double, Keys);
-    void Render(HDC graphics);
+    ~SplashScene() override;
+    void start() override;
+    void update(double, Keys) override;
+    void render(HDC graphics) override;
+
 private:
     SpriteSheet *spriteSheet_;
     double time_;

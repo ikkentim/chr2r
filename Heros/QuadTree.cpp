@@ -13,10 +13,10 @@ QuadTree::QuadTree(AABB* box)
 	}
 }
 
-bool QuadTree::Insert(GameObject *object)
+bool QuadTree::insert_object(GameObject *object)
 {
 	// Ignore objects that do not belong in this quad tree
-	if (!boundary_->ContainsPoint(object))
+	if (!boundary_->contains_point(object->position()))
 		return false;
 
 	// If there is space in this quad tree, add the object here
@@ -28,21 +28,21 @@ bool QuadTree::Insert(GameObject *object)
 
 	// Otherwise, subdivide and then add the point to whichever node will accept it
 	if (northWest_ == NULL)
-		Subdivide();
+		subdivide();
 
-	if (northWest_->Insert(object)) return true;
-	if (northEast_->Insert(object)) return true;
-	if (southWest_->Insert(object)) return true;
-	if (southEast_->Insert(object)) return true;
+	if (northWest_->insert_object(object)) return true;
+    if (northEast_->insert_object(object)) return true;
+    if (southWest_->insert_object(object)) return true;
+    if (southEast_->insert_object(object)) return true;
 
 	// Otherwise, the point cannot be inserted for some unknown reason (this should never happen)
 	return false;
 }
 
-bool QuadTree::Delete(GameObject* object)
+bool QuadTree::delete_object(GameObject* object)
 {
 	// Ignore objects that do not belong in this quad tree
-	if (!boundary_->ContainsPoint(object))
+	if (!boundary_->contains_point(object->position()))
 		return false;
 
 	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
@@ -69,24 +69,24 @@ bool QuadTree::Delete(GameObject* object)
 	if (northWest_ == NULL)
 		return false;
 
-	if (northWest_->Delete(object)) return true;
-	if (northEast_->Delete(object)) return true;
-	if (southWest_->Delete(object)) return true;
-	if (southEast_->Delete(object)) return true;
+	if (northWest_->delete_object(object)) return true;
+    if (northEast_->delete_object(object)) return true;
+    if (southWest_->delete_object(object)) return true;
+    if (southEast_->delete_object(object)) return true;
 
 	// Otherwise, the point cannot be deleted
 	return false;
 }
 
-int QuadTree::QueryRange(AABB *box, GameObject** objects, int count)
+int QuadTree::query_range(AABB *box, GameObject** objects, int count)
 {
 	// Automatically abort if the range does not intersect this quad
-	if (!boundary_->IntersectsWith(box))
+	if (!boundary_->intersects_with(box))
 		return count; // empty list
 
 	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
 		if (points_[i] != NULL)
-			if (box->ContainsPoint(points_[i]))
+			if (box->contains_point(points_[i]->position()))
 				objects[count++] = points_[i];
 
 	// Terminate here, if there are no children
@@ -94,30 +94,30 @@ int QuadTree::QueryRange(AABB *box, GameObject** objects, int count)
 		return count;
 
 	// Otherwise, add the points from the children
-	count = northWest_->QueryRange(box, objects, count);
-	count = northEast_->QueryRange(box, objects, count);
-	count = southWest_->QueryRange(box, objects, count);
-	count = southEast_->QueryRange(box, objects, count);
+	count = northWest_->query_range(box, objects, count);
+    count = northEast_->query_range(box, objects, count);
+    count = southWest_->query_range(box, objects, count);
+    count = southEast_->query_range(box, objects, count);
 
 	return count;
 }
 
-void QuadTree::Subdivide()
+void QuadTree::subdivide()
 {
-	Vector2 halfHalfDimension = boundary_->HalfDimension() / 2;
+	Vector2 halfHalfDimension = boundary_->half_dimension() / 2;
 
-	AABB* nwBox = new AABB(boundary_->Center() - halfHalfDimension, halfHalfDimension);
+	AABB* nwBox = new AABB(boundary_->center() - halfHalfDimension, halfHalfDimension);
 
 	Vector2 neVector2;
-	neVector2.x = boundary_->Center().x + halfHalfDimension.x;
-	neVector2.y = boundary_->Center().y - halfHalfDimension.y;
+	neVector2.x = boundary_->center().x + halfHalfDimension.x;
+	neVector2.y = boundary_->center().y - halfHalfDimension.y;
 	AABB* neBox = new AABB(neVector2, halfHalfDimension);
 
-	AABB* seBox = new AABB(boundary_->Center() + halfHalfDimension, halfHalfDimension);
+	AABB* seBox = new AABB(boundary_->center() + halfHalfDimension, halfHalfDimension);
 
 	Vector2 swVector2;
-	swVector2.x = boundary_->Center().x - halfHalfDimension.x;
-	swVector2.y = boundary_->Center().y + halfHalfDimension.y;
+	swVector2.x = boundary_->center().x - halfHalfDimension.x;
+	swVector2.y = boundary_->center().y + halfHalfDimension.y;
 	AABB* swBox = new AABB(swVector2, halfHalfDimension);
 
 	northWest_ = new QuadTree(nwBox);
