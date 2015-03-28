@@ -7,8 +7,6 @@
 
 #define MOVEMENT_ACCEL      (0.0004)
 
-EditorScene *instance; /* todo: find a better way than just keeping a ref */
-
 bool fileExists(const char * file) {
     std::string fp = std::string(_getcwd(NULL, 0)).append("/").append(file);
 
@@ -17,366 +15,19 @@ bool fileExists(const char * file) {
     return !!ifile;
 }
 
-bool isExtPath(std::string const &fullString, const char *ext) {
-    return fullString.length() >= 4 && 
-        (0 == fullString.compare(fullString.length() - strlen(ext), strlen(ext), ext));
-}
-
-bool SetLevelNameCommand(Console * const console, const char *cmd) {
-    if (strlen(cmd) == 0) {
-        console->log_notice("Usage: setlevelname [name]");
-        return true;
-    }
-
-    console->log_notice("Level name set to %s.", cmd);
-    instance->level_name(cmd);
-    return true;
-}
-bool SetNextLevelCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-    if (!isExtPath(cmd, ".dat")) {
-        console->log_error("Given path is not a .dat file.");
-        console->log_notice("Usage: setnextlevel [path]");
-        return true;
-    }
-
-    if (!fileExists(cmd)) {
-        console->log_error("File does not exist.");
-        console->log_notice("Usage: setnextlevel [path]");
-        return true;
-    }
-
-    console->log_notice("Next level set to %s.", cmd);
-    instance->next_level(cmd);
-
-    return true;
-}
-
-bool SetBackgroundTextureCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-    if (!isExtPath(cmd, ".bmp")) {
-        console->log_error("Given path is not a .bmp file.");
-        console->log_notice("Usage: setbackgroundtexture [path]");
-        return true;
-    }
-
-    if (!fileExists(cmd)) {
-        console->log_error("File does not exist.");
-        console->log_notice("Usage: setbackgroundtexture [path]");
-        return true;
-    }
-
-    console->log_notice("Background set to %s.", cmd);
-    instance->background(cmd);
-
-    return true;
-}
-
-bool SetBackgroundOverlayTextureCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-    if (!isExtPath(cmd, ".bmp")) {
-        console->log_error("Given path is not a .bmp file.");
-        console->log_notice("Usage: setbackgroundoverlaytexture [path]");
-        return true;
-    }
-
-    if (!fileExists(cmd)) {
-        console->log_error("File does not exist.");
-        console->log_notice("Usage: setbackgroundoverlaytexture [path]");
-        return true;
-    }
-
-    console->log_notice("Background overlay set to %s.", cmd);
-    instance->background_overlay(cmd);
-
-    return true;
-}
-
-bool SetTerrainTextureCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-    if (!isExtPath(cmd, ".bmp")) {
-        console->log_error("Given path is not a .bmp file.");
-        console->log_notice("Usage: setterraintexture [path]");
-        return true;
-    }
-
-    if (!fileExists(cmd)) {
-        console->log_error("File does not exist.");
-        console->log_notice("Usage: setterraintexture [path]");
-        return true;
-    }
-
-    console->log_notice("Terrain set to %s.", cmd);
-    instance->terrain(cmd);
-
-    return true;
-}
-
-bool SetBackgroundWidthCommand(Console * const console, const char *cmd) {
-    int width = atoi(cmd);
-
-    if (width < 100) {
-        console->log_error("Minimum width is 100. %d was given.", width);
-        console->log_notice("Usage: setbackgroundwidth [width]");
-        return true;
-    }
-
-    console->log_notice("Background width set to %d.", width);
-    instance->background_width(width);
-
-    return true;
-}
-
-bool SetBackgroundOverlayWidthCommand(Console * const console, const char *cmd) {
-    int width = atoi(cmd);
-
-    if (width < 100) {
-        console->log_error("Minimum width is 100. %d was given.", width);
-        console->log_notice("Usage: setbackgroundoverlaywidth [width]");
-        return true;
-    }
-
-    console->log_notice("Background overlay width set to %d.", width);
-    instance->background_overlay_width(width);
-
-    return true;
-}
-
-bool SetGridSizeCommand(Console * const console, const char *cmd) {
-    int size = atoi(cmd);
-
-    if (size < 1) {
-        console->log_error("Minimum grid size is 1. %d was given.", size);
-        console->log_notice("Usage: setgridsize [size]");
-        return true;
-    }
-
-    console->log_notice("Grid size set to %d.", size);
-    instance->grid_size(size);
-
-    return true;
-}
-
-bool SetBottomYCommand(Console * const console, const char *cmd) {
-    int y = atoi(cmd);
-
-    console->log_notice("Bottom Y set to %d", y);
-    instance->bottom_y(y);
-
-    return true;
-}
-
-bool SetEndGameXCommand(Console * const console, const char *cmd) {
-    int x = atoi(cmd);
-
-    console->log_notice("End game X set to %d", x);
-    instance->end_game_x(x);
-
-    return true;
-}
-
-bool SaveLevelCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-    if (!isExtPath(cmd, ".dat")) {
-        console->log_error("Given path is not a .dat file.");
-        console->log_notice("Usage: savelevel [path]");
-        return true;
-    }
-
-    console->log_notice("Saving to %s...", cmd);
-    instance->save(cmd);
-    console->log_notice("Level saved!", cmd);
-
-    return true;
-}
-
-bool LoadLevelCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-    if (!isExtPath(cmd, ".dat")) {
-        console->log_error("Given path is not a .dat file.");
-        console->log_notice("Usage: loadlevel [path]");
-        return true;
-    }
-
-    console->log_notice("Loading from %s...", cmd);
-    instance->load(cmd);
-    console->log_notice("Level loaded!", cmd);
-}
-
-bool SetPlayerSpawnCommand(Console * const console, const char *cmd) {
-    int x, y;
-    instance->current_pos(x, y);
-    instance->player_spawn(x, y);
-
-    console->log_notice("Player spawn set to (%d, %d).", x, y);
-    return true;
-}
-
-bool GoToCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-
-    int sp = command.find(' ');
-    if (sp == -1) sp = command.length();
-    std::string xvalue = command.substr(0, sp);
-
-    command.erase(0, sp);
-    while (command.find(' ', 0) == 0) command.erase(0, 1);
-
-    sp = command.find(' ');
-    if (sp == -1) sp = command.length();
-    std::string yvalue = command.substr(0, sp);
-
-    if (xvalue.length() == 0 || yvalue.length() == 0) {
-        console->log_notice("Invalid parameters.");
-        console->log_notice("Usage: goto [x] [y]");
-        return true;
-    }
-
-    instance->go_to(atoi(xvalue.c_str()), atoi(yvalue.c_str()));
-
-    return true;
-}
-
-bool ToggleLayerCommand(Console * const console, const char *cmd) {
-    switch (cmd[0])
-    {
-    case 'P':
-    case 'p':
-        if (instance->toggle_layer_visible(LevelManager::PLAYABLE))
-            console->log_notice("The playable layer is now visible.");
-        else
-            console->log_notice("The playable layer is now invisible.");
-        break;
-    case 'B':
-    case 'b':
-        if (instance->toggle_layer_visible(LevelManager::BACKGROUND))
-            console->log_notice("The background layer is now visible.");
-        else
-            console->log_notice("The background layer is now invisible.");
-        break;
-    case 'F':
-    case 'f':
-        if (instance->toggle_layer_visible(LevelManager::FOREGROUND))
-            console->log_notice("The foreground layer is now visible.");
-        else
-            console->log_notice("The foreground layer is now invisible.");
-        break;
-    default:
-        console->log_notice("Invalid parameters.");
-        console->log_notice("Usage: togglelayer [layer]");
-        break;
-    }
-
-    return true;
-}
-
-bool SelectTextureCommand(Console * const console, const char *cmd) {
-    std::string command = cmd;
-
-
-    int sp = command.find(' ');
-    if (sp == -1) sp = command.length();
-    std::string xvalue = command.substr(0, sp);
-
-    command.erase(0, sp);
-    while (command.find(' ', 0) == 0) command.erase(0, 1);
-
-    sp = command.find(' ');
-    if (sp == -1) sp = command.length();
-    std::string yvalue = command.substr(0, sp);
-
-    command.erase(0, sp);
-    while (command.find(' ', 0) == 0) command.erase(0, 1);
-
-    sp = command.find(' ');
-    if (sp == -1) sp = command.length();
-    std::string wvalue = command.substr(0, sp);
-
-    command.erase(0, sp);
-    while (command.find(' ', 0) == 0) command.erase(0, 1);
-
-    sp = command.find(' ');
-    if (sp == -1) sp = command.length();
-    std::string hvalue = command.substr(0, sp);
-
-    if (xvalue.length() == 0 || yvalue.length() == 0 || 
-        wvalue.length() == 0 || hvalue.length() == 0) {
-        console->log_notice("Invalid parameters.");
-        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
-        return true;
-    }
-
-    int x = atoi(xvalue.c_str());
-    int y = atoi(yvalue.c_str());
-    int width = atoi(wvalue.c_str());
-    int height = atoi(hvalue.c_str());
-
-    if (x < 0) {
-        console->log_notice("Minimum left value is 0. %d was given", x);
-        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
-        return true;
-    }
-
-    if (y < 0) {
-        console->log_notice("Minimum top value is 0. %d was given", y);
-        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
-        return true;
-    }
-
-    if (width < 1) {
-        console->log_notice("Minimum width value is 1. %d was given", width);
-        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
-        return true;
-    }
-
-    if (height < 1) {
-        console->log_notice("Minimum height value is 1. %d was given", height);
-        console->log_notice("Usage: selecttexture [left] [top] [width] [height]");
-        return true;
-    }
-
-    instance->select_texture(x, y, width, height);
-
-    return true;
+bool isExtPath(std::string const & path, const char * ext) {
+    return path.length() >= 4 &&
+        0 == path.compare(
+        path.length() - strlen(ext), strlen(ext), ext);
 }
 
 EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
-    instance = this;
-
+  
     ZeroMemory(levelName_, MAX_LEVEL_NAME);
     ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
-
-    window->console()->register_command("setterraintexture",
-        SetTerrainTextureCommand);
-    window->console()->register_command("setbackgroundtexture",
-        SetBackgroundTextureCommand);
-    window->console()->register_command("setbackgroundwidth",
-        SetBackgroundWidthCommand);
-    window->console()->register_command("setbackgroundoverlaytexture",
-        SetBackgroundOverlayTextureCommand);
-    window->console()->register_command("setbackgroundoverlaywidth",
-        SetBackgroundOverlayWidthCommand);
-    window->console()->register_command("goto", GoToCommand);
-    window->console()->register_command("setbottomy", SetBottomYCommand);
-    window->console()->register_command("setendgamex", SetEndGameXCommand);
-    window->console()->register_command("savelevel", SaveLevelCommand);
-    window->console()->register_command("loadlevel", LoadLevelCommand);
-    window->console()->register_command("setplayerspawn", SetPlayerSpawnCommand);
-    window->console()->register_command("setlevelname", SetLevelNameCommand);
-    window->console()->register_command("setnextlevel", SetNextLevelCommand);
-    window->console()->register_command("togglelayer", ToggleLayerCommand);
-    window->console()->register_command("setgridsize", SetGridSizeCommand);
-    window->console()->register_command("selecttexture", SelectTextureCommand);
 }
 
 EditorScene::~EditorScene() {
@@ -472,7 +123,319 @@ void EditorScene::save(const char *path) {
 }
 
 void EditorScene::start() {
-    /* useful defaults */
+    EditorScene * const editorScene = this;
+    window_->console()->register_command("setterraintexture",
+        [editorScene](Console * const console, const char * args) -> bool {
+        if (!isExtPath(args, ".bmp")) {
+            console->log_error("Given path is not a .bmp file.");
+            console->log_notice("Usage: setterraintexture [path]");
+            return true;
+        }
+
+        if (!fileExists(args)) {
+            console->log_error("File does not exist.");
+            console->log_notice("Usage: setterraintexture [path]");
+            return true;
+        }
+
+        console->log_notice("Terrain set to %s.", args);
+        editorScene->terrain(args);
+        return true;
+    });
+    window_->console()->register_command("setbackgroundtexture",
+        [editorScene](Console * const console, const char * args) -> bool {
+        if (!isExtPath(args, ".bmp")) {
+            console->log_error("Given path is not a .bmp file.");
+            console->log_notice("Usage: setbackgroundtexture [path]");
+            return true;
+        }
+
+        if (!fileExists(args)) {
+            console->log_error("File does not exist.");
+            console->log_notice("Usage: setbackgroundtexture [path]");
+            return true;
+        }
+
+        console->log_notice("Background set to %s.", args);
+        editorScene->background(args);
+        return true;
+    });
+    window_->console()->register_command("setbackgroundwidth",
+        [editorScene](Console * const console, const char * args) -> bool {
+        int width = atoi(args);
+
+        if (width < 100) {
+            console->log_error("Minimum width is 100. %d was given.", width);
+            console->log_notice("Usage: setbackgroundwidth [width]");
+            return true;
+        }
+
+        console->log_notice("Background width set to %d.", width);
+        editorScene->background_width(width);
+        return true;
+    });
+    window_->console()->register_command("setbackgroundoverlaytexture",
+        [editorScene](Console * const console, const char * args) -> bool {
+        if (!isExtPath(args, ".bmp")) {
+            console->log_error("Given path is not a .bmp file.");
+            console->log_notice("Usage: setbackgroundoverlaytexture [path]");
+            return true;
+        }
+
+        if (!fileExists(args)) {
+            console->log_error("File does not exist.");
+            console->log_notice("Usage: setbackgroundoverlaytexture [path]");
+            return true;
+        }
+
+        console->log_notice("Background overlay set to %s.", args);
+        editorScene->background_overlay(args);
+        return true;
+    });
+    window_->console()->register_command("setbackgroundoverlaywidth",
+        [editorScene](Console * const console, const char * args) -> bool {
+        int width = atoi(args);
+
+        if (width < 100) {
+            console->log_error("Minimum width is 100. %d was given.", width);
+            console->log_notice("Usage: setbackgroundoverlaywidth [width]");
+            return true;
+        }
+
+        console->log_notice("Background overlay width set to %d.", width);
+        editorScene->background_overlay_width(width);
+        return true;
+    });
+    window_->console()->register_command("goto",
+        [editorScene](Console * const console, const char * args) -> bool {
+        std::string command = args;
+
+        int sp = command.find(' ');
+        if (sp == -1) sp = command.length();
+        std::string xvalue = command.substr(0, sp);
+
+        command.erase(0, sp);
+        while (command.find(' ', 0) == 0) command.erase(0, 1);
+
+        sp = command.find(' ');
+        if (sp == -1) sp = command.length();
+        std::string yvalue = command.substr(0, sp);
+
+        if (xvalue.length() == 0 || yvalue.length() == 0) {
+            console->log_notice("Invalid parameters.");
+            console->log_notice("Usage: goto [x] [y]");
+            return true;
+        }
+
+        editorScene->go_to(atoi(xvalue.c_str()), atoi(yvalue.c_str()));
+        return true;
+    });
+    window_->console()->register_command("setbottomy",
+        [editorScene](Console * const console, const char * args) -> bool {
+        int y = atoi(args);
+
+        console->log_notice("Bottom Y set to %d", y);
+        editorScene->bottom_y(y);
+        return true;
+    });
+    window_->console()->register_command("setendgamex",
+        [editorScene](Console * const console, const char * args) -> bool {
+        int x = atoi(args);
+
+        console->log_notice("End game X set to %d", x);
+        editorScene->end_game_x(x);
+        return true;
+    });
+    window_->console()->register_command("savelevel",
+        [editorScene](Console * const console, const char * args) -> bool {
+        if (!isExtPath(args, ".dat")) {
+            console->log_error("Given path is not a .dat file.");
+            console->log_notice("Usage: savelevel [path]");
+            return true;
+        }
+
+        console->log_notice("Saving to %s...", args);
+        editorScene->save(args);
+        console->log_notice("Level saved!", args);
+        return true;
+    });
+    window_->console()->register_command("loadlevel",
+        [editorScene](Console * const console, const char * args) -> bool {
+        std::string command = args;
+
+        if (!isExtPath(args, ".dat")) {
+            console->log_error("Given path is not a .dat file.");
+            console->log_notice("Usage: loadlevel [path]");
+            return true;
+        }
+
+        console->log_notice("Loading from %s...", args);
+        editorScene->load(args);
+        console->log_notice("Level loaded!", args);
+        return true;
+    });
+    window_->console()->register_command("setplayerspawn",
+        [editorScene](Console * const console, const char * args) -> bool {
+        int x, y;
+        editorScene->current_pos(x, y);
+        editorScene->player_spawn(x, y);
+
+        console->log_notice("Player spawn set to (%d, %d).", x, y);
+        return true;
+    });
+    window_->console()->register_command("setlevelname",
+        [editorScene](Console * const console, const char * args) -> bool {
+        if (strlen(args) == 0) {
+            console->log_notice("Usage: setlevelname [name]");
+            return true;
+        }
+
+        console->log_notice("Level name set to %s.", args);
+        editorScene->level_name(args);
+        return true;
+    });
+    window_->console()->register_command("setnextlevel",
+        [editorScene](Console * const console, const char * args) -> bool {
+        if (!isExtPath(args, ".dat")) {
+            console->log_error("Given path is not a .dat file.");
+            console->log_notice("Usage: setnextlevel [path]");
+            return true;
+        }
+
+        if (!fileExists(args)) {
+            console->log_error("File does not exist.");
+            console->log_notice("Usage: setnextlevel [path]");
+            return true;
+        }
+
+        console->log_notice("Next level set to %s.", args);
+        editorScene->next_level(args);
+        return true;
+    });
+    window_->console()->register_command("togglelayer",
+        [editorScene](Console * const console, const char * args) -> bool {
+        switch (args[0])
+        {
+        case 'P':
+        case 'p':
+            if (editorScene->toggle_layer_visible(LevelManager::PLAYABLE))
+                console->log_notice("The playable layer is now visible.");
+            else
+                console->log_notice("The playable layer is now invisible.");
+            break;
+        case 'B':
+        case 'b':
+            if (editorScene->toggle_layer_visible(LevelManager::BACKGROUND))
+                console->log_notice("The background layer is now visible.");
+            else
+                console->log_notice("The background layer is now invisible.");
+            break;
+        case 'F':
+        case 'f':
+            if (editorScene->toggle_layer_visible(LevelManager::FOREGROUND))
+                console->log_notice("The foreground layer is now visible.");
+            else
+                console->log_notice("The foreground layer is now invisible.");
+            break;
+        default:
+            console->log_notice("Invalid parameters.");
+            console->log_notice("Usage: togglelayer [layer]");
+            break;
+        }
+        return true;
+    });
+    window_->console()->register_command("setgridsize",
+        [editorScene](Console * const console, const char * args) -> bool {
+        int size = atoi(args);
+
+        if (size < 1) {
+            console->log_error("Minimum grid size is 1. %d was given.", size);
+            console->log_notice("Usage: setgridsize [size]");
+            return true;
+        }
+
+        console->log_notice("Grid size set to %d.", size);
+        editorScene->grid_size(size);
+        return true;
+    });
+    window_->console()->register_command("selecttexture",
+        [editorScene](Console * const console, const char * args) -> bool {
+        std::string command = args;
+
+
+        int sp = command.find(' ');
+        if (sp == -1) sp = command.length();
+        std::string xvalue = command.substr(0, sp);
+
+        command.erase(0, sp);
+        while (command.find(' ', 0) == 0) command.erase(0, 1);
+
+        sp = command.find(' ');
+        if (sp == -1) sp = command.length();
+        std::string yvalue = command.substr(0, sp);
+
+        command.erase(0, sp);
+        while (command.find(' ', 0) == 0) command.erase(0, 1);
+
+        sp = command.find(' ');
+        if (sp == -1) sp = command.length();
+        std::string wvalue = command.substr(0, sp);
+
+        command.erase(0, sp);
+        while (command.find(' ', 0) == 0) command.erase(0, 1);
+
+        sp = command.find(' ');
+        if (sp == -1) sp = command.length();
+        std::string hvalue = command.substr(0, sp);
+
+        if (xvalue.length() == 0 || yvalue.length() == 0 ||
+            wvalue.length() == 0 || hvalue.length() == 0) {
+            console->log_notice("Invalid parameters.");
+            console->log_notice(
+                "Usage: selecttexture [left] [top] [width] [height]");
+            return true;
+        }
+
+        int x = atoi(xvalue.c_str());
+        int y = atoi(yvalue.c_str());
+        int width = atoi(wvalue.c_str());
+        int height = atoi(hvalue.c_str());
+
+        if (x < 0) {
+            console->log_notice("Minimum left value is 0. %d was given", x);
+            console->log_notice(
+                "Usage: selecttexture [left] [top] [width] [height]");
+            return true;
+        }
+
+        if (y < 0) {
+            console->log_notice("Minimum top value is 0. %d was given", y);
+            console->log_notice(
+                "Usage: selecttexture [left] [top] [width] [height]");
+            return true;
+        }
+
+        if (width < 1) {
+            console->log_notice("Minimum width value is 1. %d was given",
+                width);
+            console->log_notice(
+                "Usage: selecttexture [left] [top] [width] [height]");
+            return true;
+        }
+
+        if (height < 1) {
+            console->log_notice("Minimum height value is 1. %d was given",
+                height);
+            console->log_notice(
+                "Usage: selecttexture [left] [top] [width] [height]");
+            return true;
+        }
+
+        editorScene->select_texture(x, y, width, height);
+        return true;
+    });
+
+    /* Set useful defaults */
     background("spr/background01.bmp");
     terrain("spr/terrain.bmp");
     background_width(727);

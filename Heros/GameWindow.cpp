@@ -12,28 +12,7 @@
 
 #define MAX_HID_BUTTONS     (64)
 
-GameWindow *instance; // used in StartLevelEditorCommand 
-// todo: find a better way of doing that ^^^^^^
-
-bool StartLevelEditorCommand(Console * const console, const char *cmd) {
-    console->log_notice("Loading level editor...");
-    instance->update_scene(new EditorScene(instance));
-
-    return true;
-}
-
-bool QuitCommand(Console * const console, const char *cmd) {
-    exit(0);
-    return true;
-}
-
-bool MenuCommand(Console * const console, const char *cmd) {
-    instance->update_scene(new MenuScene(instance));
-    return true;
-}
-
 GameWindow::GameWindow() {
-    instance = this;
 }
 
 GameWindow::~GameWindow() {
@@ -46,7 +25,25 @@ void GameWindow::update_scene(Scene *scene) {
 		delete scene_;
 	}
 
+    /* Stop all sounds */
 	soundEngine_->stopAllSounds();
+
+    /* Reset commands list to default */
+    console_->reset_commands();
+    GameWindow * const gameWindow = this;
+    console_->register_command("menu", [gameWindow](Console * const console, const char * args) -> bool {
+        gameWindow->update_scene(new MenuScene(gameWindow));
+        return true;
+    });
+    console_->register_command("quit", [gameWindow](Console * const console, const char * args) -> bool {
+        exit(0);
+        return true;
+    });
+    console_->register_command("startleveleditor", [gameWindow](Console * const console, const char * args) -> bool {
+        console->log_notice("Loading level editor...");
+        gameWindow->update_scene(new EditorScene(gameWindow));
+        return true;
+    });
 
 	scene_ = scene;
 	scene_->start();
@@ -74,10 +71,6 @@ void GameWindow::game_init() {
 		"Andy Bold");
 	SelectObject(graphics_, font);
 
-
-    scene_ = new SplashScene(this);
-	scene_->start();
-
     /* Get display refresh rate */
     DEVMODE mode;
     EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &mode);
@@ -98,10 +91,9 @@ void GameWindow::game_init() {
     hasJoystick_ = !!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
 
     console_ = new Console(graphics_);
-    console_->register_command("menu", MenuCommand);
-    console_->register_command("quit", QuitCommand);
-    console_->register_command("startleveleditor", StartLevelEditorCommand);
-    console_->register_command("sle", StartLevelEditorCommand);
+
+    /* Set initial scene */
+    update_scene(new SplashScene(this));
 }
 
 void GameWindow::game_end() {

@@ -7,12 +7,6 @@
 #define CONSOLE_HEIGHT      (480)
 #define CONSOLE_TYPE_WIDTH  (64)
 
-bool CommandsCommand(Console * const console, const char *cmd) {
-    console->log_available_commands();
-
-    return true;
-}
-
 Console::Console(HDC hdc) {
     dc_ = CreateCompatibleDC(hdc);
     bitmap_ = CreateCompatibleBitmap(hdc, CONSOLE_WIDTH, CONSOLE_HEIGHT);
@@ -25,13 +19,19 @@ Console::Console(HDC hdc) {
 
     clear_input_buffer();
 
-    register_command("commands", CommandsCommand);
 }
 
+void Console::reset_commands() {
+    commands_.clear();
+    register_command("commands", [](Console * const console, const char * args) -> bool {
+        console->log_available_commands();
+        return true;
+    });
+}
 void Console::log_available_commands() {
     log_notice("Available commands:");
-    for (std::map<std::string, ConsoleCommandHandler>::iterator iterator = commands_.begin(); iterator != commands_.end(); iterator++) {
-        auto name = iterator->first;
+    for (auto & kv : commands_) {
+        auto name = kv.first;
 
         char buffer[CONSOLE_BUFFER_SIZE];
         sprintf_s(buffer, "  %s", name.c_str());

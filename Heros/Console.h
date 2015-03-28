@@ -2,29 +2,32 @@
 #include <Windows.h>
 #include <map>
 #include <string>
+#include <functional>
 
 #define CONSOLE_LOG_COUNT           (64)
 #define CONSOLE_BUFFER_SIZE         (256)
 #define CONSOLE_TYPE_BUFFER_SIZE    (32)
 
-typedef bool(*ConsoleCommandHandler)(class Console * const, const char *);
+typedef std::function<bool(class Console * const console, const char * args)>
+    ConsoleCommandHandler;
 
 class Console
 {
 public:
     Console(HDC);
-
     void update(WPARAM);
     void render(HDC);
-    bool is_open() {
-        return isOpen_;
-    }
+    bool register_command(std::string, ConsoleCommandHandler);
+    void remove_command(std::string);
+    void reset_commands();
     void log_notice(const char *, ...);
     void log_warn(const char *, ...);
     void log_error(const char *, ...);
     void log_available_commands();
-    bool register_command(std::string, ConsoleCommandHandler);
-    void remove_command(std::string);
+
+    bool is_open() {
+        return isOpen_;
+    }
 
 private:
     void log_user_input(const char *);
@@ -37,7 +40,6 @@ private:
     HDC dc_ = NULL;
     HBITMAP bitmap_;
     HANDLE oldHandle_;
-
     COLORREF consoleTypeColor_[CONSOLE_LOG_COUNT];
     char consoleTypeBuffer_[CONSOLE_LOG_COUNT][CONSOLE_TYPE_BUFFER_SIZE];
     char consoleBuffer_[CONSOLE_LOG_COUNT][CONSOLE_BUFFER_SIZE];
