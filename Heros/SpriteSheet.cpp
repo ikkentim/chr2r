@@ -1,21 +1,4 @@
 #include "SpriteSheet.h"
-/*
-SpriteSheet *SpriteSheet::spriteSheets_[SPRITE_SHEET_COUNT];
-char *SpriteSheet::spriteFileNames_[SPRITE_SHEET_COUNT] = {
-    "spr/terrain.bmp",
-    "spr/splash.bmp",
-    "spr/background01.bmp",
-    "spr/MainCharacter.bmp",
-	"spr/metalgearsheet.bmp",
-	"spr/menu.bmp",
-	"spr/play_button.bmp",
-	"spr/options_button.bmp",
-	"spr/exit_button.bmp",
-	"spr/arrow_button.bmp",
-	"spr/Zelda_Enemies_Sprite.bmp",
-	"spr/mario.bmp",
-	
-};*/
 
 SpriteSheet::SpriteMap SpriteSheet::spriteSheets_;
 HWND SpriteSheet::hWnd_;
