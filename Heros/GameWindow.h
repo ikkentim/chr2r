@@ -12,7 +12,7 @@ public:
     GameWindow();
 	~GameWindow();
 
-    void update_scene(Scene *);
+    void change_scene(Scene *);
     irrklang::ISoundEngine *sound_engine();
     LRESULT msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     Console *console() {

@@ -17,7 +17,7 @@ void EndGameScene::update(double delta, Keys) {
     position_ += delta * 100;
 
     if (position_ > 900.0f) {
-        window_->update_scene(new MenuScene(window_));
+        window_->change_scene(new MenuScene(window_));
     }
 }
 

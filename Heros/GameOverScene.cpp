@@ -20,7 +20,7 @@ void GameOverScene::update(double delta, Keys) {
 	{
 		if (GetAsyncKeyState(VK_RETURN))
 		{
-			window_->update_scene(new MenuScene(window_));
+			window_->change_scene(new MenuScene(window_));
 			return;
 		}
 	}

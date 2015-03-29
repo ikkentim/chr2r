@@ -33,7 +33,7 @@ void MenuScene::update(double delta, Keys k) {
 
         switch (selectedOption_) {
 			case 0:
-				window_->update_scene(new GameScene(window_));
+				window_->change_scene(new GameScene(window_));
 				break;
 			case 1:
 				exit(0);

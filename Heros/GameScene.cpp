@@ -25,7 +25,7 @@ GameScene::GameScene(GameWindow *window)
 	int minY = 0;
 	int maxY = 0;
 
-    for (auto object : *layer = level_->playable_layer()) {
+    for (auto object : *level_->playable_layer()) {
 		minX = min(minX, object->position().x);
 		maxX = max(maxX, object->position().x);
 		minY = min(minY, object->position().y);
@@ -71,7 +71,7 @@ void GameScene::update(double delta, Keys keys) {
 	case PLAYER_DEAD:
 		if (player()->die())
 		{
-			window_->update_scene(new GameOverScene(window_));
+			window_->change_scene(new GameOverScene(window_));
 			return;
 		}
 		player()->state(Player::ALIVE);
@@ -80,7 +80,7 @@ void GameScene::update(double delta, Keys keys) {
     case REACHED_END:
         
         if (level_->is_last_level()) {
-            window_->update_scene(new EndGameScene(window_));
+            window_->change_scene(new EndGameScene(window_));
         }
         else {
             delete level_;

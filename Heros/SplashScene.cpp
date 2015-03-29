@@ -16,7 +16,7 @@ void SplashScene::update(double delta, Keys) {
     time_ += delta;
 
     if (time_ > 0.5f) { /* show splash for 0.5 seconds */
-        window_->update_scene(new MenuScene(window_));
+        window_->change_scene(new MenuScene(window_));
     }
 }
 

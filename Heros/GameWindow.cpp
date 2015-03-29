@@ -20,7 +20,7 @@ GameWindow::~GameWindow() {
         delete scene_;
 }
 
-void GameWindow::update_scene(Scene *scene) {
+void GameWindow::change_scene(Scene *scene) {
 	if (scene_){
 		delete scene_;
 	}
@@ -32,7 +32,7 @@ void GameWindow::update_scene(Scene *scene) {
     console_->reset_commands();
     GameWindow * const gameWindow = this;
     console_->register_command("menu", [gameWindow](Console * const console, const char * args) -> bool {
-        gameWindow->update_scene(new MenuScene(gameWindow));
+        gameWindow->change_scene(new MenuScene(gameWindow));
         return true;
     });
     console_->register_command("quit", [gameWindow](Console * const console, const char * args) -> bool {
@@ -41,7 +41,7 @@ void GameWindow::update_scene(Scene *scene) {
     });
     console_->register_command("startleveleditor", [gameWindow](Console * const console, const char * args) -> bool {
         console->log_notice("Loading level editor...");
-        gameWindow->update_scene(new EditorScene(gameWindow));
+        gameWindow->change_scene(new EditorScene(gameWindow));
         return true;
     });
 
@@ -93,7 +93,7 @@ void GameWindow::game_init() {
     console_ = new Console(graphics_);
 
     /* Set initial scene */
-    update_scene(new SplashScene(this));
+    change_scene(new SplashScene(this));
 }
 
 void GameWindow::game_end() {
@@ -170,7 +170,7 @@ bool GameWindow::game_loop(double delta) {
 
 			/* FIXME: Fix leak in LevelManager. (initializer/destructor) */
 			while (::GetAsyncKeyState(VK_F5));
-			update_scene(new GameScene(this));
+			change_scene(new GameScene(this));
 		}
 
         scene_->update(delta, keys_ | joystickKeys_);
