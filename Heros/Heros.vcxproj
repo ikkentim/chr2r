@@ -153,7 +153,6 @@
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SpriteSheet.h" />

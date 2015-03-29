@@ -9,10 +9,6 @@
       <UniqueIdentifier>{7fae39d7-c38a-46f4-9917-c432a854c683}</UniqueIdentifier>
       <Extensions>h</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{b46c1c0c-c8ae-4e5b-b265-f53ad4fb3e67}</UniqueIdentifier>
-      <Extensions>ico</Extensions>
-    </Filter>
     <Filter Include="Header Files\Objects">
       <UniqueIdentifier>{a3519f7a-ce1b-4081-b61c-f15872fd0859}</UniqueIdentifier>
     </Filter>
@@ -190,9 +186,6 @@
     </ClInclude>
     <ClInclude Include="Coin.h">
       <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MenuScene.h">
       <Filter>Header Files\Scenes</Filter>
