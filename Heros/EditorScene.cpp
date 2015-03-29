@@ -2,20 +2,17 @@
 #include "LevelHeader.h"
 #include <fstream>
 #include <algorithm>
-
 #include <direct.h>
 
 #define MOVEMENT_ACCEL      (0.0004)
 
-bool fileExists(const char * file) {
-    std::string fp = std::string(_getcwd(NULL, 0)).append("/").append(file);
-
-    OutputDebugString(fp.c_str());
-    std::ifstream ifile(fp.c_str());
+inline bool fileExists(const char * file) {
+    auto fp = std::string(_getcwd(NULL, 0)).append("/").append(file);
+    auto ifile(fp.c_str());
     return !!ifile;
 }
 
-bool isExtPath(std::string const & path, const char * ext) {
+inline bool isExtPath(std::string const & path, const char * ext) {
     return path.length() >= 4 &&
         0 == path.compare(
         path.length() - strlen(ext), strlen(ext), ext);
@@ -28,7 +25,27 @@ EditorScene::EditorScene(GameWindow *window)
     ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
+
+    objectTypes_[BLOCK] = GameObjectTypeData("BLOCK", 0, 0, 
+        NULL, Texture(0,0,0,0));
+    objectTypes_[JUMPER] = GameObjectTypeData("JUMPER", 19, 20, 
+        SpriteSheet::get("spr/Bumper.bmp"), Texture(3, 11, 19, 20));
+
+    objectTypes_[COIN] = GameObjectTypeData("COIN", 12, 16,
+        SpriteSheet::get("spr/terrain.bmp"), Texture(219, 28, 12, 16));
+    currentObjectType_ = BLOCK;
+
+    actorTypes_[DOG] = GameObjectTypeData("DOG", 33, 18,
+        SpriteSheet::get("spr/metalgearsheet.bmp"), Texture(75, 280, 33, 18));
+    actorTypes_[FLYING_ENEMIE] = GameObjectTypeData("FLYING_ENEMIE", 18, 18,
+        SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(56, 241, 18, 18));
+    actorTypes_[JUMPING_ENEMIE] = GameObjectTypeData("JUMPING_ENEMIE", 12, 17,
+        SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(164, 288, 12, 17));
+    actorTypes_[CHARACTER] = GameObjectTypeData("CHARACTER", 16, 28,
+        SpriteSheet::get("spr/mario.bmp"), Texture(91, 0, 16, 28));
+    currentActorType_ = DOG;
 }
+
 
 EditorScene::~EditorScene() {
 }
@@ -448,7 +465,7 @@ void EditorScene::update(double delta, Keys keys) {
     if (keys & KEY_LEFT)
         cursorVelocity_.x -= accel;
     else if (cursorVelocity_.x < 0)
-        cursorVelocity_.x  = 0;
+        cursorVelocity_.x = 0;
 
     if (keys & KEY_RIGHT)
         cursorVelocity_.x += accel;
@@ -485,37 +502,18 @@ void EditorScene::update(double delta, Keys keys) {
             }
             isKeyDown_ = true;
         }
-        else if (keys & KEY_O) {/* TODO: put object types in an array for a
-                           little more dynimicness.*/
-
+        else if (keys & KEY_O) {
             if (currentLayer_ == LevelManager::MOVABLE) {
-                switch (currentActorType_) {
-                case DOG:
-                    currentActorType_ = FLYING_ENEMIE;
-                    break;
-                case FLYING_ENEMIE:
-                    currentActorType_ = JUMPING_ENEMIE;
-                    break;
-                case JUMPING_ENEMIE:
-                    currentActorType_ = CHARACTER;
-                    break;
-                case CHARACTER:
-                    currentActorType_ = DOG;
-                    break;
-                }
+                auto it = actorTypes_.find(currentActorType_);
+                currentActorType_ = ++it == actorTypes_.end()
+                    ? (*actorTypes_.begin()).first
+                    : (*it).first;
             }
             else {
-                switch (currentObjectType_) {
-                case BLOCK:
-                    currentObjectType_ = COIN;
-                    break;
-                case COIN:
-                    currentObjectType_ = JUMPER;
-                    break;
-                case JUMPER:
-                    currentObjectType_ = BLOCK;
-                    break;
-                }
+                auto it = objectTypes_.find(currentObjectType_);
+                currentObjectType_ = ++it == objectTypes_.end()
+                    ? (*objectTypes_.begin()).first
+                    : (*it).first;
             }
             isKeyDown_ = true;
         }
@@ -525,55 +523,51 @@ void EditorScene::update(double delta, Keys keys) {
         isKeyDown_ = (keys & KEY_L) || (keys & KEY_O);
     }
 
-         if (keys & KEY_JUMP) {
-            if (currentLayer_ == LevelManager::MOVABLE) {
-                /* Actors */
-                ActorData data;
-                data.type = currentActorType_;
+    if (keys & KEY_JUMP) {
+        if (currentLayer_ == LevelManager::MOVABLE) {
+            /* Actors */
+            ActorData data;
+            data.type = currentActorType_;
+            current_pos(data.x, data.y);
+
+            add_actor(data);
+        }
+        else {
+            /* Objects */
+            if (currentObjectType_ != BLOCK ||
+                (selectedTexture_.width > 0 && selectedTexture_.height > 0)) {
+                ObjectData data;
                 current_pos(data.x, data.y);
+                data.layer = currentLayer_;
+                data.texture = selectedTexture_;
+                data.type = currentObjectType_;
 
-                add_actor(data);
-            }
-            else {
-                /* Objects */
-                if (currentObjectType_ != BLOCK || 
-                    (selectedTexture_.width > 0 && selectedTexture_.height > 0)) {
-                    ObjectData data;
-                    current_pos(data.x, data.y);
-                    data.layer = currentLayer_;
-                    data.texture = selectedTexture_;
-                    data.type = currentObjectType_;
-
-                    if (currentObjectType_ == COIN) {
-                        data.width = 12;
-                        data.height = 16;
-                    }
-                    else if (currentObjectType_ == JUMPER) {
-                        data.width = 19;
-                        data.height = 20;
-                    }
-                    else {
-                        data.width = selectedTexture_.width;
-                        data.height = selectedTexture_.height;
-                    }
-
-                    add_object(current_layer(), data);
+                if (currentObjectType_ == BLOCK) {
+                    data.width = selectedTexture_.width;
+                    data.height = selectedTexture_.height;
                 }
+                else {
+                    data.width = objectTypes_[currentObjectType_].width;
+                    data.height = objectTypes_[currentObjectType_].height;
+                }
+
+                add_object(current_layer(), data);
             }
-            isKeyDown_ = true;
         }
-        if (keys & KEY_DELETE) {
-            int x, y;
-            current_pos(x, y);
-            if (currentLayer_ == LevelManager::MOVABLE) {
-                remove_actor(Vector2(x, y));
-            }
-            else {
-                remove_object(current_layer(), Vector2(x, y));
-            }
-            isKeyDown_ = true;
+        isKeyDown_ = true;
+    }
+    if (keys & KEY_DELETE) {
+        int x, y;
+        current_pos(x, y);
+        if (currentLayer_ == LevelManager::MOVABLE) {
+            remove_actor(Vector2(x, y));
         }
-    
+        else {
+            remove_object(current_layer(), Vector2(x, y));
+        }
+        isKeyDown_ = true;
+    }
+
 
     /* Update viewport */
     update_viewport();
@@ -614,8 +608,7 @@ void EditorScene::remove_object(std::vector<ObjectData> *layer, Vector2 pos) {
     }
 }
 Vector2 EditorScene::actor_size_for_actor(ActorType type) {
-    /* TODO: improve this block */
-    return Vector2(16, 16);
+    return Vector2(actorTypes_[type].width, actorTypes_[type].height);
 }
 
 void EditorScene::add_actor(ActorData data) {
@@ -676,19 +669,6 @@ void EditorScene::update_viewport() {
     else if (posy > maxy) viewport_.y += posy - maxy;
 }
 
-void EditorScene::draw_object(ObjectData data) {
-    switch (data.type) {
-    case BLOCK:
-        terrain_->draw(data.texture, Vector2(data.x, data.y), viewport_);
-        break;
-    case COIN:
-        defaultSpriteSheet_->draw(Texture(219, 28, 12, 16), Vector2(data.x, data.y), viewport_);
-        break;
-    case JUMPER:
-        bumperSpriteSheet_->draw(Texture(3, 11, 19, 20), Vector2(data.x, data.y), viewport_);
-        break;
-    }
-}
 void EditorScene::render(HDC graphics) {
     /* Draw background */
     const int image_width = backgroundWidth_;
@@ -709,45 +689,56 @@ void EditorScene::render(HDC graphics) {
     if (terrain_) {
         if (showBackgroundLayer_) {
             for (ObjectData object : backgroundLayer_) {
-                draw_object(object);
+                auto data = objectTypes_[object.type];
+                if (data.spriteSheet) {
+                    data.spriteSheet->draw(data.texture,
+                        Vector2(object.x, object.y), viewport_);
+                }
+                else {
+                    terrain_->draw(selectedTexture_,
+                        Vector2(object.x, object.y), viewport_);
+                }
             }
         }
         if (showPlayableLayer_) {
             for (ObjectData object : playableLayer_) {
-                draw_object(object);
+                auto data = objectTypes_[object.type];
+                if (data.spriteSheet) {
+                    data.spriteSheet->draw(data.texture,
+                        Vector2(object.x, object.y), viewport_);
+                }
+                else {
+                    terrain_->draw(selectedTexture_,
+                        Vector2(object.x, object.y), viewport_);
+                }
             }
         }
         if (showForegroundLayer_) {
             for (ObjectData object : foregroundLayer_) {
-                draw_object(object);
+                auto data = objectTypes_[object.type];
+                if (data.spriteSheet) {
+                    data.spriteSheet->draw(data.texture,
+                        Vector2(object.x, object.y), viewport_);
+                }
+                else {
+                    terrain_->draw(selectedTexture_,
+                        Vector2(object.x, object.y), viewport_);
+                }
             }
         }
     }
 
     for (ActorData actor : actors_) {
-        switch (actor.type) {
-        case DOG:
-            metalGearSpriteSheet_->draw(Texture(75, 280, 33, 18 ), Vector2(actor.x, actor.y), viewport_);
-            break;
-        case FLYING_ENEMIE:
-            zeldaEnemiesSpriteSheet_->draw(Texture(56, 241, 18, 18), Vector2(actor.x, actor.y), viewport_);
-            break;
-        case JUMPING_ENEMIE:
-            zeldaEnemiesSpriteSheet_->draw(Texture(164, 288, 12, 17), Vector2(actor.x, actor.y), viewport_);
-            break;
-        case CHARACTER:
-            marioSpriteSheet_->draw(Texture(91, 0, 16, 28), Vector2(actor.x, actor.y), viewport_);
-
-            break;
-        }
+        auto data = actorTypes_[actor.type];
+        data.spriteSheet->draw(data.texture,
+            Vector2(actor.x, actor.y), viewport_);
     }
-
     /* Guidelines */
     HPEN hBlackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     HPEN hRedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
     HPEN hBluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
     HPEN hPenOld = (HPEN)SelectObject(graphics, hBlackPen);
- 
+
 
     /* Draw cursor */
     int cx, cy;
@@ -758,7 +749,7 @@ void EditorScene::render(HDC graphics) {
     MoveToEx(graphics, x, 0, NULL);
     LineTo(graphics, x, viewport_.height);
     MoveToEx(graphics, 0, y, NULL);
-    LineTo(graphics,  viewport_.width, y);
+    LineTo(graphics, viewport_.width, y);
 
     SelectObject(graphics, hRedPen);
 
@@ -785,7 +776,7 @@ void EditorScene::render(HDC graphics) {
     char buf[32];
     sprintf_s(buf, "%f, %f", cursorPos_.x, cursorPos_.y);
     TextOut(graphics, 5, 50, buf, strlen(buf));
-    
+
     /* draw selected data */
     switch (currentLayer_) {
     case LevelManager::PLAYABLE:
@@ -808,34 +799,100 @@ void EditorScene::render(HDC graphics) {
 
     TextOut(graphics, 200, 70, buf, strlen(buf));
 
-
     if (currentLayer_ == LevelManager::MOVABLE) {
-        switch (currentActorType_) {
-        case DOG:
-            TextOut(graphics, 5, 90, "DOG", 3);
-            break;
-        case FLYING_ENEMIE:
-            TextOut(graphics, 5, 90, "FLYING_ENEMIE", 13);
-            break;
-        case JUMPING_ENEMIE:
-            TextOut(graphics, 5, 90, "JUMPING_ENEMIE", 14);
-            break;
-        case CHARACTER:
-            TextOut(graphics, 5, 90, "CHARACTER", 9);
-            break;
-        }
+        char * name = actorTypes_[currentActorType_].name;
+        TextOut(graphics, 5, 90, name, strlen(name));
     }
     else {
-        switch (currentObjectType_) {
-        case BLOCK:
-            TextOut(graphics, 5, 90, "BLOCK", 5);
-            break;
-        case COIN:
-            TextOut(graphics, 5, 90, "COIN", 4);
-            break;
-        case JUMPER:
-            TextOut(graphics, 5, 90, "JUMPER", 6);
-            break;
-        }
+        char * name = objectTypes_[currentObjectType_].name;
+        TextOut(graphics, 5, 90, name, strlen(name));
+    }
+}
+
+
+void EditorScene::background(const char *background) {
+    strcpy_s(backgroundPath_, background);
+    background_ = SpriteSheet::get(background);
+}
+
+void EditorScene::background_overlay(const char *background) {
+    strcpy_s(backgroundOverlayPath_, background);
+    backgroundOverlay_ = SpriteSheet::get(background);
+}
+
+void EditorScene::terrain(const char *terrain) {
+    strcpy_s(terrainPath_, terrain);
+    terrain_ = SpriteSheet::get(terrain);
+}
+
+void EditorScene::level_name(const char *name) {
+    strcpy_s(levelName_, name);
+}
+
+void EditorScene::next_level(const char *path) {
+    strcpy_s(nextLevel_, path);
+}
+
+void EditorScene::background_width(int backgroundWidth) {
+    backgroundWidth_ = backgroundWidth;
+}
+
+void EditorScene::background_overlay_width(int backgroundWidth) {
+    backgroundOverlayWidth_ = backgroundWidth;
+}
+
+void EditorScene::bottom_y(int y) {
+    bottomY_ = y;
+}
+
+void EditorScene::go_to(int x, int y) {
+    cursorPos_.x = x;
+    cursorPos_.y = y;
+}
+
+void EditorScene::end_game_x(int x) {
+    endGameX_ = x;
+}
+
+void EditorScene::player_spawn(int x, int y) {
+    playerX_ = x;
+    playerY_ = y;
+}
+
+void EditorScene::current_pos(int &x, int &y) {
+    x = ((int)cursorPos_.x / gridSize_) * gridSize_;
+    y = ((int)cursorPos_.y / gridSize_) * gridSize_;
+}
+
+void EditorScene::grid_size(int size) {
+    gridSize_ = size;
+}
+
+void EditorScene::select_texture(int left, int top, int width, int height) {
+    selectedTexture_.left = left;
+    selectedTexture_.top = top;
+    selectedTexture_.width = width;
+    selectedTexture_.height = height;
+}
+
+bool EditorScene::toggle_layer_visible(LevelManager::Layer layer) {
+    switch (layer) {
+    case LevelManager::PLAYABLE:
+        return showPlayableLayer_ = !showPlayableLayer_;
+    case LevelManager::FOREGROUND:
+        return showForegroundLayer_ = !showForegroundLayer_;
+    case LevelManager::BACKGROUND:
+        return showBackgroundLayer_ = !showBackgroundLayer_;
+    }
+}
+
+std::vector<ObjectData> *EditorScene::current_layer() {
+    switch (currentLayer_) {
+    case LevelManager::FOREGROUND:
+        return &foregroundLayer_;
+    case LevelManager::BACKGROUND:
+        return &backgroundLayer_;
+    default:
+        return &playableLayer_;
     }
 }

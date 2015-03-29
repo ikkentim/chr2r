@@ -25,10 +25,7 @@ GameScene::GameScene(GameWindow *window)
 	int minY = 0;
 	int maxY = 0;
 
-	LevelLayer *layer = level_->playable_layer();
-	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-		GameObject *object = *iter;
-
+    for (auto object : *layer = level_->playable_layer()) {
 		minX = min(minX, object->position().x);
 		maxX = max(maxX, object->position().x);
 		minY = min(minY, object->position().y);
@@ -41,10 +38,7 @@ GameScene::GameScene(GameWindow *window)
 	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(maxX - minX + 100, maxY - minY + 100)));
 
 	/* playablelayer */
-	layer = level_->playable_layer();
-	for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-		GameObject *object = *iter;
-
+    for (auto object : *level_->playable_layer()) {
 		if (object == NULL || object == player())
 			continue;
 
@@ -65,8 +59,7 @@ void GameScene::update(double delta, Keys keys) {
 	update_viewport();
 	check_states();
 
-	for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-		HUD *hud = *it;
+    for (auto hud : *hud_) {
 		hud->update(this, delta, keys);
 	}
 	switch (state_)
@@ -100,18 +93,12 @@ void GameScene::update(double delta, Keys keys) {
 	}
 
     /* playablelayer */
-    LevelLayer *layer = level_->playable_layer();
-    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-        GameObject *object = *iter;
-
+    for (auto object : *level_->playable_layer()) {
         object->update(this, delta, keys);
     }
 
-    /* Check collision on movableslayer */    
-    layer = level_->movables();
-    for (LevelLayer::iterator iter = layer->begin(); iter != layer->end(); ++iter) {
-        GameObject *object = *iter;
-
+    /* Check collision on movableslayer */ 
+    for (auto object : *level_->movables()) {
 		AABB* queryBox = new AABB(object->position(), Vector2(32, 32));
 
 		int count = quadTree_->query_range(queryBox, collisionBuffer_, 0);
@@ -202,27 +189,18 @@ void GameScene::render(HDC graphics) {
         level_->background_overlay()->draw(tex2, skyx, 0);
     }
 	/* Render all layers */
-	LevelLayer *layer;
-
-	layer = level_->background_layer();
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
+    for (auto object : *level_->background_layer()) {
 		object->render(viewport_);
 	}
-	layer = level_->playable_layer();
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
+    for (auto object : *level_->playable_layer()) {
 		object->render(viewport_);
 	}
-	layer = level_->foreground_layer();
-	for (LevelLayer::iterator it = layer->begin(); it != layer->end(); ++it) {
-		GameObject *object = *it;
+    for (auto object : *level_->foreground_layer()) {
 		object->render(viewport_);
 	}
 
     /* Render HUD */
-    for (HUDVector::iterator it = hud_->begin(); it != hud_->end(); ++it) {
-        HUD *hud = *it;
+    for (auto hud : *hud_) {
         hud->render(graphics);
     }
 }

@@ -38,8 +38,8 @@ SpriteSheet *SpriteSheet::get(std::string sheet) {
 }
 
 void SpriteSheet::unload() {
-    for (SpriteMap::iterator iterator = spriteSheets_.begin(); iterator != spriteSheets_.end(); iterator++) {
-        delete iterator->second;
+    for(auto kv : spriteSheets_) {
+        delete kv.second;
     }
 
     spriteSheets_.clear();
