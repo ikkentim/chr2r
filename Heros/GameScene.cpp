@@ -8,6 +8,7 @@
 #include <algorithm>
 #include "EndGameScene.h"
 #include "GameOverScene.h"
+#include "GameHUD.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -18,6 +19,7 @@ GameScene::GameScene(GameWindow *window)
 	state_ = PLAYING;
 	dialog_ = new DialogHUD(player_, this);
 	hud_->push_back(dialog_);
+	hud_->push_back(new GameHUD());
 
 
 	int minX = 0;

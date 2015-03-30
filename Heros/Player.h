@@ -46,7 +46,8 @@ public:
     }
     bool is_ducking() {
         return duckingAbility_ && duckingAbility_->is_active();
-    }
+	}
+	int lives_ = 3;
 private:
 	bool Player::is_dead_state(State);
 
@@ -67,5 +68,4 @@ private:
     irrklang::ISoundEngine *soundEngine_;
 
     AnimationState get_animation_state(int &frames);
-	int lives_ = 3;
 };

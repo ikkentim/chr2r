@@ -123,7 +123,7 @@
     <ClCompile Include="SplashScene.cpp" />
     <ClCompile Include="SprintAbility.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
-    <ClCompile Include="TestHUD.cpp" />
+    <ClCompile Include="GameHUD.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -167,7 +167,7 @@
     <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SprintAbility.h" />
     <ClInclude Include="SpriteSheet.h" />
-    <ClInclude Include="TestHUD.h" />
+    <ClInclude Include="GameHUD.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Viewport.h" />

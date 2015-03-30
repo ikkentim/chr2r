@@ -104,9 +104,6 @@
     <ClCompile Include="EnnemyJumping.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="TestHUD.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
@@ -157,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="SprintAbility.cpp">
       <Filter>Source Files\Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="GameHUD.cpp">
+      <Filter>Source Files\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,9 +262,6 @@
     <ClInclude Include="HUD.h">
       <Filter>Header Files\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="TestHUD.h">
-      <Filter>Header Files\HUD</Filter>
-    </ClInclude>
     <ClInclude Include="Ability.h">
       <Filter>Header Files\Abilities</Filter>
     </ClInclude>
@@ -291,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="Abilities.h">
       <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameHUD.h">
+      <Filter>Header Files\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
