@@ -52,8 +52,8 @@ GameScene::~GameScene() {
 	delete dialog_;
 }
 void GameScene::start() {
-    /* Testing sound */
-	sound_engine()->play2D("snd/01-main-theme-overworld.mp3", true);
+    if (strlen(level_->sound()))
+        sound_engine()->play2D(level_->sound(), true);
 }
 void GameScene::update(double delta, Keys keys) {
 	update_viewport();
@@ -85,6 +85,10 @@ void GameScene::update(double delta, Keys keys) {
         else {
             delete level_;
             level_ = LevelManager::load(level_->next_level(), this, player_);
+
+            sound_engine()->stopAllSounds();
+            if (strlen(level_->sound()))
+                sound_engine()->play2D(level_->sound(), true);
             state(PLAYING);
         }
         return;

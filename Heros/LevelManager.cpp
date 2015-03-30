@@ -100,6 +100,8 @@ LevelManager *LevelManager::load(const char * name, GameScene *scene,
     }
 
     strcpy_s(manager->nextLevel_, header.next_level);
+    strcpy_s(manager->sound_, header.sound);
+
     manager->endGameX_ = header.end_game_x;
     manager->isEndGameRight_ = header.is_end_game_right;
 
@@ -119,7 +121,7 @@ void LevelManager::write_simple_level()
     lvl.player_y = 240;
     lvl.player_abilities_ph = 0;
 
-    sprintf_s(lvl.name, "Level 01!");
+    sprintf_s(lvl.sound, "snd/01-main-theme-overworld.mp3");
     sprintf_s(lvl.background_texture, "spr/background01.bmp");
     sprintf_s(lvl.background_overlay_texture, "spr/background02.bmp");
     sprintf_s(lvl.next_level, "");

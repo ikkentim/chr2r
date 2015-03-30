@@ -21,7 +21,7 @@ inline bool isExtPath(std::string const & path, const char * ext) {
 EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
   
-    ZeroMemory(levelName_, MAX_LEVEL_NAME);
+    ZeroMemory(sound_, MAX_SOUND_NAME);
     ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
@@ -66,7 +66,7 @@ void EditorScene::load(const char *path) {
     playerX_ = header.player_x;
     playerY_ = header.player_y;
 
-    level_name(header.name);
+    sound(header.sound);
     background(header.background_texture);
     background_overlay(header.background_overlay_texture);
     background_width(header.background_width);
@@ -104,7 +104,7 @@ void EditorScene::save(const char *path) {
     lvl.player_x = playerX_;
     lvl.player_y = playerY_;
     lvl.player_abilities_ph = 0;
-    sprintf_s(lvl.name, levelName_);
+    sprintf_s(lvl.sound, sound_);
     sprintf_s(lvl.background_texture, backgroundPath_);
     sprintf_s(lvl.background_overlay_texture, backgroundOverlayPath_);
     sprintf_s(lvl.next_level, nextLevel_);
@@ -300,15 +300,21 @@ void EditorScene::start() {
         console->log_notice("Player spawn set to (%d, %d).", x, y);
         return true;
     });
-    window_->console()->register_command("setlevelname",
+    window_->console()->register_command("setsound",
         [editorScene](Console * const console, const char * args) -> bool {
         if (strlen(args) == 0) {
-            console->log_notice("Usage: setlevelname [name]");
+            console->log_notice("Usage: setsound [path]");
             return true;
         }
 
-        console->log_notice("Level name set to %s.", args);
-        editorScene->level_name(args);
+        if (!fileExists(args)) {
+            console->log_error("File does not exist.");
+            console->log_notice("Usage: setsound [path]");
+            return true;
+        }
+
+        console->log_notice("Sound set to %s.", args);
+        editorScene->sound(args);
         return true;
     });
     window_->console()->register_command("setnextlevel",
@@ -825,8 +831,8 @@ void EditorScene::terrain(const char *terrain) {
     terrain_ = SpriteSheet::get(terrain);
 }
 
-void EditorScene::level_name(const char *name) {
-    strcpy_s(levelName_, name);
+void EditorScene::sound(const char *path) {
+    strcpy_s(sound_, path);
 }
 
 void EditorScene::next_level(const char *path) {
