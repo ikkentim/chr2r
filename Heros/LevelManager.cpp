@@ -76,7 +76,7 @@ LevelManager *LevelManager::load(const char * name, GameScene *scene,
         switch (actor_buffer.type) {
 		case DOG:
 			actor = new EnnemyDog(Vector2(actor_buffer.x, actor_buffer.y));
-            break;
+			break;
         case CHARACTER_MARIO:
             actor = new Mario(Vector2(actor_buffer.x, actor_buffer.y));
             break;
@@ -85,7 +85,7 @@ LevelManager *LevelManager::load(const char * name, GameScene *scene,
             break;
         case CHARACTER_MAGIKARP:
             actor = new Magikarp(Vector2(actor_buffer.x, actor_buffer.y));
-            break;
+			break;
 		case FLYING_ENEMIE:
 			actor = new EnnemyFlying(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
