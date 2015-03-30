@@ -34,8 +34,8 @@ EditorScene::EditorScene(GameWindow *window)
     objectTypes_[COIN] = GameObjectTypeData("COIN", 12, 16,
         SpriteSheet::get("spr/terrain.bmp"), Texture(219, 28, 12, 16));
     currentObjectType_ = BLOCK;
-
     actorTypes_[DOG] = GameObjectTypeData("DOG", 33, 18,
+
         SpriteSheet::get("spr/metalgearsheet.bmp"), Texture(75, 280, 33, 18));
     actorTypes_[FLYING_ENEMIE] = GameObjectTypeData("FLYING_ENEMIE", 18, 18,
         SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(56, 241, 18, 18));
@@ -701,7 +701,7 @@ void EditorScene::render(HDC graphics) {
                         Vector2(object.x, object.y), viewport_);
                 }
                 else {
-                    terrain_->draw(selectedTexture_,
+                    terrain_->draw(object.texture,
                         Vector2(object.x, object.y), viewport_);
                 }
             }
@@ -714,7 +714,7 @@ void EditorScene::render(HDC graphics) {
                         Vector2(object.x, object.y), viewport_);
                 }
                 else {
-                    terrain_->draw(selectedTexture_,
+                    terrain_->draw(object.texture,
                         Vector2(object.x, object.y), viewport_);
                 }
             }
@@ -727,7 +727,7 @@ void EditorScene::render(HDC graphics) {
                         Vector2(object.x, object.y), viewport_);
                 }
                 else {
-                    terrain_->draw(selectedTexture_,
+                    terrain_->draw(object.texture,
                         Vector2(object.x, object.y), viewport_);
                 }
             }
