@@ -6,9 +6,15 @@ Mario::Mario(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 	spriteSheet_ = SpriteSheet::get("spr/mario.bmp");
 	//TODO: ability = jump
 	dialog.push_back(DialogLine(true, "Hi im Mario"));
-	dialog.push_back(DialogLine(false, "Hey"));
-	dialog.push_back(DialogLine(true, "Nice Weather, huh?"));
-	dialog.push_back(DialogLine(false, "Certainly, Sir, Myah"));
+	dialog.push_back(DialogLine(false, "Hey there"));
+	dialog.push_back(DialogLine(true, "It looks like you are stuck"));
+	dialog.push_back(DialogLine(false, "Ehh, maybe..."));
+	dialog.push_back(DialogLine(false, "..."));
+	dialog.push_back(DialogLine(true, "Have you tried jumping?"));
+	dialog.push_back(DialogLine(false, "Jumping?"));
+	dialog.push_back(DialogLine(true, "Yes, pressing the spacebar?"));
+	dialog.push_back(DialogLine(false, "Is that how that works?"));
+	dialog.push_back(DialogLine(false, "Convenient, Thanks!"));
 
 }
 
@@ -53,6 +59,8 @@ Magikarp::Magikarp(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 	dialog.push_back(DialogLine(true, "Magi Magi Magikarp"));
 	dialog.push_back(DialogLine(false, "Certainly, Sir, Myah"));
 	dialog.push_back(DialogLine(true, "Magikarp (Use SplashAttack !!!)"));
+	dialog.push_back(DialogLine(true, "Magi (Press the S key)"));
+	dialog.push_back(DialogLine(false, "Uhh, thanks i guess?"));
 }
 
 void Magikarp::render(Viewport &vp) {
