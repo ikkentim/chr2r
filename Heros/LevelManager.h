@@ -58,6 +58,9 @@ public:
     char *next_level() {
         return nextLevel_;
     }
+    char *sound() {
+        return sound_;
+    }
 
 	void add(GameObject *, LevelManager::Layer);
     static LevelManager *load(const char *, class GameScene *, class Player *&);
@@ -69,6 +72,7 @@ private:
     int bottomY_;
     int endGameX_;
     char nextLevel_[MAX_LEVEL_PATH];
+    char sound_[MAX_SOUND_NAME];
     bool isEndGameRight_;
 
     SpriteSheet *background_ = NULL;

@@ -26,7 +26,7 @@ public:
     void background(const char *background);
     void background_overlay(const char *background);
     void terrain(const char *terrain);
-    void level_name(const char *name);
+    void sound(const char *path);
     void next_level(const char *path);
     void background_width(int backgroundWidth);
     void background_overlay_width(int backgroundWidth);
@@ -78,7 +78,7 @@ private:
     Vector2 cursorPos_ = Vector2(0, 0);
     Vector2 cursorVelocity_ = Vector2(0, 0);
 
-    char levelName_[MAX_LEVEL_NAME];
+    char sound_[MAX_SOUND_NAME];
     char backgroundPath_[MAX_TEXTURE_PATH];
     char backgroundOverlayPath_[MAX_TEXTURE_PATH];
     char terrainPath_[MAX_TEXTURE_PATH];
