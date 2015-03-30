@@ -39,6 +39,18 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{d3ada156-7059-4f7f-ba9d-947a7c0417e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Abilities">
+      <UniqueIdentifier>{70d538ae-3dd0-4c2c-a0b1-16dcc32aec53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\HUD">
+      <UniqueIdentifier>{938990fd-135b-4583-9191-7fc2bffee7de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Abilities">
+      <UniqueIdentifier>{a51be67f-8af5-4bf4-8d12-3a7fb7400286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\HUD">
+      <UniqueIdentifier>{6e4804a9-9139-4183-8168-7c68a4ba2791}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,14 +107,8 @@
     <ClCompile Include="TestHUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestHUD.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Source Files\Actors</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogHUD.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -119,17 +125,38 @@
     <ClCompile Include="Characters.cpp">
       <Filter>Source Files\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuadTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EndGameScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="GameOverScene.cpp">
       <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="TestHUD.cpp">
+      <Filter>Source Files\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogHUD.cpp">
+      <Filter>Source Files\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpAbility.cpp">
+      <Filter>Source Files\Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SplashAbility.cpp">
+      <Filter>Source Files\Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="DuckAbility.cpp">
+      <Filter>Source Files\Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SneakAbility.cpp">
+      <Filter>Source Files\Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SprintAbility.cpp">
+      <Filter>Source Files\Abilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,17 +226,8 @@
     <ClInclude Include="EnnemyJumping.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestHUD.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>Header Files\Actors</Filter>
-    </ClInclude>
-    <ClInclude Include="DialogHUD.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Console.h">
       <Filter>Header Files\Engine</Filter>
@@ -229,12 +247,6 @@
     <ClInclude Include="ActorData.h">
       <Filter>Header Files\LevelData</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuadTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EndGameScene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -244,8 +256,41 @@
     <ClInclude Include="Characters.h">
       <Filter>Header Files\Actors</Filter>
     </ClInclude>
+    <ClInclude Include="DialogHUD.h">
+      <Filter>Header Files\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="TestHUD.h">
+      <Filter>Header Files\HUD</Filter>
+    </ClInclude>
     <ClInclude Include="Ability.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="JumpAbility.h">
+      <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashAbility.h">
+      <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="DuckAbility.h">
+      <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SneakAbility.h">
+      <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SprintAbility.h">
+      <Filter>Header Files\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Abilities.h">
+      <Filter>Header Files\Abilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

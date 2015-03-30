@@ -1,10 +1,12 @@
 #pragma once
 #include "Characters.h"
+#include "JumpAbility.h"
+
 #define ANIMATION_INTERVAL	(0.08)
 
 Mario::Mario(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 	spriteSheet_ = SpriteSheet::get("spr/mario.bmp");
-	//TODO: ability = jump
+    ability = new JumpAbility;
 	dialog.push_back(DialogLine(true, "Hi im Mario"));
 	dialog.push_back(DialogLine(false, "Hey"));
 	dialog.push_back(DialogLine(true, "Nice Weather, huh?"));

@@ -64,8 +64,6 @@ public:
 
 	void add(GameObject *, LevelManager::Layer);
     static LevelManager *load(const char *, class GameScene *, class Player *&);
-
-    static void write_simple_level();/* TODO: TEMP! Delete soon! */
 private:
     int backgroundWidth_;
     int backgroundOverlayWidth_;

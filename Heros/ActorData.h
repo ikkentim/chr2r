@@ -4,7 +4,10 @@ enum ActorType {
     DOG,
     FLYING_ENEMIE,
     JUMPING_ENEMIE,
-    CHARACTER,
+    CHARACTER_MARIO,
+    CHARACTER_SANIC,
+    CHARACTER_MAGIKARP,
+
 };
 
 struct ActorData {

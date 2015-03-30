@@ -28,6 +28,9 @@ public:
 	LevelManager *level() {
         return level_;
     }
+    GameWindow *window() {
+        return window_;
+    }
 	bool paused;
 	enum State {
 		PLAYING,

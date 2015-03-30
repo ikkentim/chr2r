@@ -1,25 +1,23 @@
-#include <ctime>
 #include "fps.h"
 
-Fps::Fps() :lastframetime_(time(0))
+Fps::Fps() :deltaSum_(0)
 {
 
 }
 
-void Fps::update()
+void Fps::update(double delta)
 {
 	frames_++;
+    deltaSum_ += delta;
 }
 
 int Fps::fps()
 {
-	time_t currenttime = time(0);
-
-	if (currenttime - lastframetime_ > 0.25)
+    if (deltaSum_>= 0.25)
 	{
-		fps_ = (double)frames_ / (currenttime - lastframetime_);
+        fps_ = (double)frames_ / deltaSum_;
 		frames_ = 0;
-		lastframetime_ = currenttime;
+        deltaSum_ = 0;
 	}
 
 	return (int)fps_;

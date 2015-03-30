@@ -10,6 +10,13 @@ void Character::update(GameScene* scene, double delta, Keys) {
 		scene->dialog_->engage_dialog(this);
 		finisheddialog = true;
 		//TODO: teach lesson
+        if (ability) {
+            scene->player()->give_ability(ability);
+        }
+        else {
+            scene->window()->console()
+                ->log_error("Character has no set ability");
+        }
 	}
 	process_gravity(delta);
 }

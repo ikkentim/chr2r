@@ -393,3 +393,5 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 /Heros.sln.GhostDoc.xml
+/dependencies/snd/AlbumArtSmall.jpg
+/dependencies/snd/Folder.jpg

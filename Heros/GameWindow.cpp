@@ -107,10 +107,11 @@ bool GameWindow::game_loop(double delta) {
     timeSinceRender_ += delta;
 
     if (timeSinceRender_ >= frameInterval_) {
-        timeSinceRender_ -= frameInterval_;
 
+        fps.update(timeSinceRender_);
         scene_->render(graphics_);
-        fps.update();
+
+        timeSinceRender_ -= frameInterval_;
 
 #ifdef SHOW_FPS
         TCHAR buf[16];
@@ -174,7 +175,7 @@ bool GameWindow::game_loop(double delta) {
 		}
 
         scene_->update(delta, keys_ | joystickKeys_);
-        ups.update();
+        ups.update(delta);
 
         return false;
     }

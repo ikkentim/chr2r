@@ -1,15 +1,13 @@
 #pragma once
 
-#include <ctime>
-
 class Fps
 {
 private:
-	time_t lastframetime_;
+	double deltaSum_;
 	int frames_ = 0;
 	double fps_ = 0.0;
 public:
 	Fps();
-	void update();
+	void update(double delta);
 	int fps();
 };

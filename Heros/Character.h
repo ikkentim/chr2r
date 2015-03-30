@@ -13,7 +13,7 @@ public:
 
 	std::vector<DialogLine> dialog;
 protected:
-	Ability ability;
+	Ability * ability;
 	SpriteSheet *spriteSheet_;
 	bool finisheddialog = false;
 

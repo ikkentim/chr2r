@@ -100,6 +100,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DialogHUD.cpp" />
+    <ClCompile Include="DuckAbility.cpp" />
     <ClCompile Include="EditorScene.cpp" />
     <ClCompile Include="EndGameScene.cpp" />
     <ClCompile Include="Ennemis.cpp" />
@@ -111,18 +112,23 @@
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
+    <ClCompile Include="JumpAbility.cpp" />
     <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuadTree.cpp" />
+    <ClCompile Include="SneakAbility.cpp" />
+    <ClCompile Include="SplashAbility.cpp" />
     <ClCompile Include="SplashScene.cpp" />
+    <ClCompile Include="SprintAbility.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="TestHUD.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Abilities.h" />
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorData.h" />
@@ -132,6 +138,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="DialogHUD.h" />
+    <ClInclude Include="DuckAbility.h" />
     <ClInclude Include="EditorScene.h" />
     <ClInclude Include="EndGameScene.h" />
     <ClInclude Include="Ennemis.h" />
@@ -144,6 +151,7 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="JumpAbility.h" />
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LevelHeader.h" />
@@ -154,7 +162,10 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SneakAbility.h" />
+    <ClInclude Include="SplashAbility.h" />
     <ClInclude Include="SplashScene.h" />
+    <ClInclude Include="SprintAbility.h" />
     <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="TestHUD.h" />
     <ClInclude Include="Texture.h" />

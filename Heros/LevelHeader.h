@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Abilities.h"
+
 #define MAX_SOUND_NAME      (32)
 #define MAX_TEXTURE_PATH    (32)
 #define MAX_LEVEL_PATH      (32)
@@ -8,7 +10,7 @@ struct LevelHeader {
     int bottom;
     int player_x;
     int player_y;
-    int player_abilities_ph;
+    AbilityType player_abilities;
     char sound[MAX_SOUND_NAME];
     char background_texture[MAX_TEXTURE_PATH];
     char background_overlay_texture[MAX_TEXTURE_PATH];

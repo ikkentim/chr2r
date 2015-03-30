@@ -10,7 +10,7 @@
 #include "ActorData.h"
 #include <map>
 
-#define MAX_GAME_OBJECT_TYPE_NAME_LENGTH  (16)
+#define MAX_GAME_OBJECT_TYPE_NAME_LENGTH  (32)
 
 class EditorScene : public Scene {
 public:
@@ -38,6 +38,7 @@ public:
     void grid_size(int size);
     void select_texture(int left, int top, int width, int height);
     bool toggle_layer_visible(LevelManager::Layer layer);
+    bool toggle_ability_type(AbilityType type);
 
 private:
     struct GameObjectTypeData {
@@ -91,6 +92,7 @@ private:
     int playerX_ = 0;
     int playerY_ = 0;
     int gridSize_ = 1;
+    AbilityType abilities_ = ABILITY_NONE;
 
     SpriteSheet *background_ = NULL;
     SpriteSheet *backgroundOverlay_ = NULL;

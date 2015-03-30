@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "Keys.h"
 #include <irrKlang.h>
+#include "Ability.h"
 
 class Player : public Actor {
 public:
@@ -30,23 +31,35 @@ public:
 	void render(Viewport &) override;
 	bool die();
 	void add_velocity(Vector2);
-
+    void give_ability(Ability *);
 	Vector2 velocity(){
 		return velocity_;
-	}
-	bool is_sneaking(){
-		return isSneaking_;
-	}
-
+    }
+    bool is_sneaking() {
+        return sneakingAbility_ && sneakingAbility_->is_active();
+    }
+    bool is_sprinting() {
+        return sprintingAbility_ && sprintingAbility_->is_active();
+    }
+    bool is_splashing() {
+        return splashingAbility_ && splashingAbility_->is_active();
+    }
+    bool is_ducking() {
+        return duckingAbility_ && duckingAbility_->is_active();
+    }
 private:
 	bool Player::is_dead_state(State);
 
-    SpriteSheet *spriteSheet_;
+    Ability *sneakingAbility_ = NULL;
+    Ability *jumpingAbility_ = NULL;
+    Ability *sprintingAbility_ = NULL;
+    Ability *splashingAbility_ = NULL;
+    Ability *duckingAbility_ = NULL;
+
+    SpriteSheet *mainSpriteSheet_;
+    SpriteSheet *boxSpriteSheet_;
     Keys keys_ = KEY_NONE;
     bool isLastMovementLeft_ = false;
-    bool isDucking_ = false;
-	bool isSplashing_ = false;
-	bool isSneaking_ = false;
 	double animationTime_ = 0;
 	int animationIndex_ = 0;
     int animationFrames_ = 1;

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <direct.h>
-
+#include "Abilities.h"
 #define MOVEMENT_ACCEL      (0.0004)
 
 inline bool fileExists(const char * file) {
@@ -41,8 +41,13 @@ EditorScene::EditorScene(GameWindow *window)
         SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(56, 241, 18, 18));
     actorTypes_[JUMPING_ENEMIE] = GameObjectTypeData("JUMPING_ENEMIE", 12, 17,
         SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(164, 288, 12, 17));
-    actorTypes_[CHARACTER] = GameObjectTypeData("CHARACTER", 16, 28,
+    actorTypes_[CHARACTER_MARIO] = GameObjectTypeData("CHARACTER_MARIO", 16, 28,
         SpriteSheet::get("spr/mario.bmp"), Texture(91, 0, 16, 28));
+    actorTypes_[CHARACTER_SANIC] = GameObjectTypeData("CHARACTER_SANIC", 16, 28,
+        SpriteSheet::get("spr/sonic_sheet.bmp"), Texture(391, 56, 34, 40));
+    actorTypes_[CHARACTER_MAGIKARP] = GameObjectTypeData("CHARACTER_MAGIKARP", 16, 28,
+        SpriteSheet::get("spr/magikarp_Sprite.bmp"), Texture(10, 158, 30, 36));
+
     currentActorType_ = DOG;
 }
 
@@ -103,7 +108,7 @@ void EditorScene::save(const char *path) {
     lvl.bottom = bottomY_;
     lvl.player_x = playerX_;
     lvl.player_y = playerY_;
-    lvl.player_abilities_ph = 0;
+    lvl.player_abilities = abilities_;
     sprintf_s(lvl.sound, sound_);
     sprintf_s(lvl.background_texture, backgroundPath_);
     sprintf_s(lvl.background_overlay_texture, backgroundOverlayPath_);
@@ -365,6 +370,50 @@ void EditorScene::start() {
             console->log_notice("Usage: togglelayer [layer]");
             break;
         }
+        return true;
+    });
+    window_->console()->register_command("toggleability",
+        [editorScene](Console * const console, const char * args) -> bool {
+
+        if (!strcmp(args, "sneak")) {
+            if (editorScene->toggle_ability_type(ABILITY_SNEAK))
+                console->log_notice("Sneaking is now available");
+            else
+                console->log_notice("Sneaking is now unavailable");
+        }
+        else if (!strcmp(args, "jump")) {
+            if (editorScene->toggle_ability_type(ABILITY_JUMP))
+                console->log_notice("Jumping is now available");
+            else
+                console->log_notice("Jumping is now unavailable");
+
+        }
+        else if (!strcmp(args, "sprint")) {
+            if (editorScene->toggle_ability_type(ABILITY_SPRINT))
+                console->log_notice("Sprinting is now available");
+            else
+                console->log_notice("Sprinting is now unavailable");
+
+        }
+        else if (!strcmp(args, "splash")) {
+            if (editorScene->toggle_ability_type(ABILITY_SPLASH))
+                console->log_notice("Splashing is now available");
+            else
+                console->log_notice("Splashing is now unavailable");
+
+        }
+        else if (!strcmp(args, "duck")) {
+            if (editorScene->toggle_ability_type(ABILITY_DUCK))
+                console->log_notice("Ducking is now available");
+            else
+                console->log_notice("Ducking is now unavailable");
+
+        }
+        else {
+            console->log_notice("Invalid parameters.");
+            console->log_notice("Usage: toggleability [ability:sneak|jump|sprint|splash|duck]");
+        }
+
         return true;
     });
     window_->console()->register_command("setgridsize",
@@ -890,6 +939,11 @@ bool EditorScene::toggle_layer_visible(LevelManager::Layer layer) {
     case LevelManager::BACKGROUND:
         return showBackgroundLayer_ = !showBackgroundLayer_;
     }
+}
+
+bool EditorScene::toggle_ability_type(AbilityType type) {
+    abilities_ = abilities_ ^ type;
+    return !!(abilities_ & type);
 }
 
 std::vector<ObjectData> *EditorScene::current_layer() {
