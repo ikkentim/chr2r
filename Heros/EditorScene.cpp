@@ -21,8 +21,9 @@ inline bool isExtPath(std::string const & path, const char * ext) {
 EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
   
-    ZeroMemory(sound_, MAX_SOUND_NAME);
-    ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
+	ZeroMemory(sound_, MAX_SOUND_NAME);
+	ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
+	ZeroMemory(backgroundOverlayPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
 
