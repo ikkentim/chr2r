@@ -68,7 +68,6 @@ private:
 
     void add_object(std::vector<ObjectData> *, ObjectData);
     void remove_object(std::vector<ObjectData> *, Vector2);
-    Vector2 actor_size_for_actor(ActorType type);
     void add_actor(ActorData);
     void remove_actor(Vector2);
     std::vector<ObjectData> *current_layer();
@@ -86,8 +85,8 @@ private:
     char nextLevel_[MAX_LEVEL_PATH];
 
     int endGameX_ = 0;
-    int backgroundWidth_ = 0;
-    int backgroundOverlayWidth_ = 0;
+    int backgroundWidth_ = 100;
+    int backgroundOverlayWidth_ = 100;
     int bottomY_ = 0;
     int playerX_ = 0;
     int playerY_ = 0;
