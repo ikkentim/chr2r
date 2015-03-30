@@ -351,8 +351,9 @@ EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
     instance = this;
 
-    ZeroMemory(levelName_, MAX_LEVEL_NAME);
-    ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
+	ZeroMemory(levelName_, MAX_LEVEL_NAME);
+	ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
+	ZeroMemory(backgroundOverlayPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
 
@@ -400,7 +401,8 @@ void EditorScene::Load(const char *path) {
 
     SetLevelName(header.name);
     SetBackground(header.background_texture);
-    SetBackgroundOverlay(header.background_overlay_texture);
+	if (strlen(header.background_overlay_texture))
+		SetBackgroundOverlay(header.background_overlay_texture);
     SetBackgroundWidth(header.background_width);
     SetBackgroundOverlayWidth(header.background_overlay_width);
     SetNextLevel(header.next_level);
@@ -586,8 +588,8 @@ void EditorScene::Update(double delta, Keys keys) {
                         data.height = 16;
                     }
                     else if (currentObjectType_ == JUMPER) {
-                        data.width = 19;
-                        data.height = 20;
+                        data.width = 16;
+                        data.height = 16;
                     }
                     else {
                         data.width = selectedTexture_.width;

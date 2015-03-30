@@ -24,7 +24,8 @@ void Jumper::Update(GameScene *scene, double delta, Keys keys) {
 }
 
 void Jumper::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
-	if (cooldown == 0 && obj == scene->player()){
+	//if (cooldown == 0 && obj == scene->player()){
+		if (cooldown == 0) {
 	scene->SoundEngine()->play2D("snd/Jumper.mp3");
 		cooldown = 40;
 		Vector2 playervel = scene->player()->Velocity();
