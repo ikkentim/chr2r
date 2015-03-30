@@ -5,6 +5,6 @@
 #include "Keys.h"
 class HUD {
 public:
-    virtual void Update(class GameScene *, double, Keys) = 0;
-    virtual void Render(HDC) = 0;
+    virtual void update(class GameScene *, double, Keys) = 0;
+    virtual void render(HDC) = 0;
 };

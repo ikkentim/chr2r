@@ -3,27 +3,27 @@
 #include "SpriteSheet.h"
 
 EndGameScene::EndGameScene(GameWindow *window) :position_(0.0f), window_(window) {
-    spriteSheet_ = SpriteSheet::Get("spr/credits.bmp");
+    spriteSheet_ = SpriteSheet::get("spr/credits.bmp");
 }
 
 EndGameScene::~EndGameScene() {
 }
 
-void EndGameScene::Start() {
-    window_->SoundEngine()->play2D("snd/07-castle-complete.mp3");
+void EndGameScene::start() {
+    window_->sound_engine()->play2D("snd/07-castle-complete.mp3");
 }
 
-void EndGameScene::Update(double delta, Keys) {
+void EndGameScene::update(double delta, Keys) {
     position_ += delta * 100;
 
     if (position_ > 900.0f) {
-        window_->UpdateScene(new MenuScene(window_));
+        window_->change_scene(new MenuScene(window_));
     }
 }
 
-void EndGameScene::Render(HDC graphics) {
+void EndGameScene::render(HDC graphics) {
 
     const int maxy = 1200 - 480;
     int y = min((int)position_, maxy);
-    spriteSheet_->Draw(Texture(0, y, 640, 480), 0, 0);
+    spriteSheet_->draw(Texture(0, y, 640, 480), 0, 0);
 }

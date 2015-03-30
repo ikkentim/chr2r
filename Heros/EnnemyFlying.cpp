@@ -11,13 +11,7 @@
 #define TEXTURE_WIDTH       (18) 
 #define TEXTURE_HEIGHT      (18) 
 
-
-
-/*EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(pos){
-	velocity_ = Vector2(-WALK_SPEED, -WALK_SPEED);
-	start_position = pos;
-*/
-	EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(pos, SpriteSheet::Get("spr/Zelda_Enemies_Sprite.bmp")){
+	EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(pos, SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp")){
 		velocity_ = Vector2(-WALK_SPEED, -WALK_SPEED);
 		start_position = pos;
 
@@ -25,8 +19,8 @@
 
 EnnemyFlying :: ~EnnemyFlying(){}
 
-void EnnemyFlying::Render(Viewport &vp) {
-	if (IsDeadState(GetState())){
+void EnnemyFlying::render(Viewport &vp) {
+	if (is_dead_state(state())){
 		return;
 	}
 
@@ -43,12 +37,9 @@ void EnnemyFlying::Render(Viewport &vp) {
 
 	switch (state_) {
 	case RUN_RIGHT:
-		//	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(texture_right, position_, vp);
 		tex = texture_right;
 		break;
 	case RUN_LEFT:
-
-		//	SpriteSheet::Get(SpriteSheet::ENNEMY_1)->Draw(texture_left, position_, vp);
 		tex = texture_left;
 		break;
 	}
@@ -61,12 +52,12 @@ void EnnemyFlying::Render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 
 
-	spriteSheet()->Draw(tex, position_, vp);
+	spriteSheet()->draw(tex, position_, vp);
 
 }
 
-void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
-	if (IsDeadState(GetState())){
+void EnnemyFlying::update(GameScene *scene, double delta, Keys keys){
+	if (is_dead_state(state())){
 		return;
 	}
 
@@ -75,26 +66,26 @@ void EnnemyFlying::Update(GameScene *scene, double delta, Keys keys){
 	nbTick_++;
 
 	if (position_.y < start_position.y - 100){
-		GoDown(delta, nbTick_); //GoDown
+		go_down(delta, nbTick_); //GoDown
 	}
 
-	if (position_.y > start_position.y || IsOnGround()){
-		GoUp(delta, nbTick_); //GoUp
+	if (position_.y > start_position.y || is_on_ground()){
+		go_up(delta, nbTick_); //GoUp
 	}
 	if (position_.x <= start_position.x - 100){
-		GoRight(delta); 
+		go_right(delta); 
 	}
 
 	if (position_.x >= start_position.x + 100){
-		GoLeft(delta);
+		go_left(delta);
 	}
 	/* Update the player animation. */
-	AnimationState new_state = GetAnimationState(animationFrames_);
+	AnimationState new_state = get_animation_state(animationFrames_);
 
 	/*There no falling fonction because the enemie fly*/
 }
 
-EnnemyFlying::AnimationState EnnemyFlying::GetAnimationState(int &frames) {
+EnnemyFlying::AnimationState EnnemyFlying::get_animation_state(int &frames) {
 	frames = 1;
 
 	if (velocity_.x > 0) { /* Is moving Up. */
@@ -110,14 +101,14 @@ EnnemyFlying::AnimationState EnnemyFlying::GetAnimationState(int &frames) {
 }
 
 
-void EnnemyFlying::GoDown(double delta,int nbTick){ //Go Down
+void EnnemyFlying::go_down(double delta,int nbTick){ //Go Down
 
 	Vector2 hAccel1 = { 0, (400 * abs(sin(nbTick * 0.5 * M_PI))) + abs(velocity_.y )};
 	
 	velocity_ += hAccel1*delta;
 }
 
-void EnnemyFlying::GoUp(double delta,int nbTick){ //Go UP
+void EnnemyFlying::go_up(double delta,int nbTick){ //Go UP
 
 	Vector2 hAccel1 = {0, -((400*abs(sin(nbTick * 0.5 * M_PI))) + abs(velocity_.y))};
 

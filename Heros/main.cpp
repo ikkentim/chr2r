@@ -7,8 +7,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     //LevelManager::WriteSimpleLevel();/* TODO: Remove */
     GameWindow app;
 
-    if (!app.Create())
+    if (!app.create())
         return 0;
 
-    return app.Run();
+    return app.run();
 }

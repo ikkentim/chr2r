@@ -6,13 +6,13 @@
 class EndGameScene : public Scene {
 public:
     EndGameScene(GameWindow *);
-    virtual ~EndGameScene();
-    virtual void Start();
-    void Update(double, Keys);
-    void Render(HDC graphics);
+    ~EndGameScene() override;
+    void start() override;
+    void update(double, Keys) override;
+    void render(HDC graphics) override;
+
 private:
     SpriteSheet *spriteSheet_;
     double position_;
-    
     GameWindow *window_;
 };

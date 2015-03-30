@@ -8,52 +8,61 @@ typedef std::vector <class GameObject *> LevelLayer;
 
 class LevelManager {
 public:
+    enum Layer : char 
+    { 
+        MOVABLE, 
+        BACKGROUND, 
+        PLAYABLE, 
+        FOREGROUND 
+    };
+
     LevelManager();
     ~LevelManager();
-    LevelLayer *BackgroundLayer() {
+
+    LevelLayer *background_layer() {
         return &backgroundLayer_;
     }
-    LevelLayer *PlayableLayer() {
+    LevelLayer *playable_layer() {
         return &playableLayer_;
     }
-    LevelLayer *ForegroundLayer() {
+    LevelLayer *foreground_layer() {
         return &foregroundLayer_;
     }
-	LevelLayer *Movables() {
+	LevelLayer *movables() {
 		return &movables_;
 	}
     SpriteSheet *background() {
         return background_;
     }
-    SpriteSheet *backgroundOverlay() {
+    SpriteSheet *background_overlay() {
         return backgroundOverlay_;
     }
-    int backgroundWidth() {
+    int background_width() {
         return backgroundWidth_;
     }
-    int backgroundOverlayWidth() {
+    int background_overlay_width() {
         return backgroundOverlayWidth_;
     }
-    int bottomY() {
+    int bottom_y() {
         return bottomY_;
     }
-    int endGameX() {
+    int end_game_x() {
         return endGameX_;
     }
-    bool isEndGameRight() {
+    bool is_end_game_right() {
         return isEndGameRight_;
     }
-    bool isLastLevel() {
+    bool is_last_level() {
         return strlen(nextLevel_) == 0;
     }
-    char *nextLevel() {
+    char *next_level() {
         return nextLevel_;
     }
 
-	enum Layer : char { MOVABLE, BACKGROUND, PLAYABLE, FOREGROUND };
-	void Add(GameObject *, LevelManager::Layer);
-    static LevelManager *Load(const char *, class GameScene *, class Player *&);
-    static void WriteSimpleLevel();/* TODO: TEMP! Delete soon! */
+	void add(GameObject *, LevelManager::Layer);
+    static LevelManager *load(const char *, class GameScene *, class Player *&);
+
+    static void write_simple_level();/* TODO: TEMP! Delete soon! */
 private:
     int backgroundWidth_;
     int backgroundOverlayWidth_;

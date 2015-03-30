@@ -1,3 +1,7 @@
+/*
+ * TODO: Is used? Will be used? If not: delete.
+ */
+
 #pragma once
 #include <iostream>
 #include <vector>

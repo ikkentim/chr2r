@@ -20,17 +20,15 @@ LevelManager::LevelManager() {
 }
 
 LevelManager::~LevelManager() {
-	for (std::vector<GameObject*>::iterator it = playableLayer_.begin(); it != playableLayer_.end(); ++it)
-		delete *it;
-
-	for (std::vector<GameObject*>::iterator it = backgroundLayer_.begin(); it != backgroundLayer_.end(); ++it)
-		delete *it;
-
-	for (std::vector<GameObject*>::iterator it = foregroundLayer_.begin(); it != foregroundLayer_.end(); ++it)
-		delete *it;
+    for (auto o : playableLayer_)
+        delete o;
+    for (auto o : backgroundLayer_)
+        delete o;
+    for (auto o : foregroundLayer_)
+        delete o;
 }
 
-LevelManager *LevelManager::Load(const char * name, GameScene *scene, 
+LevelManager *LevelManager::load(const char * name, GameScene *scene, 
     Player *&player) {
     LevelManager *manager = new LevelManager();
 
@@ -40,7 +38,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
     LevelHeader header;
     lvl.read((char *)&header, sizeof(header));
     
-    SpriteSheet *terrain = SpriteSheet::Get(header.terrain_texture);
+    SpriteSheet *terrain = SpriteSheet::get(header.terrain_texture);
 
     ObjectData object_buffer;
     for (int i = 0; i < header.object_count; i++) {
@@ -61,7 +59,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 			break;
         }
 
-        manager->Add(object, object_buffer.layer);
+        manager->add(object, object_buffer.layer);
     }
 
     ActorData actor_buffer;
@@ -87,17 +85,17 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 			break;
         }
 
-        manager->Add(actor, MOVABLE);
+        manager->add(actor, MOVABLE);
     }
 
     player = new Player(scene, Vector2(header.player_x, header.player_y));
-    manager->Add(player, MOVABLE);
+    manager->add(player, MOVABLE);
 
-    manager->background_ = SpriteSheet::Get(header.background_texture);
+    manager->background_ = SpriteSheet::get(header.background_texture);
     manager->backgroundWidth_ = header.background_width;
 
     if (strlen(header.background_overlay_texture) > 0) {
-        manager->backgroundOverlay_ = SpriteSheet::Get(header.background_overlay_texture);
+        manager->backgroundOverlay_ = SpriteSheet::get(header.background_overlay_texture);
         manager->backgroundOverlayWidth_ = header.background_overlay_width;
     }
 
@@ -113,7 +111,7 @@ LevelManager *LevelManager::Load(const char * name, GameScene *scene,
 
 
 /* TEMPORARY FUNCTION! */
-void LevelManager::WriteSimpleLevel()
+void LevelManager::write_simple_level()
 {
     LevelHeader lvl;
     lvl.bottom = 500;
@@ -328,20 +326,20 @@ void LevelManager::WriteSimpleLevel()
     lvlout.close();
 }
 
-void LevelManager::Add(GameObject * object, LevelManager::Layer layer) {
+void LevelManager::add(GameObject * object, LevelManager::Layer layer) {
 	switch (layer) {
 	case LevelManager::MOVABLE:
-		Movables()->push_back(object);
-		PlayableLayer()->push_back(object);
+		movables()->push_back(object);
+		playable_layer()->push_back(object);
 		break;
 	case LevelManager::BACKGROUND:
-		BackgroundLayer()->push_back(object);
+		background_layer()->push_back(object);
 		break;
 	case LevelManager::PLAYABLE:
-		PlayableLayer()->push_back(object);
+		playable_layer()->push_back(object);
 		break;
 	case LevelManager::FOREGROUND:
-		ForegroundLayer()->push_back(object);
+		foreground_layer()->push_back(object);
 		break;
 	default:
 		break;

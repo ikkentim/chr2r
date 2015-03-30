@@ -5,33 +5,33 @@ DialogHUD::DialogHUD(Player* p, GameScene* scene) : player(p), scene_(scene), wa
 	
 }
 
-void DialogHUD::EngageDialog(Character* c) {
+void DialogHUD::engage_dialog(Character* c) {
 	character = c;
 	l1dialog = character->dialog;
 	activedialog = true;
 	dialogit = l1dialog.begin();
 
 }
-void DialogHUD::NextLine() {
+void DialogHUD::next_line() {
 	dialogit++;
 	if (dialogit == l1dialog.end()) //dialog is done
 	{
 		activedialog = false;
-		scene_->SetState(GameScene::PLAYING);
+		scene_->state(GameScene::PLAYING);
 	}
 }
-void DialogHUD::Update(GameScene *scene, double, Keys k) {
+void DialogHUD::update(GameScene *scene, double, Keys k) {
 	if (k & KEY_JUMP && wait == 0 && activedialog == true) {
-		NextLine();
+		next_line();
 		wait = 30;
 	}
 
 	if (activedialog)
-		scene->SetState(GameScene::TALKING);
+		scene->state(GameScene::TALKING);
 
 }
 
-void DialogHUD::Render(HDC hdc) {
+void DialogHUD::render(HDC hdc) {
 	if (activedialog) {
 
 		if (wait > 0)

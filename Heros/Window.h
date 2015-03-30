@@ -5,14 +5,14 @@
 class Window {
 public:
 	 Window();
-	 HRESULT Create();
-	 int Run();
-     virtual LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
+	 HRESULT create();
+	 int run();
+     virtual LRESULT msg_proc(HWND, UINT, WPARAM, LPARAM);
 
 protected:
-     virtual void GameInit() = 0;
-     virtual bool GameLoop(double) = 0;
-     virtual void GameEnd() = 0;
+     virtual void game_init() = 0;
+     virtual bool game_loop(double) = 0;
+     virtual void game_end() = 0;
 
 	static HINSTANCE instance_;
 	HWND  hWnd_;

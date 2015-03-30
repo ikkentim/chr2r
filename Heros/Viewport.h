@@ -12,11 +12,11 @@ struct Viewport {
         :x(a), y(b), width(w), height(h) {
     }
 
-	inline Vector2 Position() {
+	inline Vector2 position() {
         return{ (double)x, (double)y };
 	}
 
-    inline Vector2 Size() {
+    inline Vector2 size() {
         return{ (double)width, (double)height };
     }
 };

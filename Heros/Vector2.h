@@ -10,47 +10,47 @@ struct Vector2 {
     Vector2() :x(0), y(0){ }
     Vector2(double a, double b) :x(a), y(b){ }
 
-    inline void Zero() {
+    inline void zero() {
         x = 0;
         y = 0;
     }
 
-    inline bool IsZero() const {
+    inline bool is_zero() const {
         return x == 0 && y == 0;
     }
 
-    inline double Length() {
-        return sqrt(LengthSq());
+    inline double length() {
+        return sqrt(length_sq());
     }
 
-    inline double LengthSq() {
+    inline double length_sq() {
         return x * x + y * y;
     }
 
-    inline void Normalize() {
-        double length = Length();
-        x /= length;
-        y /= length;
+    inline void normalize() {
+        double len = length();
+        x /= len;
+        y /= len;
     }
 
-    inline double Dot(const Vector2 &v2) const {
+    inline double dot(const Vector2 &v2) const {
         return x*v2.x + y*v2.y;
     }
 
-    void Truncate(double max) {
+    void truncate(double max) {
         assert(max > 0);
 
-        double length = Length();
+        double len = length();
 
-        if (length < max) return;
+        if (len < max) return;
 
-        length /= max;
+        len /= max;
 
-        x /= length;
-        y /= length;
+        x /= len;
+        y /= len;
     }
 
-	void TruncateX(double max)
+	void truncate_x(double max)
 	{
 		assert(max > 0);
 
@@ -59,7 +59,7 @@ struct Vector2 {
 		x = x < 0 ? -max : max;
 	}
 
-    void TruncateY(double max)
+    void truncate_y(double max)
     {
         assert(max > 0);
 
@@ -68,15 +68,15 @@ struct Vector2 {
         y = y < 0 ? -max : max;
     }
 
-    inline double Distance(const Vector2 &v2) {
-        return sqrt(DistanceSq(v2));
+    inline double distance(const Vector2 &v2) {
+        return sqrt(distance_sq(v2));
     }
 
-    inline double DistanceSq(const Vector2 &v2) {
+    inline double distance_sq(const Vector2 &v2) {
         return (x - v2.x) * (x - v2.x) + (y - v2.y) * (y - v2.y);
     }
 
-    inline Vector2 GetReverse() const {
+    inline Vector2 reverse() const {
         return{ y, x };
     }
 
@@ -131,15 +131,15 @@ struct Vector2 {
     }
 
     inline bool operator<(Vector2 rhs) {
-        return LengthSq() < rhs.LengthSq();
+        return length_sq() < rhs.length_sq();
     }
     inline bool operator<=(Vector2 rhs) {
-        return LengthSq() <= rhs.LengthSq();
+        return length_sq() <= rhs.length_sq();
     }
     inline bool operator>(Vector2 rhs) {
-        return LengthSq() > rhs.LengthSq();
+        return length_sq() > rhs.length_sq();
     }
     inline bool operator>=(Vector2 rhs) {
-        return LengthSq() >= rhs.LengthSq();
+        return length_sq() >= rhs.length_sq();
     }
 };

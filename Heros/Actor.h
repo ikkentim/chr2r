@@ -13,10 +13,11 @@ public:
 	};
 
     Actor();
-    void Falling(double delta);
 	Actor(Vector2 position, Vector2 size);
-	virtual void SetState(State);
-	virtual State GetState();
+
+    void process_gravity(double delta);
+	virtual void state(State);
+    virtual State state();
 protected:
 	State state_;
 };

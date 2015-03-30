@@ -114,7 +114,6 @@
     <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="MenuScene.cpp" />
-    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="SplashScene.cpp" />
@@ -127,13 +126,11 @@
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorData.h" />
-    <ClInclude Include="Alive.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Characters.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Console.h" />
-    <ClInclude Include="Dead.h" />
     <ClInclude Include="DialogHUD.h" />
     <ClInclude Include="EditorScene.h" />
     <ClInclude Include="EndGameScene.h" />
@@ -154,10 +151,8 @@
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="ObjectData.h" />
-    <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SplashScene.h" />
     <ClInclude Include="SpriteSheet.h" />

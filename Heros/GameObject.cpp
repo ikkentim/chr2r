@@ -21,11 +21,11 @@ GameObject::GameObject(bool isSolid, Vector2 pos, Vector2 size)
     : isSolid_(isSolid), position_(pos), size_(size), velocity_({}) {
 }
 
-void GameObject::ApplyVelocity(double delta) {
+void GameObject::apply_velocity(double delta) {
 	position_ += velocity_ * delta;
 }
 
-bool GameObject::IsCollidingWith(GameObject *other, double delta) {
+bool GameObject::is_colliding_with(GameObject *other, double delta) {
     /* Get the positions of both objects. */
 	Vector2 position = position_ + velocity_ * delta;
     Vector2 other_position = other->position_;
@@ -47,7 +47,7 @@ bool GameObject::IsCollidingWith(GameObject *other, double delta) {
 //	int c = 0;
 //}
 
-void GameObject::CheckForCollisions(GameScene *scene, GameObject** checks, int PossibleColliders, double delta) {
+void GameObject::check_for_collisions(GameScene *scene, GameObject** checks, int PossibleColliders, double delta) {
     bool has_touched_ground = false;
 
 	for (int i = 0; i < PossibleColliders; i++)
@@ -60,7 +60,7 @@ void GameObject::CheckForCollisions(GameScene *scene, GameObject** checks, int P
         }
 
         /* If the objects are colliding, take action. */
-        if (IsCollidingWith(check, delta)) {
+        if (is_colliding_with(check, delta)) {
             /* Calculate offset between both objects and the offset between 
              * the objects when this objects velocity would be applied. */
             Vector2 offset_before = position_ - check->position_;
@@ -71,8 +71,8 @@ void GameObject::CheckForCollisions(GameScene *scene, GameObject** checks, int P
                 offset_prevented - (position_ - check->position_);
 
 			/* Notify children. */
-			EnteredCollision(scene, check, collision);
-			check->EnteredCollision(scene, this, -collision);
+			entered_collision(scene, check, collision);
+            check->entered_collision(scene, this, -collision);
 
             /* If not solid, just notify children and don't modify velocity. */
             if (!check->isSolid_) {
@@ -125,6 +125,6 @@ void GameObject::CheckForCollisions(GameScene *scene, GameObject** checks, int P
     onGround_ = has_touched_ground;
 }
 
-void GameObject::EnteredCollision(GameScene *scene, GameObject *collider, Vector2 collision) {
+void GameObject::entered_collision(GameScene *scene, GameObject *collider, Vector2 collision) {
 	
 }

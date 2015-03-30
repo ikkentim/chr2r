@@ -12,27 +12,7 @@
 
 #define MAX_HID_BUTTONS     (64)
 
-GameWindow *instance; // used in StartLevelEditorCommand 
-// todo: find a better way of doing that ^^^^^^
-bool StartLevelEditorCommand(Console * const console, const char *cmd) {
-    console->LogNotice("Loading level editor...");
-    instance->UpdateScene(new EditorScene(instance));
-
-    return true;
-}
-
-bool QuitCommand(Console * const console, const char *cmd) {
-    exit(0);
-    return true;
-}
-
-bool MenuCommand(Console * const console, const char *cmd) {
-    instance->UpdateScene(new MenuScene(instance));
-    return true;
-}
-
 GameWindow::GameWindow() {
-    instance = this;
 }
 
 GameWindow::~GameWindow() {
@@ -40,23 +20,41 @@ GameWindow::~GameWindow() {
         delete scene_;
 }
 
-void GameWindow::UpdateScene(Scene *scene) {
+void GameWindow::change_scene(Scene *scene) {
 	if (scene_){
 		delete scene_;
 	}
 
+    /* Stop all sounds */
 	soundEngine_->stopAllSounds();
 
+    /* Reset commands list to default */
+    console_->reset_commands();
+    GameWindow * const gameWindow = this;
+    console_->register_command("menu", [gameWindow](Console * const console, const char * args) -> bool {
+        gameWindow->change_scene(new MenuScene(gameWindow));
+        return true;
+    });
+    console_->register_command("quit", [gameWindow](Console * const console, const char * args) -> bool {
+        exit(0);
+        return true;
+    });
+    console_->register_command("startleveleditor", [gameWindow](Console * const console, const char * args) -> bool {
+        console->log_notice("Loading level editor...");
+        gameWindow->change_scene(new EditorScene(gameWindow));
+        return true;
+    });
+
 	scene_ = scene;
-	scene_->Start();
+	scene_->start();
 }
 
-irrklang::ISoundEngine *GameWindow::SoundEngine() {
+irrklang::ISoundEngine *GameWindow::sound_engine() {
 	return soundEngine_;
 }
 
-void GameWindow::GameInit() {
-    SpriteSheet::SetWindow(hWnd_, graphics_);
+void GameWindow::game_init() {
+    SpriteSheet::set_window(hWnd_, graphics_);
 
     /* Create handle of sound engine. */
     soundEngine_ = irrklang::createIrrKlangDevice(); 
@@ -72,10 +70,6 @@ void GameWindow::GameInit() {
 		DEFAULT_PITCH | FF_ROMAN,
 		"Andy Bold");
 	SelectObject(graphics_, font);
-
-
-    scene_ = new SplashScene(this);
-	scene_->Start();
 
     /* Get display refresh rate */
     DEVMODE mode;
@@ -97,45 +91,44 @@ void GameWindow::GameInit() {
     hasJoystick_ = !!RegisterRawInputDevices(&rid, 1, sizeof(RAWINPUTDEVICE));
 
     console_ = new Console(graphics_);
-    console_->RegisterCommand("menu", MenuCommand);
-    console_->RegisterCommand("quit", QuitCommand);
-    console_->RegisterCommand("startleveleditor", StartLevelEditorCommand);
-    console_->RegisterCommand("sle", StartLevelEditorCommand);
+
+    /* Set initial scene */
+    change_scene(new SplashScene(this));
 }
 
-void GameWindow::GameEnd() {
+void GameWindow::game_end() {
     delete console_;
-    SpriteSheet::Unload();
+    SpriteSheet::unload();
     soundEngine_->drop();
 }
 
-bool GameWindow::GameLoop(double delta) {
+bool GameWindow::game_loop(double delta) {
 	/* Check whether it is time to render another frame. */
     timeSinceRender_ += delta;
 
     if (timeSinceRender_ >= frameInterval_) {
         timeSinceRender_ -= frameInterval_;
 
-        scene_->Render(graphics_);
-        fps.Update();
+        scene_->render(graphics_);
+        fps.update();
 
 #ifdef SHOW_FPS
         TCHAR buf[16];
-        sprintf_s(buf, "FPS: %d", fps.GetFps());
+        sprintf_s(buf, "FPS: %d", fps.fps());
         TextOut(graphics_, 5, 5, buf, strlen(buf));
 
-        sprintf_s(buf, "UPS: %d", ups.GetFps());
+        sprintf_s(buf, "UPS: %d", ups.fps());
         TextOut(graphics_, 5, 25, buf, strlen(buf));
 #endif
 
-        console_->Render(graphics_);
+        console_->render(graphics_);
 
         /* Tell the window to repaint. */
         return true;
     }
 	else {
 		/* Handle key presses. */
-        if (console_->IsOpen()) {
+        if (console_->is_open()) {
             keys_ = KEY_NONE;
         }
         else {
@@ -177,22 +170,22 @@ bool GameWindow::GameLoop(double delta) {
 
 			/* FIXME: Fix leak in LevelManager. (initializer/destructor) */
 			while (::GetAsyncKeyState(VK_F5));
-			UpdateScene(new GameScene(this));
+			change_scene(new GameScene(this));
 		}
 
-        scene_->Update(delta, keys_ | joystickKeys_);
-		ups.Update();
+        scene_->update(delta, keys_ | joystickKeys_);
+        ups.update();
 
         return false;
     }
 }
 
 /* Handles WM_INPUT for HID input. */
-LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
+LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam, 
     LPARAM lParam) {
     switch (uMsg) {
     case WM_KEYDOWN:
-        console_->Update(wParam);
+        console_->update(wParam);
         break;
     case WM_INPUT:
     {
@@ -349,7 +342,7 @@ LRESULT GameWindow::MsgProc(HWND hWnd, UINT uMsg, WPARAM wParam,
     }
     return 0;
     default:
-        return Window::MsgProc(hWnd, uMsg, wParam, lParam);
+        return Window::msg_proc(hWnd, uMsg, wParam, lParam);
     }
 
     return 0;

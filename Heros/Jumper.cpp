@@ -6,10 +6,10 @@
 #define ANIMATION_INTERVAL  (0.25)
 
 Jumper::Jumper(Vector2 pos) :GameObject(false, pos, Vector2(16, 16)){
-	spriteSheet_ = SpriteSheet::Get("spr/Bumper.bmp");
+	spriteSheet_ = SpriteSheet::get("spr/Bumper.bmp");
 }
 
-void Jumper::Update(GameScene *scene, double delta, Keys keys) {
+void Jumper::update(GameScene *scene, double delta, Keys keys) {
 	animationTime_ += delta;
 
 	if (cooldown == 0)
@@ -23,20 +23,19 @@ void Jumper::Update(GameScene *scene, double delta, Keys keys) {
 		
 }
 
-void Jumper::EnteredCollision(GameScene *scene, GameObject *obj, Vector2 vec) {
-	//if (cooldown == 0 && obj == scene->player()){
-		if (cooldown == 0) {
-	scene->SoundEngine()->play2D("snd/Jumper.mp3");
+void Jumper::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) {
+	if (cooldown == 0 && obj == scene->player()){
+	scene->sound_engine()->play2D("snd/Jumper.mp3");
 		cooldown = 40;
-		Vector2 playervel = scene->player()->Velocity();
+		Vector2 playervel = scene->player()->velocity();
 		Vector2 Jump {0,-JUMP_POWER};
-		scene->player()->AddVelocity(Vector2(0, -abs(playervel.y)));
-		scene->player()->AddVelocity(Jump);
+		scene->player()->add_velocity(Vector2(0, -abs(playervel.y)));
+        scene->player()->add_velocity(Jump);
 
 	}
 }
 
-void Jumper::Render(Viewport &vp){
+void Jumper::render(Viewport &vp){
 	Texture t0 = { 3, 11, 19, 20 }; //small
 	Texture t1 = { 25, 13, 18, 20 }; //medium
 	Texture t2 = { 45, 12, 18, 20 }; //big
@@ -46,13 +45,13 @@ void Jumper::Render(Viewport &vp){
 
 	switch(animationIndex_) {
 		case 0:
-			spriteSheet_->Draw(t1, position_, vp);
+			spriteSheet_->draw(t1, position_, vp);
 			break;
 		case 1:
-			spriteSheet_->Draw(t2, position_, vp);
+            spriteSheet_->draw(t2, position_, vp);
 			break;
 		case 2:
-			spriteSheet_->Draw(t0, position_, vp);
+            spriteSheet_->draw(t0, position_, vp);
 			break;
 		}
 

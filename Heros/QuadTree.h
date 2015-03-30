@@ -13,10 +13,10 @@ class QuadTree
 public:
 	QuadTree();
 	QuadTree(AABB*);
-	bool Insert(GameObject*);
-	bool Delete(GameObject*);
-	void Subdivide();
-	int QueryRange(AABB*, GameObject**, int);
+	bool insert_object(GameObject*);
+	bool delete_object(GameObject*);
+	void subdivide();
+	int query_range(AABB*, GameObject**, int);
 	~QuadTree();
 private:
 	// Axis-aligned bounding box stored as a center with half-dimensions
