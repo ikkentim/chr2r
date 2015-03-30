@@ -1,6 +1,6 @@
 #include "GameHUD.h"
 void GameHUD::update(GameScene * scene , double delta, Keys keys) {
-	lives_ = scene->player()->lives_;
+	lives_ = scene->player()->lives();
 }
 void GameHUD::render(HDC gr) {
 	string str = to_string(lives_);

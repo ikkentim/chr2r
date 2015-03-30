@@ -12,86 +12,141 @@
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
-    
-    hud_ = new HUDVector;
-	level_ = LevelManager::load("lvl/level01.dat", this, player_);
 
-	state_ = PLAYING;
-	dialog_ = new DialogHUD(player_, this);
-	hud_->push_back(dialog_);
-	hud_->push_back(new GameHUD());
-
-
-	int minX = 0;
-	int maxX = 0;
-	int minY = 0;
-	int maxY = 0;
-
-    for (auto object : *level_->playable_layer()) {
-		minX = min(minX, object->position().x);
-		maxX = max(maxX, object->position().x);
-		minY = min(minY, object->position().y);
-		maxY = max(maxY, object->position().y);
 }
 
-	int boxX = (minX + maxX) / 2;
-	int boxY = (minY + maxY) / 2;
-
-	quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), Vector2(maxX - minX + 100, maxY - minY + 100)));
-
-	/* playablelayer */
-    for (auto object : *level_->playable_layer()) {
-		if (object == NULL || object == player())
-			continue;
-
-		quadTree_->insert_object(object);
-	}
-}
 
 GameScene::~GameScene() {
-    delete level_;
-	delete quadTree_;
-	delete dialog_;
+    if (level_)
+        unload_level();
+
 }
+
 void GameScene::start() {
-    if (strlen(level_->sound()))
-        sound_engine()->play2D(level_->sound(), true);
+    load_level("lvl/level01.dat");
 }
+
+void GameScene::load_level(const char * path) {
+    if (level_) {
+        window()->console()->log_error("Can't load level %s.", path);
+        window()->console()->log_error("A level has already been loaded!");
+        return;
+    }
+
+    window()->console()->log_notice("Loading level %s.", path);
+    strcpy_s(lastLevelPath_, path);
+
+    level_ = LevelManager::load(path, this, player_);
+
+    state_ = PLAYING;
+    hud_.push_back(dialog_ = new DialogHUD(player_, this));
+    hud_.push_back(new GameHUD());
+
+
+    int minX = 0;
+    int maxX = 0;
+    int minY = 0;
+    int maxY = 0;
+
+    for (auto object : *level_->playable_layer()) {
+        minX = min(minX, object->position().x);
+        maxX = max(maxX, object->position().x);
+        minY = min(minY, object->position().y);
+        maxY = max(maxY, object->position().y);
+    }
+
+    int boxX = (minX + maxX) / 2;
+    int boxY = (minY + maxY) / 2;
+
+    quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), 
+        Vector2(maxX - minX + 100, maxY - minY + 100)));
+
+    /* Add every object in the playable layer to the quadtree */
+    for (auto object : *level_->playable_layer()) {
+        if (object == NULL || object == player())
+            continue;
+
+        quadTree_->insert_object(object);
+    }
+
+    sound_engine()->stopAllSounds();
+
+    if (strlen(level_->sound())) {
+        window()->console()->log_notice("Playing level sound %s.", level_->sound());
+        sound_engine()->play2D(level_->sound(), true);
+    }
+}
+
+void GameScene::unload_level() {
+    if (!level_) {
+        window()->console()->log_error("Can't unload level.");
+        window()->console()->log_error("No level is currently loaded!");
+        return;
+    }
+
+    delete quadTree_;
+
+    for (auto hud : hud_)
+        delete hud;
+    hud_.clear();
+    dialog_ = NULL;
+
+    delete level_;
+    level_ = NULL;
+}
+
 void GameScene::update(double delta, Keys keys) {
+    if (!level_) {
+        return;
+    }
+
 	update_viewport();
 	check_states();
 
-    for (auto hud : *hud_) {
-		hud->update(this, delta, keys);
-	}
+    /* No matter the state of the scene update the HUD. */
+    for (auto hud : hud_) {
+        hud->update(this, delta, keys);
+    }
+
 	switch (state_)
 	{
 	case PAUSED:
 		return;
 	case TALKING:
 		return;
-	case PLAYER_DEAD:
-		if (player()->die())
-		{
-			window_->change_scene(new GameOverScene(window_));
-			return;
-		}
-		player()->state(Player::ALIVE);
-		state_ = PLAYING;
-		return;
+    case PLAYER_DEAD: {
+        int lives = player()->die();
+        if (lives > 0) {
+            window()->console()
+                ->log_notice("Reloading with %d lives.", lives);
+            unload_level();
+            load_level(lastLevelPath_);
+            player()->lives(lives);
+        }
+        else
+        {
+            window()->console()
+                ->log_notice("No lives left. "
+                "Changing to game over scene.");
+            window_->change_scene(new GameOverScene(window_));
+            return;
+        }
+        return;
+    }
     case REACHED_END:
-        
+        window()->console()->log_notice("Player reached end.");
         if (level_->is_last_level()) {
+            window()->console()
+                ->log_notice("No next level set. Changing to end game scene.");
             window_->change_scene(new EndGameScene(window_));
         }
         else {
-            delete level_;
-            level_ = LevelManager::load(level_->next_level(), this, player_);
-
-            sound_engine()->stopAllSounds();
-            if (strlen(level_->sound()))
-                sound_engine()->play2D(level_->sound(), true);
-            state(PLAYING);
+            int lives = player()->lives();
+            char lvlbuf[MAX_LEVEL_PATH];
+            strcpy_s(lvlbuf, level()->next_level());
+            unload_level();
+            load_level(lvlbuf);
+            player()->lives(lives);
         }
         return;
 	default:
@@ -179,6 +234,7 @@ bool GameScene::check_states()
 }
 
 void GameScene::render(HDC graphics) {
+    if (!level_) return;
 
     /* Draw background */
     const int image_width = level_->background_width();
@@ -206,7 +262,7 @@ void GameScene::render(HDC graphics) {
 	}
 
     /* Render HUD */
-    for (auto hud : *hud_) {
+    for (auto hud : hud_) {
         hud->render(graphics);
     }
 }

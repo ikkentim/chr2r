@@ -13,7 +13,6 @@ public:
 
 private:
 	SpriteSheet *spriteSheet_;
-	double position_;
 	GameWindow *window_;
 	double time_ = 0;
 };
