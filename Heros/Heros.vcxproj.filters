@@ -51,6 +51,12 @@
     <Filter Include="Source Files\HUD">
       <UniqueIdentifier>{6e4804a9-9139-4183-8168-7c68a4ba2791}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Util">
+      <UniqueIdentifier>{6402a9ce-a693-4d62-a5eb-817598c3ad8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{4480a79e-7e3f-4765-a339-ad18e721308b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -134,9 +140,6 @@
     <ClCompile Include="QuadTree.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="TestHUD.cpp">
-      <Filter>Source Files\HUD</Filter>
-    </ClCompile>
     <ClCompile Include="DialogHUD.cpp">
       <Filter>Source Files\HUD</Filter>
     </ClCompile>
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="GameHUD.cpp">
       <Filter>Source Files\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="fileutil.cpp">
+      <Filter>Source Files\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +297,9 @@
     </ClInclude>
     <ClInclude Include="GameHUD.h">
       <Filter>Header Files\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="fileutil.h">
+      <Filter>Header Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

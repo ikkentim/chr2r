@@ -9,6 +9,7 @@
 #include "EndGameScene.h"
 #include "GameOverScene.h"
 #include "GameHUD.h"
+#include "fileutil.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -30,9 +31,29 @@ void GameScene::start() {
     GameScene * const gameScene = this;
     window()->console()->register_command("startlevel", 
         [gameScene](Console * const console, const char * args) -> bool {
+
+        if (!strlen(args)) {
+            console->log_notice("Usage: startlevel [path]");
+            return true;
+        }
+
+        if (!has_extension(args, ".dat")) {
+            console->log_error("Given path is not a .dat file.");
+            console->log_notice("Usage: startlevel [path]");
+            return true;
+        }
+
+        if (!file_exists(args)) {
+            console->log_error("File does not exist");
+            console->log_notice("Usage: startlevel [path]");
+            return true;
+        }
+
         if (gameScene->level())
-            //todo
-            console->log_notice("TODO");
+            gameScene->unload_level();
+
+        console->log_notice("Loading level from %s.", args);
+        gameScene->load_level(args);
         return true;
     });
 }

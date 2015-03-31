@@ -2,21 +2,10 @@
 #include "LevelHeader.h"
 #include <fstream>
 #include <algorithm>
-#include <direct.h>
 #include "Abilities.h"
+#include "fileutil.h"
+
 #define MOVEMENT_ACCEL      (0.0004)
-
-inline bool fileExists(const char * file) {
-    auto fp = std::string(_getcwd(NULL, 0)).append("/").append(file);
-    auto ifile(fp.c_str());
-    return !!ifile;
-}
-
-inline bool isExtPath(std::string const & path, const char * ext) {
-    return path.length() >= 4 &&
-        0 == path.compare(
-        path.length() - strlen(ext), strlen(ext), ext);
-}
 
 EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -186,13 +175,13 @@ void EditorScene::start() {
      * the current level. */
     window_->console()->register_command("setterraintexture",
         [editorScene](Console * const console, const char * args) -> bool {
-        if (!isExtPath(args, ".bmp")) {
+        if (!has_extension(args, ".bmp")) {
             console->log_error("Given path is not a .bmp file.");
             console->log_notice("Usage: setterraintexture [path]");
             return true;
         }
 
-        if (!fileExists(args)) {
+        if (!file_exists(args)) {
             console->log_error("File does not exist.");
             console->log_notice("Usage: setterraintexture [path]");
             return true;
@@ -207,13 +196,13 @@ void EditorScene::start() {
      * Sets the background texture for the current level. */
     window_->console()->register_command("setbackgroundtexture",
         [editorScene](Console * const console, const char * args) -> bool {
-        if (!isExtPath(args, ".bmp")) {
+        if (!has_extension(args, ".bmp")) {
             console->log_error("Given path is not a .bmp file.");
             console->log_notice("Usage: setbackgroundtexture [path]");
             return true;
         }
 
-        if (!fileExists(args)) {
+        if (!file_exists(args)) {
             console->log_error("File does not exist.");
             console->log_notice("Usage: setbackgroundtexture [path]");
             return true;
@@ -246,13 +235,13 @@ void EditorScene::start() {
      * overlay is drawn over the background in a parallelish way. */
     window_->console()->register_command("setbackgroundoverlaytexture",
         [editorScene](Console * const console, const char * args) -> bool {
-        if (!isExtPath(args, ".bmp")) {
+        if (!has_extension(args, ".bmp")) {
             console->log_error("Given path is not a .bmp file.");
             console->log_notice("Usage: setbackgroundoverlaytexture [path]");
             return true;
         }
 
-        if (!fileExists(args)) {
+        if (!file_exists(args)) {
             console->log_error("File does not exist.");
             console->log_notice("Usage: setbackgroundoverlaytexture [path]");
             return true;
@@ -339,7 +328,7 @@ void EditorScene::start() {
      * Saves the current level to the specified path. */
     window_->console()->register_command("savelevel",
         [editorScene](Console * const console, const char * args) -> bool {
-        if (!isExtPath(args, ".dat")) {
+        if (!has_extension(args, ".dat")) {
             console->log_error("Given path is not a .dat file.");
             console->log_notice("Usage: savelevel [path]");
             return true;
@@ -356,8 +345,19 @@ void EditorScene::start() {
         [editorScene](Console * const console, const char * args) -> bool {
         std::string command = args;
 
-        if (!isExtPath(args, ".dat")) {
+        if (!strlen(args)) {
+            console->log_notice("Usage: loadlevel [path]");
+            return true;
+        }
+
+        if (!has_extension(args, ".dat")) {
             console->log_error("Given path is not a .dat file.");
+            console->log_notice("Usage: loadlevel [path]");
+            return true;
+        }
+
+        if (!file_exists(args)) {
+            console->log_error("File does not exist");
             console->log_notice("Usage: loadlevel [path]");
             return true;
         }
@@ -389,7 +389,7 @@ void EditorScene::start() {
             return true;
         }
 
-        if (!fileExists(args)) {
+        if (!file_exists(args)) {
             console->log_error("File does not exist.");
             console->log_notice("Usage: setsound [path]");
             return true;
@@ -404,13 +404,13 @@ void EditorScene::start() {
      * is no next map. */
     window_->console()->register_command("setnextlevel",
         [editorScene](Console * const console, const char * args) -> bool {
-        if (!isExtPath(args, ".dat")) {
+        if (!has_extension(args, ".dat")) {
             console->log_error("Given path is not a .dat file.");
             console->log_notice("Usage: setnextlevel [path]");
             return true;
         }
 
-        if (!fileExists(args)) {
+        if (!file_exists(args)) {
             console->log_error("File does not exist.");
             console->log_notice("Usage: setnextlevel [path]");
             return true;
