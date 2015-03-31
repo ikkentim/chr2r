@@ -5,7 +5,10 @@ void GameHUD::update(GameScene * scene , double delta, Keys keys) {
 void GameHUD::render(HDC gr) {
 	string str = to_string(lives_);
 
-	str.append(" Lives");
+	if (lives_ > 1)
+		str.append(" Lives");
+	else
+		str.append(" Life");
 
 	SpriteSheet * spr = SpriteSheet::get("spr/mario.bmp");
 
@@ -16,5 +19,5 @@ void GameHUD::render(HDC gr) {
 
 	spr->draw(txt, 100, 100);
 
-    TextOut(gr, 200, 10, str.c_str(), 7);
+    TextOut(gr, 550, 10, str.c_str(), 7);
 }

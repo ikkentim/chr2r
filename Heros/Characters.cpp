@@ -1,6 +1,8 @@
 #pragma once
 #include "Characters.h"
 #include "JumpAbility.h"
+#include "SprintAbility.h"
+#include "SplashAbility.h"
 
 #define ANIMATION_INTERVAL	(0.08)
 

@@ -9,6 +9,7 @@
 #include "EndGameScene.h"
 #include "GameOverScene.h"
 #include "GameHUD.h"
+#include "fileutil.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -23,7 +24,38 @@ GameScene::~GameScene() {
 }
 
 void GameScene::start() {
+    /* Load first level. */
     load_level("lvl/level01.dat");
+
+    /* Load commands. */
+    GameScene * const gameScene = this;
+    window()->console()->register_command("startlevel", 
+        [gameScene](Console * const console, const char * args) -> bool {
+
+        if (!strlen(args)) {
+            console->log_notice("Usage: startlevel [path]");
+            return true;
+        }
+
+        if (!has_extension(args, ".dat")) {
+            console->log_error("Given path is not a .dat file.");
+            console->log_notice("Usage: startlevel [path]");
+            return true;
+        }
+
+        if (!file_exists(args)) {
+            console->log_error("File does not exist");
+            console->log_notice("Usage: startlevel [path]");
+            return true;
+        }
+
+        if (gameScene->level())
+            gameScene->unload_level();
+
+        console->log_notice("Loading level from %s.", args);
+        gameScene->load_level(args);
+        return true;
+    });
 }
 
 void GameScene::load_level(const char * path) {
@@ -58,7 +90,7 @@ void GameScene::load_level(const char * path) {
     int boxX = (minX + maxX) / 2;
     int boxY = (minY + maxY) / 2;
 
-    quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), 
+    quadTree_ = new QuadTree(AABB(Vector2(boxX, boxY), 
         Vector2(maxX - minX + 100, maxY - minY + 100)));
 
     /* Add every object in the playable layer to the quadtree */
@@ -160,11 +192,9 @@ void GameScene::update(double delta, Keys keys) {
 
     /* Check collision on movableslayer */ 
     for (auto object : *level_->movables()) {
-		AABB* queryBox = new AABB(object->position(), Vector2(32, 32));
+		AABB queryBox = AABB(object->position(), Vector2(32, 32));
 
 		int count = quadTree_->query_range(queryBox, collisionBuffer_, 0);
-
-		delete queryBox;
 
 		object->check_for_collisions(this, collisionBuffer_, count, delta);
 

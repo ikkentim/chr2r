@@ -5,7 +5,7 @@
 #define JUMP_POWER (600)
 #define ANIMATION_INTERVAL  (0.25)
 
-Jumper::Jumper(Vector2 pos) :GameObject(false, pos, Vector2(16, 16)){
+Jumper::Jumper(Vector2 pos) :GameObject(false, pos, Vector2(15, 16)){
 	spriteSheet_ = SpriteSheet::get("spr/Bumper.bmp");
 }
 
@@ -36,9 +36,12 @@ void Jumper::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) {
 }
 
 void Jumper::render(Viewport &vp){
-	Texture t0 = { 3, 11, 19, 20 }; //small
-	Texture t1 = { 25, 13, 18, 20 }; //medium
-	Texture t2 = { 45, 12, 18, 20 }; //big
+	//Texture t0 = { 3, 11, 19, 20 }; //small
+	//Texture t1 = { 25, 13, 18, 20 }; //medium
+	//Texture t2 = { 45, 12, 18, 20 }; //big
+    Texture t0 = { 4, 14, 15, 16}; //small
+    Texture t1 = { 26, 14, 15, 16 }; //medium
+    Texture t2 = { 47, 14, 15, 16 }; //big
 
 	if (cooldown > 0)
 		cooldown--;

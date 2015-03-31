@@ -92,7 +92,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -107,6 +106,7 @@
     <ClCompile Include="EnnemyDog.cpp" />
     <ClCompile Include="EnnemyFlying.cpp" />
     <ClCompile Include="EnnemyJumping.cpp" />
+    <ClCompile Include="fileutil.cpp" />
     <ClCompile Include="Fps.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
@@ -145,6 +145,7 @@
     <ClInclude Include="EnnemyDog.h" />
     <ClInclude Include="EnnemyFlying.h" />
     <ClInclude Include="EnnemyJumping.h" />
+    <ClInclude Include="fileutil.h" />
     <ClInclude Include="Fps.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOverScene.h" />
