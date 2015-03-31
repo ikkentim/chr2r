@@ -38,14 +38,15 @@ public:
     GameWindow *window() {
         return window_;
     }
-	virtual void state(State);
-    virtual State state();
+	void state(State);
+    State state();
+
+    void load_level(const char * path);
+    void unload_level();
 
     /* TODO: make private */
 	DialogHUD *dialog_;
 private:
-    void load_level(const char * path);
-    void unload_level();
 	void update_viewport();
 	bool check_states();
 

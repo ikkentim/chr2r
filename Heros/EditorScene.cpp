@@ -31,8 +31,8 @@ EditorScene::EditorScene(GameWindow *window)
     /* Fill map of game object types */
     objectTypes_[BLOCK] = GameObjectTypeData("BLOCK", 0, 0, 
         NULL, Texture(0,0,0,0));
-    objectTypes_[JUMPER] = GameObjectTypeData("JUMPER", 19, 20, 
-        SpriteSheet::get("spr/Bumper.bmp"), Texture(3, 11, 19, 20));
+    objectTypes_[JUMPER] = GameObjectTypeData("JUMPER", 15, 16, 
+        SpriteSheet::get("spr/Bumper.bmp"), Texture(47, 14, 15, 16));
     objectTypes_[COIN] = GameObjectTypeData("COIN", 12, 16,
         SpriteSheet::get("spr/terrain.bmp"), Texture(219, 28, 12, 16));
 
