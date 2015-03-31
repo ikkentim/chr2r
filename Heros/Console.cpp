@@ -1,5 +1,4 @@
 #include "Console.h"
-#include <stdio.h>
 #include <assert.h>
 
 #define LINE_HEIGHT         (15)
@@ -23,7 +22,8 @@ Console::Console(HDC hdc) {
 
 void Console::reset_commands() {
     commands_.clear();
-    register_command("commands", [](Console * const console, const char * args) -> bool {
+    register_command("commands", 
+        [](Console * const console, const char * args) -> bool {
         console->log_available_commands();
         return true;
     });
@@ -110,12 +110,14 @@ void Console::log_user_input(const char *message) {
     log(message, "input", RGB(255, 255, 255));
 }
 
-void Console::log(const char *format, va_list args, char *type, COLORREF color) {
+void Console::log(const char *format, va_list args, char *type, 
+    COLORREF color) {
     char buffer[CONSOLE_BUFFER_SIZE];
 
     vsnprintf_s(buffer, CONSOLE_BUFFER_SIZE, format, args);
     log(buffer, type, color);
 }
+
 void Console::log(const char *message, char *type, COLORREF color) {
 
     strcpy_s(consoleTypeBuffer_[consolePos_], type);
@@ -125,7 +127,8 @@ void Console::log(const char *message, char *type, COLORREF color) {
     consolePos_ %= CONSOLE_LOG_COUNT;
 }
 
-bool Console::register_command(std::string name, ConsoleCommandHandler handler) {
+bool Console::register_command(std::string name, 
+    ConsoleCommandHandler handler) {
     assert(handler);
     assert(name.length() < 32);
 
@@ -195,7 +198,8 @@ void Console::render(HDC hdc) {
     for (int i = 0; i < CONSOLE_LOG_COUNT; i++) {
         int y = CONSOLE_HEIGHT - LINE_HEIGHT * 2 - i * LINE_HEIGHT;
 
-        int rpos = ((CONSOLE_LOG_COUNT - i) + consolePos_ - 1) % CONSOLE_LOG_COUNT;
+        int rpos = ((CONSOLE_LOG_COUNT - i) + consolePos_ - 1) 
+            % CONSOLE_LOG_COUNT;
 
         if (!strlen(consoleBuffer_[rpos]))
             continue;
@@ -207,11 +211,14 @@ void Console::render(HDC hdc) {
         TextOut(dc_, 0, y, buffer, strlen(buffer));
 
         SetTextColor(dc_, RGB(255, 255, 255));
-        TextOut(dc_, CONSOLE_TYPE_WIDTH, y, consoleBuffer_[rpos], strlen(consoleBuffer_[rpos]));
+        TextOut(dc_, CONSOLE_TYPE_WIDTH, y, consoleBuffer_[rpos], 
+            strlen(consoleBuffer_[rpos]));
     }
 
-    TextOut(dc_, 0, CONSOLE_HEIGHT - LINE_HEIGHT, inputBuffer_, strlen(inputBuffer_));
+    TextOut(dc_, 0, CONSOLE_HEIGHT - LINE_HEIGHT, inputBuffer_, 
+        strlen(inputBuffer_));
 
-    AlphaBlend(hdc, 0, 0, CONSOLE_WIDTH, CONSOLE_HEIGHT, dc_, 0, 0, CONSOLE_WIDTH, CONSOLE_HEIGHT, { AC_SRC_OVER, 0, 200, 0 });
+    AlphaBlend(hdc, 0, 0, CONSOLE_WIDTH, CONSOLE_HEIGHT, dc_, 0, 0, 
+        CONSOLE_WIDTH, CONSOLE_HEIGHT, { AC_SRC_OVER, 0, 200, 0 });
     DeleteObject(hbr);
 }

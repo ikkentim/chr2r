@@ -12,16 +12,16 @@ class QuadTree
 {
 public:
 	QuadTree();
-	QuadTree(AABB*);
+	QuadTree(AABB);
 	bool insert_object(GameObject*);
 	bool delete_object(GameObject*);
 	void subdivide();
-	int query_range(AABB*, GameObject**, int);
+	int query_range(AABB, GameObject**, int);
 	~QuadTree();
 private:
 	// Axis-aligned bounding box stored as a center with half-dimensions
 	// to represent the boundaries of this quad tree
-	AABB* boundary_;
+	AABB boundary_;
 
 	// Points in this quad tree node
 	GameObject* points_[QUAD_TREE_CAPACITY];
