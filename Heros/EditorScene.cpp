@@ -44,6 +44,9 @@ EditorScene::EditorScene(GameWindow *window)
     actorTypes_[CHARACTER_MAGIKARP] = GameObjectTypeData("CHARACTER_MAGIKARP", 
         16, 28, SpriteSheet::get("spr/magikarp_Sprite.bmp"), 
         Texture(10, 158, 30, 36));
+	actorTypes_[CHARACTER_SNAKE] = GameObjectTypeData("CHARACTER_SNAKE",
+		16, 28, SpriteSheet::get("spr/Box_Sprite.bmp"),
+		Texture(76, 12, 18, 18));
 
     /* Set default actor type */
     currentActorType_ = DOG;

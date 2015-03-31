@@ -86,6 +86,9 @@ LevelManager *LevelManager::load(const char * name, GameScene *scene,
         case CHARACTER_MAGIKARP:
             actor = new Magikarp(Vector2(actor_buffer.x, actor_buffer.y));
 			break;
+		case CHARACTER_SNAKE:
+			actor = new Snake(Vector2(actor_buffer.x, actor_buffer.y));
+			break;
 		case FLYING_ENEMIE:
 			actor = new EnnemyFlying(Vector2(actor_buffer.x, actor_buffer.y));
 			break;

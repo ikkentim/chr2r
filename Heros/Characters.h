@@ -30,3 +30,11 @@ private:
 	int texture_top = 36;
 	int texture_left = 30;
 };
+
+class Snake : public Character {
+public:
+	Snake(Vector2);
+
+	void update(GameScene*, double, Keys);
+	void render(Viewport &vp);
+};
