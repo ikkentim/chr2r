@@ -39,11 +39,11 @@ void DialogHUD::render(HDC hdc) {
 
 		std::string text = dialogit->sentence;
 		if (dialogit->playerspoken) {
-			TextOut(hdc, 150,
+			TextOut(hdc, 50,
 				100, text.c_str(), text.length());
 		}
 		else {
-			TextOut(hdc, 400,
+			TextOut(hdc, 300,
 				100, text.c_str(), text.length());
 		}
 	}
