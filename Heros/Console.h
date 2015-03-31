@@ -1,4 +1,8 @@
-    #pragma once
+/**
+ * Console.h
+ * Declares the Console class.
+ */
+#pragma once
 #include <Windows.h>
 #include <map>
 #include <string>
@@ -8,21 +12,42 @@
 #define CONSOLE_BUFFER_SIZE         (256)
 #define CONSOLE_TYPE_BUFFER_SIZE    (32)
 
-typedef std::function<bool(class Console * const console, const char * args)>
-    ConsoleCommandHandler;
-
+// Represents a console
 class Console
 {
 public:
-    Console(HDC);
-    void update(WPARAM);
-    void render(HDC);
+    // A function to handle console commands
+    typedef std::function<bool(class Console * const console, const char * args)>
+        ConsoleCommandHandler;
+
+    // A constructor for the specified graphics handle
+    Console(HDC hDc);
+
+    // Updates based on the specified wparam
+    void update(WPARAM wParam);
+
+    // Renders the graphics to the specified handle
+    void render(HDC hDc);
+
+    // Registers a command
     bool register_command(std::string, ConsoleCommandHandler);
+
+    // Removes a registered command
     void remove_command(std::string);
+
+    // Removes all commands
     void reset_commands();
+
+    // Logs a notice
     void log_notice(const char *, ...);
+
+    // Logs a warning
     void log_warn(const char *, ...);
+
+    // Logs an error
     void log_error(const char *, ...);
+
+    // Logs all available commands
     void log_available_commands();
 
     bool is_open() {

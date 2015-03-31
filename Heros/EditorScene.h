@@ -1,5 +1,10 @@
+/**
+ * EditorScene.h
+ * Declares the EditorScene class.
+ */
 #pragma once
-#include "Scene.h"
+
+#include "IScene.h"
 #include <string>
 #include "GameWindow.h"
 #include "Viewport.h"
@@ -12,33 +17,77 @@
 
 #define MAX_GAME_OBJECT_TYPE_NAME_LENGTH  (32)
 
-class EditorScene : public Scene {
+// Represents a level editor scene
+class EditorScene : public IScene {
 public:
-    EditorScene(GameWindow *);
+    // A constructor which sets the gamewindow
+    EditorScene(GameWindow * window);
+
+    // Default destructor
     ~EditorScene() override;
 
+    // Initialises the scene
     void start() override;
-    void update(double, Keys) override;
-    void render(HDC graphics) override;
-    void load(const char *);
-    void save(const char *);
 
+    // Performs the update logic
+    void update(double, Keys) override;
+
+    // Renders the graphics
+    void render(HDC graphics) override;
+
+    // Loads the level from the specified path
+    void load(const char *path);
+
+    // Saves the level to the specified path
+    void save(const char *path);
+
+    // Sets the background
     void background(const char *background);
+
+    // Sets the background overlay
     void background_overlay(const char *background);
+
+    // Sets the terrain texture sheet
     void terrain(const char *terrain);
+
+    // Sets the backgound music
     void sound(const char *path);
+
+    // Sets the next level
     void next_level(const char *path);
+
+    // Sets the background width
     void background_width(int backgroundWidth);
+
+    // Sets the background overlay width
     void background_overlay_width(int backgroundWidth);
+
+    // Sets the bottom y coordinate under which the player dies
     void bottom_y(int y);
+
+    // Moves the cursor to the specified X- and Y-coordinates
     void go_to(int x, int y);
+
+    // Set the X-coordinate the player needs to reach to win
     void end_game_x(int x);
+
+    // Sets the player spawn coordinates
     void player_spawn(int x, int y);
+
+    // Gets the current cursor position
     void current_pos(int &x, int &y);
+
+    // Sets the grid size
     void grid_size(int size);
+
+    // Selects the specified texture
     void select_texture(int left, int top, int width, int height);
+
+    // Toggles the visibility of the specified layer
     bool toggle_layer_visible(LevelManager::Layer layer);
-    bool toggle_ability_type(AbilityType type);
+
+    // Toggles the availability of the specified ability
+    bool toggle_ability_type(Abilities type);
 
 private:
     struct GameObjectTypeData {
@@ -91,7 +140,7 @@ private:
     int playerX_ = 0;
     int playerY_ = 0;
     int gridSize_ = 1;
-    AbilityType abilities_ = ABILITY_NONE;
+    Abilities abilities_ = ABILITY_NONE;
 
     SpriteSheet *background_ = NULL;
     SpriteSheet *backgroundOverlay_ = NULL;

@@ -1,23 +1,36 @@
+/**
+ * EnnemyJumping.h
+ * Declares the EnnemyJumping class.
+ */
 #pragma once
 
-#include <stdio.h>
 #include "Ennemis.h"
 #include "SpriteSheet.h"
 
+// Represents an enemy jumper
 class EnnemyJumping : public Ennemis {
 public:
-	enum AnimationState{
+    // Enumartion of animation states
+	enum AnimationState {
 		RUN_RIGHT,
 		RUN_LEFT,
 		JUMP_
-	};
-	EnnemyJumping(Vector2);
+    };
+
+    // A constructor which sets the position 
+    EnnemyJumping(Vector2 position);
+
+    // Default destructor
 	~EnnemyJumping();
 
-	void Jump(double);
+    // Jump up
+    void jump(double);
 
-	void render(Viewport &) override;
-	void update(GameScene *, double, Keys) override;
+    // Performs the update logic
+    void update(GameScene *, double, Keys) override;
+
+    // Renders the graphics
+    void render(Viewport &) override;
 
 private:
 	AnimationState state_;

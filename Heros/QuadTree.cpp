@@ -1,3 +1,8 @@
+/**
+ * QuadTree.cpp
+ * Defines the QuadTree class.
+ */
+
 #include "QuadTree.h"
 #include <vector>
 

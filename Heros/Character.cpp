@@ -1,3 +1,8 @@
+/**
+ * Character.cpp
+ * Defines the abstract Character class.
+ */
+
 #include "Character.h"
 #include "GameScene.h"
 #include "DialogHUD.h"

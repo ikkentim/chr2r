@@ -1,3 +1,8 @@
+/**
+ * GameWindow.cpp
+ * Defines the GameWindow class.
+ */
+
 #include "GameWindow.h"
 #include <typeinfo>
 #include <hidsdi.h>
@@ -20,7 +25,7 @@ GameWindow::~GameWindow() {
         delete scene_;
 }
 
-void GameWindow::change_scene(Scene *scene) {
+void GameWindow::change_scene(IScene *scene) {
 	if (scene_){
 		delete scene_;
 	}

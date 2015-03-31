@@ -1,3 +1,8 @@
+/**
+ * Block.cpp
+ * Defines the Block class.
+ */
+
 #include "Block.h"
 #include "SpriteSheet.h"
 

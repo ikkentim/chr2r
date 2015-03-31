@@ -1,3 +1,8 @@
+/**
+ * SplashAbility.cpp
+ * Defines the SplashAbility class.
+ */
+
 #include "SplashAbility.h"
 #include "Player.h"
 #include "GameScene.h"

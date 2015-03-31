@@ -1,3 +1,8 @@
+/**
+ * Jumper.cpp
+ * Defines the Jumper class.
+ */
+
 #include "Jumper.h"
 #include "SpriteSheet.h"
 #include "GameScene.h"

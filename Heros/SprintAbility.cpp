@@ -1,3 +1,8 @@
+/**
+ * SprintAbility.cpp
+ * Defines the SprintAbility class.
+ */
+
 #include "SprintAbility.h"
 
 #include "Player.h"

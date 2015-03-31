@@ -1,3 +1,8 @@
+/**
+ * Window.cpp
+ * Defines the abstract Window class.
+ */
+
 #include "Window.h"
 #include <tchar.h>
 #include <math.h>

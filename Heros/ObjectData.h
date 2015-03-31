@@ -1,14 +1,13 @@
+/**
+ * ObjectData.h
+ * Defines the ObjectData structure.
+ */
 #pragma once
 
 #include "LevelManager.h"
+#include "ObjectType.h"
 
-enum ObjectType {
-    BLOCK,
-    COIN,
-    JUMPER
-};
-
-
+// Contains object data
 struct ObjectData {
     ObjectData() :texture(Texture(0, 0, 0, 0)) {
     }

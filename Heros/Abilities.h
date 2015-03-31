@@ -1,3 +1,8 @@
+/**
+ * Abilities.h
+ * Contains definitions for every available ability type and declares the 
+ * Abilities type.
+ */
 #pragma once
 
 #define ABILITY_NONE        (0)
@@ -7,4 +12,5 @@
 #define ABILITY_SNEAK       (8)
 #define ABILITY_DUCK        (16)
 
-typedef int AbilityType;
+// Holds a bit field of available abilities.
+typedef int Abilities;

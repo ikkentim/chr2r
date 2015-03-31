@@ -1,3 +1,8 @@
+/**
+ * DuckAbility.cpp
+ * Defines the DuckAbility class.
+ */
+
 #include "DuckAbility.h"
 #include "Player.h"
 #include "GameScene.h"

@@ -1,3 +1,8 @@
+/**
+ * GameOverScene.cpp
+ * Defines the GameOverScene class.
+ */
+
 #include "GameOverScene.h"
 #include "MenuScene.h"
 #include "SpriteSheet.h"

@@ -1,3 +1,8 @@
+/**
+ * LevelManager.cpp
+ * Defines the LevelManager class.
+ */
+
 #include "LevelManager.h"
 #include <fstream>
 #include "Block.h"
@@ -100,7 +105,7 @@ LevelManager *LevelManager::load(const char * name, GameScene *scene,
         manager->add(actor, MOVABLE);
     }
 
-    player = new Player(scene, Vector2(header.player_x, header.player_y));
+    player = new Player(Vector2(header.player_x, header.player_y));
 
     if (header.player_abilities & ABILITY_JUMP)
         player->give_ability(new JumpAbility);

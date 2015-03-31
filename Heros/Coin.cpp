@@ -1,3 +1,8 @@
+/**
+ * Coin.cpp
+ * Defines the Coin class.
+ */
+
 #include "Coin.h"
 #include "SpriteSheet.h"
 #include "GameScene.h"

@@ -1,3 +1,8 @@
+/**
+ * SneakAbility.cpp
+ * Defines the SneakAbility class.
+ */
+
 #include "SneakAbility.h"
 #include "Player.h"
 #include "GameScene.h"

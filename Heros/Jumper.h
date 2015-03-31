@@ -1,15 +1,28 @@
+/**
+ * Jumper.h
+ * Declares the Jumper class.
+ */
 #pragma once
 
 #include "GameObject.h"
 #include "Texture.h"
 
+// Represents a trampoline
 class Jumper : public GameObject{
 
 public:
-	Jumper(Vector2);
-	void update(GameScene *, double, Keys) override;
-	void render(Viewport &) override;
-    void entered_collision(GameScene *, GameObject *, Vector2) override;
+    // A constructor which sets the position
+    Jumper(Vector2 position);
+
+    // Performs the update logic
+    void update(GameScene *, double, Keys) override;
+
+    // Renders the graphics
+    void render(Viewport &) override;
+
+    // Contains logic for handling collisions
+    virtual void entered_collision(GameScene *scene, GameObject *other,
+        Vector2 overlap);
 
 private:
 	SpriteSheet *spriteSheet_;

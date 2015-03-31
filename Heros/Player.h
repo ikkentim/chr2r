@@ -1,13 +1,17 @@
+/**
+ * Player.h
+ * Declares the Player class.
+ */
 #pragma once
 
 #include "Actor.h"
 #include "Keys.h"
-#include <irrKlang.h>
 #include "Ability.h"
 
+// Represents a player
 class Player : public Actor {
 public:
-    enum AnimationState{
+    enum AnimationState {
 		RUN_RIGHT,
 		RUN_LEFT,
 		JUMP_RIGHT,
@@ -26,36 +30,55 @@ public:
 
 	};
 
-    Player(class GameScene *, Vector2);
+    // A constructor which sets the position of the player
+    Player(Vector2);
+
+    // Performs the update logic
     void update(GameScene *, double, Keys) override;
+
+    // Renders the graphics
 	void render(Viewport &) override;
+
+    // Die
 	int die();
-	void add_velocity(Vector2);
-    void give_ability(Ability *);
-	Vector2 velocity(){
-		return velocity_;
-    }
+
+    // Adds the specified value to the velocity
+	void add_velocity(Vector2 value);
+
+    // Gives the specified ability to the player
+    void give_ability(Ability *ability);
+  
+    // Gets a value indicating whether the player is sneaking
     bool is_sneaking() {
         return sneakingAbility_ && sneakingAbility_->is_active();
     }
+
+    // Gets a value indicating whether the player is sprinting
     bool is_sprinting() {
         return sprintingAbility_ && sprintingAbility_->is_active();
     }
+
+    // Gets a value indicating whether the player is splashing
     bool is_splashing() {
         return splashingAbility_ && splashingAbility_->is_active();
     }
+
+    // Gets a value indicating whether the player is ducking
     bool is_ducking() {
         return duckingAbility_ && duckingAbility_->is_active();
-	}
+    }
+
+    // Gets the number of lives left
     int lives() {
         return lives_;
     }
+
+    // Sets the number of lives left
     void lives(int lives) {
         lives_ = lives;
     }
-private:
-	bool Player::is_dead_state(State);
 
+private:
     Ability *sneakingAbility_ = NULL;
     Ability *jumpingAbility_ = NULL;
     Ability *sprintingAbility_ = NULL;
@@ -70,8 +93,6 @@ private:
 	int animationIndex_ = 0;
     int animationFrames_ = 1;
     AnimationState state_;
-    irrklang::ISoundEngine *soundEngine_ = NULL;
-
     AnimationState get_animation_state(int &frames);
 	int lives_ = 3;
 };

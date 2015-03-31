@@ -1,3 +1,8 @@
+/**
+ * Ennemis.cpp
+ * Defines the abstract Ennemis class.
+ */
+
 #include "Ennemis.h"
 #include "GameScene.h"
 #include "Actor.h"
@@ -7,12 +12,8 @@
 
 
 Ennemis::Ennemis(Vector2 pos, SpriteSheet *spriteSheet) :Actor(pos, Vector2(16, 16)){
-	//velocity_ = Vector2(WALK_SPEED, 0);
     spriteSheet_ = spriteSheet;
-
 }
-Ennemis :: ~Ennemis(){}
-
 void Ennemis::go_left(double delta){
 
 	Vector2 hAccel = { -(WALK_ACCEL + abs(velocity_.x)),0};
@@ -25,18 +26,8 @@ void Ennemis::go_right(double delta){
 	velocity_ += hAccel*delta;
 }
 
-
-/*void Ennemis::Render(Viewport &vp) {
-	Texture texture = {
-		257, 247,
-		16, 16
-	};
-
-	SpriteSheet::Get(SpriteSheet::TERRAIN)->Draw(texture, position_, vp);
-}*/
-
 void Ennemis::update(GameScene *scene, double delta, Keys keys){
-	if (is_dead_state(state())){
+	if (state() == DEAD){
 		return;
 	}
 
@@ -44,7 +35,7 @@ void Ennemis::update(GameScene *scene, double delta, Keys keys){
 }
 
 void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) {
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 	
@@ -71,11 +62,4 @@ void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) 
 			} 
 		}
 	}
-}
-
-bool Ennemis::is_dead_state(State state){
-	if (state == DEAD){
-		return true;
-	}
-	return false;
 }

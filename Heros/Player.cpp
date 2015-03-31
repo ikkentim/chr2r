@@ -1,3 +1,8 @@
+/**
+ * Player.cpp
+ * Defines the Player class.
+ */
+
 #include "Player.h"
 #include "SpriteSheet.h"
 #include "GameScene.h"
@@ -16,10 +21,9 @@
 #define TEX_WIDTH_SNEAK		(24)
 #define TEX_HEIGHT_SNEAK    (28)
 
-Player::Player(GameScene *scene, Vector2 pos) :Actor(pos, Vector2(14, 27)) {
+Player::Player(Vector2 pos) :Actor(pos, Vector2(14, 27)) {
     mainSpriteSheet_ = SpriteSheet::get("spr/MainCharacter.bmp");
     boxSpriteSheet_ = SpriteSheet::get("spr/Box_Sprite.bmp");
-    soundEngine_ = scene->sound_engine();
 }
 
 void Player::update(GameScene *scene, double delta, Keys keys) {
@@ -300,13 +304,8 @@ void Player::render(Viewport &vp) {
         : mainSpriteSheet_)->draw(texture, position_, vp);
 }
 
-int Player::die()
-{
+int Player::die() {
     return --lives_;
-}
-
-bool Player::is_dead_state(State state){
-    return state == DEAD;
 }
 
 void Player::add_velocity(Vector2 vec){

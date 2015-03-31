@@ -132,6 +132,7 @@
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="ActorData.h" />
+    <ClInclude Include="ActorType.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Characters.h" />
@@ -151,7 +152,7 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />
-    <ClInclude Include="HUD.h" />
+    <ClInclude Include="IHUD.h" />
     <ClInclude Include="JumpAbility.h" />
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="Keys.h" />
@@ -160,9 +161,10 @@
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="ObjectData.h" />
+    <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="IScene.h" />
     <ClInclude Include="SneakAbility.h" />
     <ClInclude Include="SplashAbility.h" />
     <ClInclude Include="SplashScene.h" />

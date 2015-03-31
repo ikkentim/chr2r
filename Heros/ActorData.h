@@ -1,16 +1,12 @@
+/**
+ * ActorData.h
+ * Defines the ActorData structure.
+ */
 #pragma once
 
-enum ActorType {
-    DOG,
-    FLYING_ENEMIE,
-    JUMPING_ENEMIE,
-    CHARACTER_MARIO,
-    CHARACTER_SANIC,
-    CHARACTER_MAGIKARP,
-	CHARACTER_SNAKE
+#include "ActorType.h"
 
-};
-
+// Contains actor data
 struct ActorData {
     int x;
     int y;

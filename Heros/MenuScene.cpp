@@ -1,3 +1,8 @@
+/**
+ * MenuScene.cpp
+ * Defines the MenuScene class.
+ */
+
 #include "MenuScene.h"
 #include "GameScene.h"
 

@@ -1,11 +1,21 @@
+/**
+ * GameHUD.h
+ * Declares the GameHUD class.
+ */
 #pragma once
 
-#include "HUD.h"
+#include "IHUD.h"
 #include "GameScene.h"
 
-class GameHUD : public HUD {
+class GameHUD : public IHUD {
 public:
-	int lives_ = 0;
-    void update(GameScene *, double, Keys);
-    void render(HDC);
+    int lives_ = 0;
+
+    // Performs the update logic
+    void update(GameScene*, double, Keys) override;
+
+    // Renders the graphics
+    void render(HDC) override;
+private:
+    int hearths = 0;
 };

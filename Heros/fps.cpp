@@ -1,4 +1,9 @@
-#include "fps.h"
+/**
+ * Fps.cpp
+ * Defines the Fps class.
+ */
+
+#include "Fps.h"
 
 Fps::Fps() :deltaSum_(0)
 {

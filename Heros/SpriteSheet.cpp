@@ -1,3 +1,8 @@
+/**
+ * SpriteSheet.cpp
+ * Defines the SpriteSheet class.
+ */
+
 #include "SpriteSheet.h"
 
 SpriteSheet::SpriteMap SpriteSheet::spriteSheets_;

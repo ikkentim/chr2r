@@ -1,3 +1,8 @@
+/**
+ * fileutil.cpp
+ * Defines various file path helper functions.
+ */
+
 #include "fileutil.h"
 #include <fstream>
 #include <direct.h>

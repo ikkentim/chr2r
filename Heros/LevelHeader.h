@@ -1,3 +1,7 @@
+/**
+ * LevelHeader.h
+ * Defines the LevelHeader structure.
+ */
 #pragma once
 
 #include "Abilities.h"
@@ -6,11 +10,12 @@
 #define MAX_TEXTURE_PATH    (32)
 #define MAX_LEVEL_PATH      (32)
 
+// Contains level information
 struct LevelHeader {
     int bottom;
     int player_x;
     int player_y;
-    AbilityType player_abilities;
+    Abilities player_abilities;
     char sound[MAX_SOUND_NAME];
     char background_texture[MAX_TEXTURE_PATH];
     char background_overlay_texture[MAX_TEXTURE_PATH];

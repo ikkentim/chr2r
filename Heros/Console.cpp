@@ -1,3 +1,8 @@
+/**
+ * Console.cpp
+ * Defines the Console class.
+ */
+
 #include "Console.h"
 #include <assert.h>
 

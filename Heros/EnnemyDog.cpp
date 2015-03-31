@@ -1,3 +1,8 @@
+/**
+ * EnnemyDog.cpp
+ * Defines the EnnemyDog class.
+ */
+
 #include "EnnemyDog.h"
 
 #define WALK_ACCEL  (150.0)
@@ -17,7 +22,7 @@ EnnemyDog::EnnemyDog(Vector2 pos) :Ennemis(pos, SpriteSheet::get("spr/metalgears
 EnnemyDog :: ~EnnemyDog(){}
 
 void EnnemyDog::render(Viewport &vp) {
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 	Texture texture_left = {
@@ -45,12 +50,12 @@ void EnnemyDog::render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 
 
-	spriteSheet()->draw(tex, position_, vp);
+    sprite_sheet()->draw(tex, position_, vp);
 		
 }
 
 void EnnemyDog::update(GameScene *scene, double delta, Keys keys){
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 	animationTime_ += delta;

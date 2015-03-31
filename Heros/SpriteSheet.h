@@ -1,3 +1,7 @@
+/**
+ * SpriteSheet.h
+ * Declares the SpriteSheet class.
+ */
 #pragma once
 
 #include <string>
@@ -7,20 +11,31 @@
 #include "Vector2.h"
 #include "Viewport.h"
 
+// Represents a sprite sheet
 class SpriteSheet
 {
 public:
-    SpriteSheet(const char *);
-    ~SpriteSheet(void);
+    // Default destructor
+    ~SpriteSheet();
 
+    // Sets the window and graphics handle
     static void set_window(HWND, HDC);
-    static void unload();
-    static SpriteSheet *get(std::string);
 
-    void draw(Texture &, Vector2 &pos, Viewport &);
-    void draw(Texture &, int offsetx, int offsety);
+    // Unloads all cached sheets
+    static void unload();
+
+    // Gets a spritesheet for teh specified path
+    static SpriteSheet *get(std::string path);
+
+    // Draw the specified texture
+    void draw(Texture &texture, Vector2 &pos, Viewport &viewport);
+
+    // Draw the specified texture
+    void draw(Texture &texture, int x, int y);
 
 private:
+    SpriteSheet(const char *path);
+
     typedef std::map<std::string, SpriteSheet *> SpriteMap;
     static SpriteMap spriteSheets_;
     static HWND hWnd_;

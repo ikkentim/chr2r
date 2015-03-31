@@ -1,3 +1,8 @@
+/**
+ * JumpAbility.cpp
+ * Defines the JumpAbility class.
+ */
+
 #include "JumpAbility.h"
 #include "Player.h"
 #include "GameScene.h"

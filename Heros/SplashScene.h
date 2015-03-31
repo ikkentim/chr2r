@@ -1,14 +1,29 @@
+/**
+ * SplashScene.h
+ * Declares the SplashScene class.
+ */
 #pragma once
 
-#include "Scene.h"
+#include "IScene.h"
 #include "GameWindow.h"
 #include "SpriteSheet.h"
-class SplashScene : public Scene {
+
+// Represents a splash screen
+class SplashScene : public IScene {
 public:
-    SplashScene(GameWindow *);
+    // A constructor which sets the gamewindow
+    SplashScene(GameWindow *window);
+
+    // Default destructor
     ~SplashScene() override;
+
+    // Initialises the scene
     void start() override;
+
+    // Performs the update logic
     void update(double, Keys) override;
+
+    // Renders the graphics
     void render(HDC graphics) override;
 
 private:

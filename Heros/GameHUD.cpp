@@ -1,4 +1,10 @@
+/**
+ * GameHUD.cpp
+ * Defines the GameHUD class.
+ */
+
 #include "GameHUD.h"
+
 void GameHUD::update(GameScene * scene , double delta, Keys keys) {
 	lives_ = scene->player()->lives();
 }

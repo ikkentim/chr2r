@@ -1,3 +1,8 @@
+/**
+ * EnnemyFlying.cpp
+ * Defines the EnnemyFlying class.
+ */
+
 #include "EnnemyFlying.h"
 #include <math.h>
 
@@ -13,14 +18,14 @@
 
 	EnnemyFlying::EnnemyFlying(Vector2 pos) :Ennemis(pos, SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp")){
 		velocity_ = Vector2(-WALK_SPEED, -WALK_SPEED);
-		start_position = pos;
+		start_position_ = pos;
 
 }
 
 EnnemyFlying :: ~EnnemyFlying(){}
 
 void EnnemyFlying::render(Viewport &vp) {
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 
@@ -52,12 +57,12 @@ void EnnemyFlying::render(Viewport &vp) {
 	tex.left += idx * TEXTURE_WIDTH;
 
 
-	spriteSheet()->draw(tex, position_, vp);
+    sprite_sheet()->draw(tex, position_, vp);
 
 }
 
 void EnnemyFlying::update(GameScene *scene, double delta, Keys keys){
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 
@@ -65,18 +70,18 @@ void EnnemyFlying::update(GameScene *scene, double delta, Keys keys){
 
 	nbTick_++;
 
-	if (position_.y < start_position.y - 100){
+    if (position_.y < start_position_.y - 100){
 		go_down(delta, nbTick_); //GoDown
 	}
 
-	if (position_.y > start_position.y || is_on_ground()){
+    if (position_.y > start_position_.y || is_on_ground()){
 		go_up(delta, nbTick_); //GoUp
 	}
-	if (position_.x <= start_position.x - 100){
+    if (position_.x <= start_position_.x - 100){
 		go_right(delta); 
 	}
 
-	if (position_.x >= start_position.x + 100){
+    if (position_.x >= start_position_.x + 100){
 		go_left(delta);
 	}
 	/* Update the player animation. */

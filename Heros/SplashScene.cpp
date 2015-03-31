@@ -1,3 +1,8 @@
+/**
+ * SplashScene.cpp
+ * Defines the SplashScene class.
+ */
+
 #include "SplashScene.h"
 #include "MenuScene.h"
 #include "SpriteSheet.h"

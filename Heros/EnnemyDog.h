@@ -1,20 +1,32 @@
+/**
+ * EnnemyDog.h
+ * Declares the EnnemyDog class.
+ */
 #pragma once
 
-#include <stdio.h>
 #include "Ennemis.h"
 #include "SpriteSheet.h"
-#include "Actor.h"
 
+// Represents an enemy dog
 class EnnemyDog : public Ennemis{
 public:
-	enum AnimationState{
+    // Enumartion of animation states
+	enum AnimationState {
 		RUN_RIGHT,
 		RUN_LEFT
-	};
-	EnnemyDog(Vector2);
-	~EnnemyDog();
-	void render(Viewport &) override;
+    };
+
+    // A constructor which sets the position 
+    EnnemyDog(Vector2 position);
+
+    // Default destructor
+    ~EnnemyDog();
+
+    // Performs the update logic
 	void update(GameScene *, double, Keys) override;
+
+    // Renders the graphics
+    void render(Viewport &) override;
 
 private:
 	AnimationState state_;

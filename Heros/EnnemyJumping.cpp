@@ -1,3 +1,8 @@
+/**
+ * EnnemyJumping.cpp
+ * Defines the EnnemyJumping class.
+ */
+
 #include "EnnemyJumping.h"
 
 #define WALK_ACCEL  (150.0)
@@ -18,7 +23,7 @@ EnnemyJumping::EnnemyJumping(Vector2 pos) :Ennemis(pos, SpriteSheet::get("spr/Ze
 EnnemyJumping :: ~EnnemyJumping(){}
 
 void EnnemyJumping::render(Viewport &vp) {
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 	Texture texture_OnGround = { 
@@ -46,19 +51,19 @@ void EnnemyJumping::render(Viewport &vp) {
 
 	tex.left += idx * TEXTURE_WIDTH;
 
-	spriteSheet()->draw(tex, position_, vp);
+    sprite_sheet()->draw(tex, position_, vp);
 
 }
 
 void EnnemyJumping::update(GameScene *scene, double delta, Keys keys){
-	if (is_dead_state(state())){
+    if (state() == DEAD){
 		return;
 	}
 	animationTime_ += delta;
 	//pattern of the enemie
 
 	if (is_on_ground()){
-		Jump(delta);
+		jump(delta);
 	}
 
 	/* Update the player animation. */
@@ -96,7 +101,7 @@ EnnemyJumping::AnimationState EnnemyJumping::get_animation_state(int &frames) {
     return RUN_RIGHT;/* todo: make an idle state? */
 }
 
-void EnnemyJumping::Jump(double delta){
+void EnnemyJumping::jump(double delta){
 	Vector2 hAccel = { 0, -JUMP_ACCEL };
 	velocity_ += hAccel;
 }

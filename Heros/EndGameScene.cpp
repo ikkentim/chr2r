@@ -1,3 +1,8 @@
+/**
+ * EndGameScene.cpp
+ * Defines the EndGameScene class.
+ */
+
 #include "EndGameScene.h"
 #include "MenuScene.h"
 #include "SpriteSheet.h"

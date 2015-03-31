@@ -1,3 +1,8 @@
+/**
+ * EditorScene.cpp
+ * Defines the EditorScene class.
+ */
+
 #include "EditorScene.h"
 #include "LevelHeader.h"
 #include <fstream>
@@ -1059,9 +1064,11 @@ bool EditorScene::toggle_layer_visible(LevelManager::Layer layer) {
     case LevelManager::BACKGROUND:
         return showBackgroundLayer_ = !showBackgroundLayer_;
     }
+
+    return false;
 }
 
-bool EditorScene::toggle_ability_type(AbilityType type) {
+bool EditorScene::toggle_ability_type(Abilities type) {
     abilities_ = abilities_ ^ type;
     return !!(abilities_ & type);
 }

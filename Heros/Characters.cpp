@@ -1,3 +1,8 @@
+/**
+ * Character.cpp
+ * Defines a number of Character subclasses.
+ */
+
 #pragma once
 #include "Characters.h"
 #include "JumpAbility.h"
@@ -70,16 +75,18 @@ Magikarp::Magikarp(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 }
 
 void Magikarp::render(Viewport &vp) {
+    const int height = 36;
+
 	Texture texture = {
 		10, 158,
-		texture_top, texture_left
+        height, 30
 	};
 
 	int idx = animationIndex_ > 2
 		? animationFrames_ - (2 * (animationIndex_ % animationFrames_) + 2)
 		: animationIndex_;
 
-	texture.top += idx * texture_top;
+    texture.top += idx * height;
 
 	spriteSheet_->draw(texture, position_, vp);
 }

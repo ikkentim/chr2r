@@ -1,3 +1,8 @@
+/**
+ * DialogHUD.cpp
+ * Defines the DialogHUD class.
+ */
+
 #include "DialogHUD.h"
 
 DialogHUD::DialogHUD(Player* p, GameScene* scene) : player(p), scene_(scene), wait(0) {

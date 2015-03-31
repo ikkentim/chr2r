@@ -1,23 +1,38 @@
+/**
+ * EnnemyFlying.h
+ * Declares the EnnemyFlying class.
+ */
 #pragma once
 
-#include <stdio.h>
 #include "Ennemis.h"
 #include "SpriteSheet.h"
 
+// Represents an enemy bird
 class EnnemyFlying : public Ennemis {
 public:
-	enum AnimationState{
+    // Enumartion of animation states
+	enum AnimationState {
 		RUN_RIGHT,
 		RUN_LEFT,
-	};
-	EnnemyFlying(Vector2);
+    };
+
+    // A constructor which sets the position 
+    EnnemyFlying(Vector2 position);
+
+    // Default destructor
 	~EnnemyFlying();
 
-	void go_down(double,int); //Go down
-	void go_up(double,int);// Go Up
+    // Move down for the specified delta time at the specified tick
+    void go_down(double delta, int tick);
 
-	void render(Viewport &) override;
-	void update(GameScene *, double, Keys) override;
+    // Move up for the specified delta time at the specified tick
+	void go_up(double,int);
+
+    // Performs the update logic
+    void update(GameScene *, double, Keys) override;
+
+    // Renders the graphics
+    void render(Viewport &) override;
 
 
 private:
@@ -26,7 +41,7 @@ private:
 	int animationIndex_ = 0;
 	int animationFrames_ = 1;
 	int nbTick_ = 0;
-	Vector2 start_position;
+	Vector2 start_position_;
 
     AnimationState get_animation_state(int &frames);
 };

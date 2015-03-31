@@ -1,14 +1,29 @@
+/**
+ * EndGameScene.h
+ * Declares the EndGameScene class.
+ */
 #pragma once
 
-#include "Scene.h"
+#include "IScene.h"
 #include "GameWindow.h"
 #include "SpriteSheet.h"
-class EndGameScene : public Scene {
+
+// Represents an end-game scene
+class EndGameScene : public IScene {
 public:
-    EndGameScene(GameWindow *);
+    // A constructor which sets the gamewindow
+    EndGameScene(GameWindow *window);
+
+    // Default destructor
     ~EndGameScene() override;
+
+    // Initialises the scene
     void start() override;
+
+    // Performs the update logic
     void update(double, Keys) override;
+
+    // Renders the graphics
     void render(HDC graphics) override;
 
 private:

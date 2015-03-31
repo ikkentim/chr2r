@@ -1,3 +1,8 @@
+/**
+ * GameObject.cpp
+ * Defines the abstract GameObject class.
+ */
+
 #include "GameObject.h"
 #include "Rectangle.h"
 #include <algorithm>

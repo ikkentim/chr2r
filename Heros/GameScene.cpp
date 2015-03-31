@@ -1,3 +1,8 @@
+/**
+ * GameScene.cpp
+ * Defines the GameScene class.
+ */
+
 #include "GameScene.h"
 #include "Block.h"
 #include "Coin.h"
@@ -81,10 +86,10 @@ void GameScene::load_level(const char * path) {
     int maxY = 0;
 
     for (auto object : *level_->playable_layer()) {
-        minX = min(minX, object->position().x);
-        maxX = max(maxX, object->position().x);
-        minY = min(minY, object->position().y);
-        maxY = max(maxY, object->position().y);
+        minX = min(minX, (int)object->position().x);
+        maxX = max(maxX, (int)object->position().x);
+        minY = min(minY, (int)object->position().y);
+        maxY = max(maxY, (int)object->position().y);
     }
 
     int boxX = (minX + maxX) / 2;

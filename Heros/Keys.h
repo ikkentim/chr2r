@@ -1,3 +1,7 @@
+/**
+ * Keys.h
+ * Contains definitions for every available key and declares the Keys type.
+ */
 #pragma once
 
 #define KEY_NONE        (0)
@@ -12,9 +16,9 @@
 #define KEY_O           (64)
 #define KEY_DELETE      (128)
 
-/*Player Power*/
 #define KEY_DASH		(256)
 #define KEY_SPLASH		(512)
 #define KEY_SNEAK		(1024)
 
+// Holds a bit field of keys.
 typedef int Keys;
