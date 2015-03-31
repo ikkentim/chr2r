@@ -16,5 +16,5 @@ void GameHUD::render(HDC gr) {
 
 	spr->draw(txt, 100, 100);
 
-    TextOut(gr, 200, 10, str.c_str(), 7);
+    TextOut(gr, 550, 10, str.c_str(), 7);
 }
