@@ -90,7 +90,7 @@ void GameScene::load_level(const char * path) {
     int boxX = (minX + maxX) / 2;
     int boxY = (minY + maxY) / 2;
 
-    quadTree_ = new QuadTree(new AABB(Vector2(boxX, boxY), 
+    quadTree_ = new QuadTree(AABB(Vector2(boxX, boxY), 
         Vector2(maxX - minX + 100, maxY - minY + 100)));
 
     /* Add every object in the playable layer to the quadtree */
@@ -192,11 +192,9 @@ void GameScene::update(double delta, Keys keys) {
 
     /* Check collision on movableslayer */ 
     for (auto object : *level_->movables()) {
-		AABB* queryBox = new AABB(object->position(), Vector2(32, 32));
+		AABB queryBox = AABB(object->position(), Vector2(32, 32));
 
 		int count = quadTree_->query_range(queryBox, collisionBuffer_, 0);
-
-		delete queryBox;
 
 		object->check_for_collisions(this, collisionBuffer_, count, delta);
 

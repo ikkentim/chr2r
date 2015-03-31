@@ -3,7 +3,7 @@
 
 using namespace std;
 
-QuadTree::QuadTree(AABB* box)
+QuadTree::QuadTree(AABB box)
 {
 	boundary_ = box;
 
@@ -16,7 +16,7 @@ QuadTree::QuadTree(AABB* box)
 bool QuadTree::insert_object(GameObject *object)
 {
 	// Ignore objects that do not belong in this quad tree
-	if (!boundary_->contains_point(object->position()))
+	if (!boundary_.contains_point(object->position()))
 		return false;
 
 	// If there is space in this quad tree, add the object here
@@ -42,7 +42,7 @@ bool QuadTree::insert_object(GameObject *object)
 bool QuadTree::delete_object(GameObject* object)
 {
 	// Ignore objects that do not belong in this quad tree
-	if (!boundary_->contains_point(object->position()))
+	if (!boundary_.contains_point(object->position()))
 		return false;
 
 	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
@@ -78,15 +78,15 @@ bool QuadTree::delete_object(GameObject* object)
 	return false;
 }
 
-int QuadTree::query_range(AABB *box, GameObject** objects, int count)
+int QuadTree::query_range(AABB box, GameObject** objects, int count)
 {
 	// Automatically abort if the range does not intersect this quad
-	if (!boundary_->intersects_with(box))
+	if (!boundary_.intersects_with(box))
 		return count; // empty list
 
 	for (int i = 0; i < QUAD_TREE_CAPACITY; i++)
 		if (points_[i] != NULL)
-			if (box->contains_point(points_[i]->position()))
+			if (box.contains_point(points_[i]->position()))
 				objects[count++] = points_[i];
 
 	// Terminate here, if there are no children
@@ -104,21 +104,21 @@ int QuadTree::query_range(AABB *box, GameObject** objects, int count)
 
 void QuadTree::subdivide()
 {
-	Vector2 halfHalfDimension = boundary_->half_dimension() / 2;
+	Vector2 halfHalfDimension = boundary_.half_dimension / 2;
 
-	AABB* nwBox = new AABB(boundary_->center() - halfHalfDimension, halfHalfDimension);
+	AABB nwBox = AABB(boundary_.center - halfHalfDimension, halfHalfDimension);
 
 	Vector2 neVector2;
-	neVector2.x = boundary_->center().x + halfHalfDimension.x;
-	neVector2.y = boundary_->center().y - halfHalfDimension.y;
-	AABB* neBox = new AABB(neVector2, halfHalfDimension);
+	neVector2.x = boundary_.center.x + halfHalfDimension.x;
+	neVector2.y = boundary_.center.y - halfHalfDimension.y;
+	AABB neBox = AABB(neVector2, halfHalfDimension);
 
-	AABB* seBox = new AABB(boundary_->center() + halfHalfDimension, halfHalfDimension);
+	AABB seBox = AABB(boundary_.center + halfHalfDimension, halfHalfDimension);
 
 	Vector2 swVector2;
-	swVector2.x = boundary_->center().x - halfHalfDimension.x;
-	swVector2.y = boundary_->center().y + halfHalfDimension.y;
-	AABB* swBox = new AABB(swVector2, halfHalfDimension);
+	swVector2.x = boundary_.center.x - halfHalfDimension.x;
+	swVector2.y = boundary_.center.y + halfHalfDimension.y;
+	AABB swBox = AABB(swVector2, halfHalfDimension);
 
 	northWest_ = new QuadTree(nwBox);
 	northEast_ = new QuadTree(neBox);
@@ -140,7 +140,4 @@ QuadTree::~QuadTree()
 		southWest_ = NULL;
 		southEast_ = NULL;
 	}
-	
-	if (boundary_ != NULL)
-		delete boundary_;
 }

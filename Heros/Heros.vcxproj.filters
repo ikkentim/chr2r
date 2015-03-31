@@ -134,9 +134,6 @@
     <ClCompile Include="GameOverScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="QuadTree.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
