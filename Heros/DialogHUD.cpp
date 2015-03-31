@@ -20,7 +20,7 @@ void DialogHUD::next_line() {
 		scene_->state(GameScene::PLAYING);
 	}
 }
-void DialogHUD::update(GameScene *scene, double, Keys k) {
+void DialogHUD::update(GameScene *scene, double delta, Keys k) {
 	if (k & KEY_JUMP && wait == 0 && activedialog == true) {
 		next_line();
 		wait = 30;

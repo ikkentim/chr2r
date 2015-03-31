@@ -14,6 +14,13 @@ typedef std::vector <class HUD *> HUDVector;
 
 class GameScene : public Scene {
 public:
+	enum State {
+		PLAYING,
+		PLAYER_DEAD,
+		REACHED_END,
+		PAUSED,
+		TALKING
+	};
     GameScene(GameWindow *);
     ~GameScene() override;
     void start() override;
@@ -31,30 +38,25 @@ public:
     GameWindow *window() {
         return window_;
     }
-	bool paused;
-	enum State {
-		PLAYING,
-		PLAYER_DEAD,
-		REACHED_END,
-		PAUSED,
-		TALKING
-	};
 	virtual void state(State);
     virtual State state();
 
-	QuadTree *quadTree_;
+    /* TODO: make private */
 	DialogHUD *dialog_;
-
 private:
+    void load_level(const char * path);
+    void unload_level();
 	void update_viewport();
 	bool check_states();
 
-	GameWindow *window_;
-    Player *player_;
-    HUDVector *hud_;
-    LevelManager *level_;
+	GameWindow *window_ = NULL;
+    Player *player_ = NULL;
+    HUDVector hud_;
+    LevelManager *level_ = NULL;
     Viewport viewport_;
     State state_ = PLAYING;
 	bool pausePressed_ = true;
 	GameObject* collisionBuffer_[500];
+	QuadTree *quadTree_;
+    char lastLevelPath_[MAX_LEVEL_PATH];
 };

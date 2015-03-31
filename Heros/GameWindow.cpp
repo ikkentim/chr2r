@@ -166,13 +166,13 @@ bool GameWindow::game_loop(double delta) {
 			::exit(0);
 
 		/* This restart button leaks pretty badly but it's useful. */
-		if (::GetAsyncKeyState(VK_F5)) {
-            soundEngine_->stopAllSounds();
+		//if (::GetAsyncKeyState(VK_F5)) {
+        //    soundEngine_->stopAllSounds();
 
-			/* FIXME: Fix leak in LevelManager. (initializer/destructor) */
-			while (::GetAsyncKeyState(VK_F5));
-			change_scene(new GameScene(this));
-		}
+		/* FIXME: Fix leak in LevelManager. (initializer/destructor) */
+		//	while (::GetAsyncKeyState(VK_F5));
+		//	change_scene(new GameScene(this));
+		//}
 
         scene_->update(delta, keys_ | joystickKeys_);
         ups.update(delta);
@@ -221,7 +221,7 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
         if ((int)GetRawInputDeviceInfo(rawInput->header.hDevice,
             RIDI_PREPARSEDDATA, preparsedData, &bufferSize) < 0) {
             delete[] rawInput;
-            delete[] preparsedData;
+            delete[] (char *)preparsedData;
             return 0;
         }
 
@@ -229,7 +229,7 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
         HIDP_CAPS capabilities;
         if (HidP_GetCaps(preparsedData, &capabilities) != HIDP_STATUS_SUCCESS) {
             delete[] rawInput;
-            delete[] preparsedData;
+            delete[](char *)preparsedData;
             return 0;
         }
 
@@ -241,7 +241,7 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
             &capabilities.NumberInputButtonCaps, preparsedData) != 
             HIDP_STATUS_SUCCESS) {
             delete[] rawInput;
-            delete[] preparsedData;
+            delete[](char *)preparsedData;
             delete[] buttonCapabilities;
             return 0;
         }
@@ -254,7 +254,7 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
             &usageLength, preparsedData, (PCHAR)rawInput->data.hid.bRawData,
             rawInput->data.hid.dwSizeHid) != HIDP_STATUS_SUCCESS) {
             delete[] rawInput;
-            delete[] preparsedData;
+            delete[](char *)preparsedData;
             delete[] buttonCapabilities;
             return 0;
         }
@@ -266,7 +266,7 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
             &capabilities.NumberInputValueCaps, preparsedData) != 
             HIDP_STATUS_SUCCESS) {
             delete[] rawInput;
-            delete[] preparsedData;
+            delete[](char *)preparsedData;
             delete[] buttonCapabilities;
             delete[] valueCapabilities;
             return 0;
@@ -336,7 +336,7 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
             joystickKeys_ ^= KEY_JUMP;
 
         /* Free memory from heap. */
-        delete[] preparsedData;
+        delete[](char *)preparsedData;
         delete[] buttonCapabilities;
         delete[] valueCapabilities;
         delete[] rawInput;

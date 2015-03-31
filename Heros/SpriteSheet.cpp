@@ -10,6 +10,10 @@ void SpriteSheet::set_window(HWND hWnd, HDC dcBuf) {
 }
 
 SpriteSheet *SpriteSheet::get(std::string sheet) {
+    if (sheet.empty()) {
+        return NULL;
+    }
+
     if (spriteSheets_.find(sheet) != spriteSheets_.end()) {
         return spriteSheets_[sheet];
     }

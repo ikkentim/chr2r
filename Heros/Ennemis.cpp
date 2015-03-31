@@ -51,7 +51,6 @@ void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) 
 	if (obj == scene->player()){
 		
 		if (scene->player()->velocity().y > 0 && scene->player()->position().y < position_.y){
-		//	OutputDebugString("dead");
 			state(Actor::DEAD);
 			isSolid_ = false;
 			scene->player()->add_velocity(Vector2(0, -(scene->player()->velocity().y )*2));

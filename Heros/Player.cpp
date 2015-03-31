@@ -300,23 +300,13 @@ void Player::render(Viewport &vp) {
         : mainSpriteSheet_)->draw(texture, position_, vp);
 }
 
-bool Player::die()
+int Player::die()
 {
-	if (--lives_ <= 0)
-		return true;
-
-	position_.x = 0;
-	position_.y = 0;
-
-	return false;
+    return --lives_;
 }
 
 bool Player::is_dead_state(State state){
-	if (state == DEAD){
-		
-		return true;
-	}
-	return false;
+    return state == DEAD;
 }
 
 void Player::add_velocity(Vector2 vec){

@@ -21,34 +21,42 @@ inline bool isExtPath(std::string const & path, const char * ext) {
 EditorScene::EditorScene(GameWindow *window)
     :window_(window), viewport_(Viewport(0, 0, 640, 480)) {
   
+    /* Clear char arrays */
 	ZeroMemory(sound_, MAX_SOUND_NAME);
 	ZeroMemory(backgroundPath_, MAX_TEXTURE_PATH);
 	ZeroMemory(backgroundOverlayPath_, MAX_TEXTURE_PATH);
     ZeroMemory(terrainPath_, MAX_TEXTURE_PATH);
     ZeroMemory(nextLevel_, MAX_LEVEL_PATH);
 
+    /* Fill map of game object types */
     objectTypes_[BLOCK] = GameObjectTypeData("BLOCK", 0, 0, 
         NULL, Texture(0,0,0,0));
     objectTypes_[JUMPER] = GameObjectTypeData("JUMPER", 19, 20, 
         SpriteSheet::get("spr/Bumper.bmp"), Texture(3, 11, 19, 20));
-
     objectTypes_[COIN] = GameObjectTypeData("COIN", 12, 16,
         SpriteSheet::get("spr/terrain.bmp"), Texture(219, 28, 12, 16));
-    currentObjectType_ = BLOCK;
-    actorTypes_[DOG] = GameObjectTypeData("DOG", 33, 18,
 
+    /* Set default game object */
+    currentObjectType_ = BLOCK;
+
+    /* Fill map of actor types */
+    actorTypes_[DOG] = GameObjectTypeData("DOG", 33, 18,
         SpriteSheet::get("spr/metalgearsheet.bmp"), Texture(75, 280, 33, 18));
     actorTypes_[FLYING_ENEMIE] = GameObjectTypeData("FLYING_ENEMIE", 18, 18,
-        SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(56, 241, 18, 18));
+        SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), 
+        Texture(56, 241, 18, 18));
     actorTypes_[JUMPING_ENEMIE] = GameObjectTypeData("JUMPING_ENEMIE", 12, 17,
-        SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), Texture(164, 288, 12, 17));
+        SpriteSheet::get("spr/Zelda_Enemies_Sprite.bmp"), 
+        Texture(164, 288, 12, 17));
     actorTypes_[CHARACTER_MARIO] = GameObjectTypeData("CHARACTER_MARIO", 16, 28,
         SpriteSheet::get("spr/mario.bmp"), Texture(91, 0, 16, 28));
     actorTypes_[CHARACTER_SANIC] = GameObjectTypeData("CHARACTER_SANIC", 16, 28,
         SpriteSheet::get("spr/sonic_sheet.bmp"), Texture(391, 56, 34, 40));
-    actorTypes_[CHARACTER_MAGIKARP] = GameObjectTypeData("CHARACTER_MAGIKARP", 16, 28,
-        SpriteSheet::get("spr/magikarp_Sprite.bmp"), Texture(10, 158, 30, 36));
+    actorTypes_[CHARACTER_MAGIKARP] = GameObjectTypeData("CHARACTER_MAGIKARP", 
+        16, 28, SpriteSheet::get("spr/magikarp_Sprite.bmp"), 
+        Texture(10, 158, 30, 36));
 
+    /* Set default actor type */
     currentActorType_ = DOG;
 }
 
@@ -57,14 +65,17 @@ EditorScene::~EditorScene() {
 }
 
 void EditorScene::load(const char *path) {
+    /* When loading a map, drop all known level data */
     playableLayer_.clear();
     foregroundLayer_.clear();
     backgroundLayer_.clear();
     actors_.clear();
 
+    /* Open the file at the specified path for reading */
     std::ifstream lvl;
     lvl.open(path, std::ios::in | std::ios::binary);
 
+    /* Read the file header */
     LevelHeader header;
     lvl.read((char *)&header, sizeof(header));
 
@@ -81,6 +92,7 @@ void EditorScene::load(const char *path) {
     terrain(header.terrain_texture);
     end_game_x(header.end_game_x);
 
+    /* Read the objects */
     ObjectData object_buffer;
     for (int i = 0; i < header.object_count; i++) {
         lvl.read((char *)&object_buffer, sizeof(object_buffer));
@@ -97,6 +109,7 @@ void EditorScene::load(const char *path) {
         }
     }
 
+    /* Read athe actors */
     ActorData actor_buffer;
     for (int i = 0; i < header.actor_count; i++) {
         lvl.read((char *)&actor_buffer, sizeof(actor_buffer));
@@ -105,29 +118,36 @@ void EditorScene::load(const char *path) {
 }
 
 void EditorScene::save(const char *path) {
-    LevelHeader lvl;
-    lvl.bottom = bottomY_;
-    lvl.player_x = playerX_;
-    lvl.player_y = playerY_;
-    lvl.player_abilities = abilities_;
-    sprintf_s(lvl.sound, sound_);
-    sprintf_s(lvl.background_texture, backgroundPath_);
-    sprintf_s(lvl.background_overlay_texture, backgroundOverlayPath_);
-    sprintf_s(lvl.next_level, nextLevel_);
-    lvl.background_width = backgroundWidth_;
-    lvl.background_overlay_width = backgroundOverlayWidth_;
-    sprintf_s(lvl.terrain_texture, terrainPath_);
-    lvl.actor_count = actors_.size();
-    lvl.object_count = playableLayer_.size() + foregroundLayer_.size() +
-        backgroundLayer_.size();
-    lvl.end_game_x = endGameX_;
-    lvl.is_end_game_right = endGameX_ > playerX_;
+    /* Create the file header. */
+    LevelHeader header;
+    header.bottom = bottomY_;
+    header.player_x = playerX_;
+    header.player_y = playerY_;
+    header.player_abilities = abilities_;
+    header.background_width = backgroundWidth_;
+    header.background_overlay_width = backgroundOverlayWidth_;
+    header.end_game_x = endGameX_;
+    header.is_end_game_right = endGameX_ > playerX_;
 
+    header.actor_count = actors_.size();
+    header.object_count = playableLayer_.size() 
+        + foregroundLayer_.size()
+        + backgroundLayer_.size();
+
+    sprintf_s(header.sound, sound_);
+    sprintf_s(header.background_texture, backgroundPath_);
+    sprintf_s(header.background_overlay_texture, backgroundOverlayPath_);
+    sprintf_s(header.next_level, nextLevel_);
+    sprintf_s(header.terrain_texture, terrainPath_);
+
+    /* Open the file at the specified path for writing. */
     std::ofstream lvlout;
     lvlout.open(path, std::ios::out | std::ios::binary);
 
-    lvlout.write((char *)&lvl, sizeof(lvl));
+    /* Write the header to the file. */
+    lvlout.write((char *)&header, sizeof(header));
 
+    /* Write the objects to the file. */
     for (ObjectData d : playableLayer_) {
         lvlout.write((char *)&d, sizeof(d));
     }
@@ -138,15 +158,32 @@ void EditorScene::save(const char *path) {
         lvlout.write((char *)&d, sizeof(d));
     }
 
+    /* Write the actors to the file. */
     for (ActorData d : actors_) {
         lvlout.write((char *)&d, sizeof(d));
     }
+
+    /* Close the file. */
     lvlout.close();
 
 }
 
 void EditorScene::start() {
+    /* Set useful defaults */
+    background("spr/background01.bmp");
+    terrain("spr/terrain.bmp");
+    background_width(727);
+
+    /* Register all level editor commands to the console. When the scene is
+     * changed the commands will automatically be unregistered from the console
+     * by the game window. */
+
+    /* Create a reference to 'this' scene for use in the lamba code later on. */
     EditorScene * const editorScene = this;
+
+    /* Command: setterraintexture [path] 
+     * Sets the path to the terrain texture used for every BLOCK game object for
+     * the current level. */
     window_->console()->register_command("setterraintexture",
         [editorScene](Console * const console, const char * args) -> bool {
         if (!isExtPath(args, ".bmp")) {
@@ -165,6 +202,9 @@ void EditorScene::start() {
         editorScene->terrain(args);
         return true;
     });
+
+    /* Command: setbackgroundtexture [path]
+     * Sets the background texture for the current level. */
     window_->console()->register_command("setbackgroundtexture",
         [editorScene](Console * const console, const char * args) -> bool {
         if (!isExtPath(args, ".bmp")) {
@@ -183,6 +223,9 @@ void EditorScene::start() {
         editorScene->background(args);
         return true;
     });
+
+    /* Command: setbackgroundwidth [width]
+     * Sets the size of the background texture for the current level. */
     window_->console()->register_command("setbackgroundwidth",
         [editorScene](Console * const console, const char * args) -> bool {
         int width = atoi(args);
@@ -197,6 +240,10 @@ void EditorScene::start() {
         editorScene->background_width(width);
         return true;
     });
+
+    /* Command: setbackgroundoverlaytexture [path]
+     * Sets the background overlay texture for the current level. The background
+     * overlay is drawn over the background in a parallelish way. */
     window_->console()->register_command("setbackgroundoverlaytexture",
         [editorScene](Console * const console, const char * args) -> bool {
         if (!isExtPath(args, ".bmp")) {
@@ -215,6 +262,18 @@ void EditorScene::start() {
         editorScene->background_overlay(args);
         return true;
     });
+    /* Command: clearbackgroundoverlaytexture 
+     * Removes background overlay textures set using 
+     * setbackgroundoverlaytexture. */
+    window_->console()->register_command("clearbackgroundoverlaytexture",
+        [editorScene](Console * const console, const char * args) -> bool {
+        console->log_notice("Background overlay removed.");
+        editorScene->background_overlay("");
+        return true;
+    });
+
+    /* Command: setbackgroundoverlaywidth [width]
+     * Sets the size of the background overlay texture for the current level. */
     window_->console()->register_command("setbackgroundoverlaywidth",
         [editorScene](Console * const console, const char * args) -> bool {
         int width = atoi(args);
@@ -229,6 +288,8 @@ void EditorScene::start() {
         editorScene->background_overlay_width(width);
         return true;
     });
+    /* Command: goto [x] [y]
+     * Moves the cursor to the specified x and y coordinates */
     window_->console()->register_command("goto",
         [editorScene](Console * const console, const char * args) -> bool {
         std::string command = args;
@@ -253,6 +314,8 @@ void EditorScene::start() {
         editorScene->go_to(atoi(xvalue.c_str()), atoi(yvalue.c_str()));
         return true;
     });
+    /* Command: setbottomy [y]
+     * Sets the y-coordinate under which the player dies. */
     window_->console()->register_command("setbottomy",
         [editorScene](Console * const console, const char * args) -> bool {
         int y = atoi(args);
@@ -261,6 +324,9 @@ void EditorScene::start() {
         editorScene->bottom_y(y);
         return true;
     });
+    /* Command: setendgamex [x]
+     * Sets the x-coordinate the player needs to pass to proceed to the next 
+     * level. */
     window_->console()->register_command("setendgamex",
         [editorScene](Console * const console, const char * args) -> bool {
         int x = atoi(args);
@@ -269,6 +335,8 @@ void EditorScene::start() {
         editorScene->end_game_x(x);
         return true;
     });
+    /* Command: savelevel [path]
+     * Saves the current level to the specified path. */
     window_->console()->register_command("savelevel",
         [editorScene](Console * const console, const char * args) -> bool {
         if (!isExtPath(args, ".dat")) {
@@ -282,6 +350,8 @@ void EditorScene::start() {
         console->log_notice("Level saved!", args);
         return true;
     });
+    /* Command: loadlevel [path]
+     * Loads a level from the specified path. */
     window_->console()->register_command("loadlevel",
         [editorScene](Console * const console, const char * args) -> bool {
         std::string command = args;
@@ -297,6 +367,9 @@ void EditorScene::start() {
         console->log_notice("Level loaded!", args);
         return true;
     });
+    /* Command: setplayerspawn
+     * Sets the CURRENT x- and y-coordinates of the cursor to as the player 
+     * spawn. */
     window_->console()->register_command("setplayerspawn",
         [editorScene](Console * const console, const char * args) -> bool {
         int x, y;
@@ -306,6 +379,9 @@ void EditorScene::start() {
         console->log_notice("Player spawn set to (%d, %d).", x, y);
         return true;
     });
+    /* Command: setsound [path]
+     * Sets the file at the specified path as the sound played while playing
+     * the current level. */
     window_->console()->register_command("setsound",
         [editorScene](Console * const console, const char * args) -> bool {
         if (strlen(args) == 0) {
@@ -323,6 +399,9 @@ void EditorScene::start() {
         editorScene->sound(args);
         return true;
     });
+    /* Command: setnextlevel [path]
+     * Sets the path to the next level. If none is specified, we assume there
+     * is no next map. */
     window_->console()->register_command("setnextlevel",
         [editorScene](Console * const console, const char * args) -> bool {
         if (!isExtPath(args, ".dat")) {
@@ -341,6 +420,16 @@ void EditorScene::start() {
         editorScene->next_level(args);
         return true;
     });
+    /* Command: clearnextlevel
+     * Remove the previously set next level (using setnextlevel). */
+    window_->console()->register_command("clearnextlevel",
+        [editorScene](Console * const console, const char * args) -> bool {
+        editorScene->next_level("");
+        console->log_notice("Removed next level.");
+        return true;
+    });
+    /* Command togglelayer [layer]
+     * Toggles the visibility of the specified layer. */
     window_->console()->register_command("togglelayer",
         [editorScene](Console * const console, const char * args) -> bool {
         switch (args[0])
@@ -373,6 +462,9 @@ void EditorScene::start() {
         }
         return true;
     });
+    /* Command: toggleability [ability]
+     * Toggles the availability of the specified ability at the start of the 
+     * map. */
     window_->console()->register_command("toggleability",
         [editorScene](Console * const console, const char * args) -> bool {
 
@@ -412,11 +504,15 @@ void EditorScene::start() {
         }
         else {
             console->log_notice("Invalid parameters.");
-            console->log_notice("Usage: toggleability [ability:sneak|jump|sprint|splash|duck]");
+            console->log_notice(
+                "Usage: toggleability [ability:sneak|jump|sprint|splash|duck]");
         }
 
         return true;
     });
+    /* Command: setgridsize [size]
+     * Sets the pixels the cursors jumps at when moving.
+     */
     window_->console()->register_command("setgridsize",
         [editorScene](Console * const console, const char * args) -> bool {
         int size = atoi(args);
@@ -431,6 +527,9 @@ void EditorScene::start() {
         editorScene->grid_size(size);
         return true;
     });
+
+    /* Command: selecttexture [left] [top] [width] [height]
+     * Selects the texture used for the next BLOCK placed. */
     window_->console()->register_command("selecttexture",
         [editorScene](Console * const console, const char * args) -> bool {
         std::string command = args;
@@ -507,17 +606,12 @@ void EditorScene::start() {
         editorScene->select_texture(x, y, width, height);
         return true;
     });
-
-    /* Set useful defaults */
-    background("spr/background01.bmp");
-    terrain("spr/terrain.bmp");
-    background_width(727);
 }
 
 void EditorScene::update(double delta, Keys keys) {
-
     auto accel = MOVEMENT_ACCEL * max(1, gridSize_ / 4) * delta;
-    /* Movement keys */
+
+    /* Process movement keys. */
     if (keys & KEY_LEFT)
         cursorVelocity_.x -= accel;
     else if (cursorVelocity_.x < 0)
@@ -540,7 +634,9 @@ void EditorScene::update(double delta, Keys keys) {
 
     cursorPos_ += cursorVelocity_;
 
+    /* Process layer/object switch keys. */
     if (!isKeyDown_) {
+        /* L key: Select the next layer. */
         if (keys & KEY_L) {
             switch (currentLayer_) {
             case LevelManager::PLAYABLE:
@@ -558,7 +654,11 @@ void EditorScene::update(double delta, Keys keys) {
             }
             isKeyDown_ = true;
         }
+        /* O key: Select the next available object*/
         else if (keys & KEY_O) {
+            /* Find the next available object/actor type in the map. 
+            * If none are available use the first type in the map.*/
+
             if (currentLayer_ == LevelManager::MOVABLE) {
                 auto it = actorTypes_.find(currentActorType_);
                 currentActorType_ = ++it == actorTypes_.end()
@@ -574,14 +674,14 @@ void EditorScene::update(double delta, Keys keys) {
             isKeyDown_ = true;
         }
     }
-    else {
-
+    else { /* (!isKeyDown_) */
         isKeyDown_ = (keys & KEY_L) || (keys & KEY_O);
     }
 
+    /* Process placement key. */
     if (keys & KEY_JUMP) {
         if (currentLayer_ == LevelManager::MOVABLE) {
-            /* Actors */
+            /* Place an actor. */
             ActorData data;
             data.type = currentActorType_;
             current_pos(data.x, data.y);
@@ -589,7 +689,11 @@ void EditorScene::update(double delta, Keys keys) {
             add_actor(data);
         }
         else {
-            /* Objects */
+            /* Place an object. */
+
+            /* If the current object type is BLOCK, and no texture is selected,
+             * do not place the object.
+             */
             if (currentObjectType_ != BLOCK ||
                 (selectedTexture_.width > 0 && selectedTexture_.height > 0)) {
                 ObjectData data;
@@ -612,15 +716,17 @@ void EditorScene::update(double delta, Keys keys) {
         }
         isKeyDown_ = true;
     }
+
+    /* Process deletion key. */
     if (keys & KEY_DELETE) {
         int x, y;
         current_pos(x, y);
-        if (currentLayer_ == LevelManager::MOVABLE) {
+
+        if (currentLayer_ == LevelManager::MOVABLE) 
             remove_actor(Vector2(x, y));
-        }
-        else {
+        else 
             remove_object(current_layer(), Vector2(x, y));
-        }
+        
         isKeyDown_ = true;
     }
 
@@ -630,7 +736,9 @@ void EditorScene::update(double delta, Keys keys) {
 }
 
 void EditorScene::add_object(std::vector<ObjectData> *layer, ObjectData data) {
-    for (std::vector<ObjectData>::iterator it = layer->begin(); it != layer->end();)
+    /* Find objects at the position we're trying to place an object and delete
+     * these. */
+    for (auto it = layer->begin(); it != layer->end();)
     {
         ObjectData check = *it;
 
@@ -649,7 +757,8 @@ void EditorScene::add_object(std::vector<ObjectData> *layer, ObjectData data) {
 }
 
 void EditorScene::remove_object(std::vector<ObjectData> *layer, Vector2 pos) {
-    for (std::vector<ObjectData>::iterator it = layer->begin(); it != layer->end();)
+    /* Find objects at the specified position and delete these. */
+    for (auto it = layer->begin(); it != layer->end();)
     {
         ObjectData check = *it;
         if (!(pos.x >= check.x + check.width / 2 ||
@@ -663,16 +772,17 @@ void EditorScene::remove_object(std::vector<ObjectData> *layer, Vector2 pos) {
         }
     }
 }
-Vector2 EditorScene::actor_size_for_actor(ActorType type) {
-    return Vector2(actorTypes_[type].width, actorTypes_[type].height);
-}
 
 void EditorScene::add_actor(ActorData data) {
-    auto size = actor_size_for_actor(data.type);
-    for (std::vector<ActorData>::iterator it = actors_.begin(); it != actors_.end();)
+    /* Find actors at the position we're trying to place an actor and delete
+    * these. */
+    auto size = Vector2(actorTypes_[data.type].width, 
+        actorTypes_[data.type].height);
+    for (auto it = actors_.begin(); it != actors_.end();)
     {
         ActorData check = *it;
-        auto checksize = actor_size_for_actor(check.type);
+        auto checksize = Vector2(actorTypes_[check.type].width, 
+            actorTypes_[check.type].height);
         if (!(data.x - size.x / 2 >= check.x + checksize.x / 2 ||
             data.x + size.x / 2 <= check.x - checksize.x / 2 ||
             data.y - size.y / 2 >= check.y + checksize.y / 2 ||
@@ -688,10 +798,12 @@ void EditorScene::add_actor(ActorData data) {
 }
 
 void EditorScene::remove_actor(Vector2 pos) {
-    for (std::vector<ActorData>::iterator it = actors_.begin(); it != actors_.end();)
+    /* Find actors at the specified position and delete these. */
+    for (auto it = actors_.begin(); it != actors_.end();)
     {
         ActorData check = *it;
-        auto checksize = actor_size_for_actor(check.type);
+        auto checksize = Vector2(actorTypes_[check.type].width,
+            actorTypes_[check.type].height);
         if (!(pos.x >= check.x + checksize.x / 2 ||
             pos.x <= check.x - checksize.x / 2 ||
             pos.y >= check.y + checksize.y / 2 ||
@@ -705,7 +817,7 @@ void EditorScene::remove_actor(Vector2 pos) {
 }
 
 void EditorScene::update_viewport() {
-    /* Minimum distance between window edge and the player*/
+    /* Minimum distance between window edge and the player. */
     const int borderOffset = 215;
 
     int minx = viewport_.x + borderOffset;
@@ -726,7 +838,7 @@ void EditorScene::update_viewport() {
 }
 
 void EditorScene::render(HDC graphics) {
-    /* Draw background */
+    /* Draw background. */
     const int image_width = backgroundWidth_;
     const int image2_width = backgroundOverlayWidth_;
     Texture tex = { 0, 0, image_width, viewport_.height };
@@ -741,7 +853,7 @@ void EditorScene::render(HDC graphics) {
         backgroundOverlay_->draw(tex2, skyx, 0);
     }
 
-    /* Draw terrain */
+    /* Draw terrain. */
     if (terrain_) {
         if (showBackgroundLayer_) {
             for (ObjectData object : backgroundLayer_) {
@@ -789,14 +901,15 @@ void EditorScene::render(HDC graphics) {
         data.spriteSheet->draw(data.texture,
             Vector2(actor.x, actor.y), viewport_);
     }
-    /* Guidelines */
+
+    /* Pens used... */
     HPEN hBlackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     HPEN hRedPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
     HPEN hBluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
     HPEN hPenOld = (HPEN)SelectObject(graphics, hBlackPen);
 
 
-    /* Draw cursor */
+    /* Draw cursor. */
     int cx, cy;
     current_pos(cx, cy);
     int x = cx - viewport_.x;
@@ -807,33 +920,36 @@ void EditorScene::render(HDC graphics) {
     MoveToEx(graphics, 0, y, NULL);
     LineTo(graphics, viewport_.width, y);
 
+    /* Draw bottom y. */
     SelectObject(graphics, hRedPen);
 
     MoveToEx(graphics, 0, bottomY_ - viewport_.y, NULL);
     LineTo(graphics, viewport_.width, bottomY_ - viewport_.y);
 
+    /* Draw end game x. */
     SelectObject(graphics, hBluePen);
     MoveToEx(graphics, endGameX_ - viewport_.x, 0, NULL);
     LineTo(graphics, endGameX_ - viewport_.x, viewport_.height);
 
-    /* Draw spawn */
+    /* Draw spawn. */
     Ellipse(graphics, playerX_ - 10 - viewport_.x, playerY_ - 10 - viewport_.y,
         playerX_ + 10 - viewport_.x, playerY_ + 10 - viewport_.y);
 
-    TextOut(graphics, playerX_ - viewport_.x - 10, playerY_ - viewport_.y - 10, "SP", 2);
+    TextOut(graphics, playerX_ - viewport_.x - 10, playerY_ - viewport_.y - 10, 
+        "SP", 2);
 
-    /* END guidelines */
+    /* Delete pens used for guidelines */
     SelectObject(graphics, hPenOld);
     DeleteObject(hRedPen);
     DeleteObject(hBluePen);
     DeleteObject(hBlackPen);
 
-    /* Draw cursor pos string */
+    /* Draw cursor pos string. */
     char buf[32];
     sprintf_s(buf, "%f, %f", cursorPos_.x, cursorPos_.y);
     TextOut(graphics, 5, 50, buf, strlen(buf));
 
-    /* draw selected data */
+    /* Draw selection information. */
     switch (currentLayer_) {
     case LevelManager::PLAYABLE:
         TextOut(graphics, 5, 70, "PLAYABLE", 8);
