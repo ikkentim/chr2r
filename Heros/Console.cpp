@@ -18,7 +18,7 @@ Console::Console(HDC hdc) {
     }
 
     clear_input_buffer();
-
+    log_notice("Type 'commands' to view all commands.");
 }
 
 void Console::reset_commands() {
@@ -196,6 +196,9 @@ void Console::render(HDC hdc) {
         int y = CONSOLE_HEIGHT - LINE_HEIGHT * 2 - i * LINE_HEIGHT;
 
         int rpos = ((CONSOLE_LOG_COUNT - i) + consolePos_ - 1) % CONSOLE_LOG_COUNT;
+
+        if (!strlen(consoleBuffer_[rpos]))
+            continue;
 
         char buffer[CONSOLE_TYPE_BUFFER_SIZE + 2];
         sprintf_s(buffer, "[%s]", consoleTypeBuffer_[rpos]);

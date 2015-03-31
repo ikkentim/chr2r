@@ -23,7 +23,18 @@ GameScene::~GameScene() {
 }
 
 void GameScene::start() {
+    /* Load first level. */
     load_level("lvl/level01.dat");
+
+    /* Load commands. */
+    GameScene * const gameScene = this;
+    window()->console()->register_command("startlevel", 
+        [gameScene](Console * const console, const char * args) -> bool {
+        if (gameScene->level())
+            //todo
+            console->log_notice("TODO");
+        return true;
+    });
 }
 
 void GameScene::load_level(const char * path) {
