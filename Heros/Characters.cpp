@@ -9,16 +9,16 @@
 Mario::Mario(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 	spriteSheet_ = SpriteSheet::get("spr/mario.bmp");
     ability = new JumpAbility;
-	dialog.push_back(DialogLine(true, "Hi im Mario"));
-	dialog.push_back(DialogLine(false, "Hey there"));
-	dialog.push_back(DialogLine(true, "It looks like you are stuck"));
-	dialog.push_back(DialogLine(false, "Ehh, maybe..."));
-	dialog.push_back(DialogLine(false, "..."));
-	dialog.push_back(DialogLine(true, "Have you tried jumping?"));
-	dialog.push_back(DialogLine(false, "Jumping?"));
-	dialog.push_back(DialogLine(true, "Yes, pressing the spacebar?"));
-	dialog.push_back(DialogLine(false, "Is that how that works?"));
-	dialog.push_back(DialogLine(false, "Convenient, Thanks!"));
+	dialog.push_back(DialogLine(false, "Hi im Mario"));
+	dialog.push_back(DialogLine(true, "Hey there"));
+	dialog.push_back(DialogLine(false, "It looks like you are stuck"));
+	dialog.push_back(DialogLine(true, "Ehh, maybe..."));
+	dialog.push_back(DialogLine(true, "..."));
+	dialog.push_back(DialogLine(false, "Have you tried jumping?"));
+	dialog.push_back(DialogLine(true, "Jumping?"));
+	dialog.push_back(DialogLine(false, "Yes, pressing the spacebar?"));
+	dialog.push_back(DialogLine(true, "Is that how that works?"));
+	dialog.push_back(DialogLine(true, "Convenient, Thanks!"));
 
 }
 
@@ -36,11 +36,12 @@ void Mario::update(GameScene* scene , double delta , Keys keys) {
 }
 Sanic::Sanic(Vector2 vect) :Character(vect, Vector2(16, 28)) {
     spriteSheet_ = SpriteSheet::get("spr/sonic_sheet.bmp");
-    ability = new SprintAbility;
-	dialog.push_back(DialogLine(true, "Hi There, im Sonic "));
-	dialog.push_back(DialogLine(false, "Hey"));
-	dialog.push_back(DialogLine(true, "Nice Weather, huh?"));
-	dialog.push_back(DialogLine(false, "Certainly, Sir, Myah"));
+	//TODO: ability = jump
+	dialog.push_back(DialogLine(false, "Man, you're slow"));
+	dialog.push_back(DialogLine(true, "Im not slow!"));
+	dialog.push_back(DialogLine(false, "Yes you are, try this"));
+	dialog.push_back(DialogLine(false, "Press the n key"));
+	dialog.push_back(DialogLine(true, "Gotta go fast, Thanks!"));
 }
 
 void Sanic::render(Viewport &vp) {
@@ -57,14 +58,14 @@ void Sanic::update(GameScene* scene, double delta, Keys keys) {
 
 Magikarp::Magikarp(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 	spriteSheet_ = SpriteSheet::get("spr/magikarp_Sprite.bmp");
-    ability = new SplashAbility;
-	dialog.push_back(DialogLine(true, "Magi Magikarp !! "));
-	dialog.push_back(DialogLine(false, "Hey ! Humm Nice to meet you"));
-	dialog.push_back(DialogLine(true, "Magi Magi Magikarp"));
-	dialog.push_back(DialogLine(false, "Certainly, Sir, Myah"));
-	dialog.push_back(DialogLine(true, "Magikarp (Use SplashAttack !!!)"));
-	dialog.push_back(DialogLine(true, "Magi (Press the S key)"));
-	dialog.push_back(DialogLine(false, "Uhh, thanks i guess?"));
+	//TODO: ability = jump
+	dialog.push_back(DialogLine(false, "Magi Magikarp !! "));
+	dialog.push_back(DialogLine(true, "Hey ! Humm Nice to meet you"));
+	dialog.push_back(DialogLine(false, "Magi Magi Magikarp"));
+	dialog.push_back(DialogLine(true, "Certainly, Sir, Myah"));
+	dialog.push_back(DialogLine(false, "Magikarp (Use SplashAttack !!!)"));
+	dialog.push_back(DialogLine(false, "Magi (Press the S key)"));
+	dialog.push_back(DialogLine(true, "Uhh, thanks i guess..."));
 }
 
 void Magikarp::render(Viewport &vp) {
