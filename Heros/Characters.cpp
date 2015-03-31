@@ -1,6 +1,8 @@
 #pragma once
 #include "Characters.h"
 #include "JumpAbility.h"
+#include "SprintAbility.h"
+#include "SplashAbility.h"
 
 #define ANIMATION_INTERVAL	(0.08)
 
@@ -34,7 +36,7 @@ void Mario::update(GameScene* scene , double delta , Keys keys) {
 }
 Sanic::Sanic(Vector2 vect) :Character(vect, Vector2(16, 28)) {
     spriteSheet_ = SpriteSheet::get("spr/sonic_sheet.bmp");
-	//TODO: ability = jump
+    ability = new SprintAbility;
 	dialog.push_back(DialogLine(true, "Hi There, im Sonic "));
 	dialog.push_back(DialogLine(false, "Hey"));
 	dialog.push_back(DialogLine(true, "Nice Weather, huh?"));
@@ -55,7 +57,7 @@ void Sanic::update(GameScene* scene, double delta, Keys keys) {
 
 Magikarp::Magikarp(Vector2 vect) :Character(vect, Vector2(16, 28)) {
 	spriteSheet_ = SpriteSheet::get("spr/magikarp_Sprite.bmp");
-	//TODO: ability = jump
+    ability = new SplashAbility;
 	dialog.push_back(DialogLine(true, "Magi Magikarp !! "));
 	dialog.push_back(DialogLine(false, "Hey ! Humm Nice to meet you"));
 	dialog.push_back(DialogLine(true, "Magi Magi Magikarp"));
