@@ -49,6 +49,15 @@ void GameWindow::change_scene(IScene *scene) {
         gameWindow->change_scene(new EditorScene(gameWindow));
         return true;
     });
+    console_->register_command("togglefps", [gameWindow](Console * const console, const char * args) -> bool {
+        if (gameWindow->toggleDisplayFps()) {
+            console->log_notice("FPS counter is now visible.");
+        }
+        else {
+            console->log_notice("FPS counter is now invisible.");
+        }
+        return true;
+    });
 
 	scene_ = scene;
 	scene_->start();
@@ -118,15 +127,15 @@ bool GameWindow::game_loop(double delta) {
 
         timeSinceRender_ -= frameInterval_;
 
-#ifdef SHOW_FPS
-        TCHAR buf[16];
-        sprintf_s(buf, "FPS: %d", fps.fps());
-        TextOut(graphics_, 5, 5, buf, strlen(buf));
+        if (displayFps_) {
+            TCHAR buf[16];
+            sprintf_s(buf, "FPS: %d", fps.fps());
+            TextOut(graphics_, 5, 5, buf, strlen(buf));
 
-        sprintf_s(buf, "UPS: %d", ups.fps());
-        TextOut(graphics_, 5, 25, buf, strlen(buf));
-#endif
-
+            sprintf_s(buf, "UPS: %d", ups.fps());
+            TextOut(graphics_, 5, 25, buf, strlen(buf));
+        }
+        
         console_->render(graphics_);
 
         /* Tell the window to repaint. */

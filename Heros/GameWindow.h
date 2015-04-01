@@ -34,6 +34,11 @@ public:
         return console_;
     }
 
+    // Toggles the value which indicates whether the fps counter is displayed
+    bool toggleDisplayFps() {
+        return displayFps_ = !displayFps_;
+    }
+
 protected:
     // Contains game initialisation logic 
     void game_init() override;
@@ -49,6 +54,7 @@ private:
     float frameInterval_ = 0.1f;
     double timeSinceRender_ = 0;
     bool hasJoystick_ = false;
+    bool displayFps_ = false;
     IScene *scene_ = NULL;
     Console *console_;
 	Keys keys_ = KEY_NONE;

@@ -28,7 +28,7 @@ void MenuScene::start() {
     Highscore::read();
 
     window_->console()->register_command("clearhighscore", 
-        [](Console * const console, char * par) -> bool {
+        [](Console * const console, const char * args)-> bool {
         Highscore::score(0);
         Highscore::write();
         return true;
