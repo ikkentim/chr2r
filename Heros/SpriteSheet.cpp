@@ -23,6 +23,9 @@ SpriteSheet *SpriteSheet::get(std::string sheet) {
         return spriteSheets_[sheet];
     }
     else {
+        char buf[128]; sprintf_s(buf, "LD spr %s\n", sheet.c_str());
+        OutputDebugString(buf);
+
         auto sh = new SpriteSheet(sheet.c_str());
         spriteSheets_[sheet] = sh;
         return sh;

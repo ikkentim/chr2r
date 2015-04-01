@@ -66,6 +66,11 @@ void Player::update(GameScene *scene, double delta, Keys keys) {
         return;
     }
 
+    if (scene->level()->bottom_y() < position_.y)
+    {
+        state(Actor::DEAD);
+        scene->state(GameScene::PLAYER_DEAD);
+    }
     if (velocity_.x != 0.00)
         isLastMovementLeft_ = velocity_.x < 0;
 

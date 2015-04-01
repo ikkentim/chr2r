@@ -18,10 +18,10 @@ void GameOverScene::start() {
 	window_->sound_engine()->play2D("snd/09-game-over.mp3");
 }
 
-void GameOverScene::update(double delta, Keys) {
+void GameOverScene::update(double delta, Keys keys) {
 	time_ += delta;
 
-    if (time_ > 1 && GetAsyncKeyState(VK_RETURN)) {
+    if (time_ > 1 && ((keys & KEY_JUMP) || GetAsyncKeyState(VK_RETURN))) {
         window_->change_scene(new MenuScene(window_));
     }
 }

@@ -80,7 +80,7 @@ void GameScene::load_level(const char * path) {
 
     level_ = LevelManager::load(path, this, player_);
 
-    state_ = PLAYING;
+    state(PLAYING);
     hud_.push_back(dialog_ = new DialogHUD(player_, this));
     hud_.push_back(new GameHUD());
 
@@ -126,6 +126,7 @@ void GameScene::unload_level() {
         return;
     }
 
+    delete level_;
     delete quadTree_;
 
     for (auto hud : hud_)
@@ -133,7 +134,6 @@ void GameScene::unload_level() {
     hud_.clear();
     dialog_ = NULL;
 
-    delete level_;
     level_ = NULL;
 }
 
@@ -163,6 +163,9 @@ void GameScene::update(double delta, Keys keys) {
     case PLAYER_DEAD: {
         lives_--;
 
+        window()->console()
+            ->log_notice("Updated lives to %d.", lives_);
+
         if (lives_ > 0) {
             window()->console()
                 ->log_notice("Reloading with %d lives.", lives_);
@@ -177,12 +180,13 @@ void GameScene::update(double delta, Keys keys) {
                 ->log_notice("No lives left. "
                 "Changing to game over scene.");
             window_->change_scene(new GameOverScene(window_));
-            return;
+            
         }
         return;
     }
     case REACHED_END:
-        window()->console()->log_notice("Player reached end.");
+        window()->console()->log_notice("Player reached end. (%f, %f)", 
+            player()->position().x, player()->position().y);
 
         score_ += levelScore_;
         levelScore_ = 0;
@@ -270,12 +274,6 @@ bool GameScene::check_states()
 	else
 	{
 		pausePressed_ = false;
-	}
-
-	if (level_->bottom_y() < player()->position().y)
-	{
-		player()->state(Actor::DEAD);
-        state(PLAYER_DEAD);
 	}
 
     if (player()->state() == Actor::DEAD)

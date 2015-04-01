@@ -25,6 +25,8 @@ void MenuScene::start() {
 	sound->setVolume(0.5f);
 	sound->drop();
 
+    keyDelay_ = 0.3;
+
     Highscore::read();
 
     window_->console()->register_command("clearhighscore", 
@@ -44,11 +46,12 @@ void MenuScene::update(double delta, Keys k) {
         selectedOption_ = (selectedOption_ + 1) % 2;
 	}
 
-	if ((k & KEY_JUMP)) {	
+    if ((k & KEY_JUMP) && keyDelay_ <= 0) {
 
         switch (selectedOption_) {
 			case 0:
 				window_->change_scene(new GameScene(window_));
+                return;
 				break;
 			case 1:
 				exit(0);
