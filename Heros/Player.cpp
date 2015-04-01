@@ -304,10 +304,6 @@ void Player::render(Viewport &vp) {
         : mainSpriteSheet_)->draw(texture, position_, vp);
 }
 
-int Player::die() {
-    return --lives_;
-}
-
 void Player::add_velocity(Vector2 vec){
 	velocity_ += vec;
 }

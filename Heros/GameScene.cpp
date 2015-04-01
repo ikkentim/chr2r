@@ -15,6 +15,7 @@
 #include "GameOverScene.h"
 #include "GameHUD.h"
 #include "fileutil.h"
+#include "Highscore.h"
 
 GameScene::GameScene(GameWindow *window)
 	:window_(window), viewport_(Viewport(0, 0, 640, 480)) {
@@ -132,6 +133,10 @@ void GameScene::unload_level() {
     level_ = NULL;
 }
 
+void GameScene::add_score(int score) {
+    levelScore_ += score;
+}
+
 void GameScene::update(double delta, Keys keys) {
     if (!level_) {
         return;
@@ -152,13 +157,12 @@ void GameScene::update(double delta, Keys keys) {
 	case TALKING:
 		return;
     case PLAYER_DEAD: {
-        int lives = player()->die();
-        if (lives > 0) {
+        if (--lives_ > 0) {
             window()->console()
-                ->log_notice("Reloading with %d lives.", lives);
+                ->log_notice("Reloading with %d lives.", lives_);
             unload_level();
             load_level(lastLevelPath_);
-            player()->lives(lives);
+            levelScore_ = 0;
         }
         else
         {
@@ -172,18 +176,26 @@ void GameScene::update(double delta, Keys keys) {
     }
     case REACHED_END:
         window()->console()->log_notice("Player reached end.");
+
+        score_ += levelScore_;
+        levelScore_ = 0;
+
         if (level_->is_last_level()) {
             window()->console()
                 ->log_notice("No next level set. Changing to end game scene.");
+
+            if (score_ > Highscore::score()) {
+                Highscore::score(score_);
+                Highscore::write();
+            }
+
             window_->change_scene(new EndGameScene(window_));
         }
         else {
-            int lives = player()->lives();
             char lvlbuf[MAX_LEVEL_PATH];
             strcpy_s(lvlbuf, level()->next_level());
             unload_level();
             load_level(lvlbuf);
-            player()->lives(lives);
         }
         return;
 	default:

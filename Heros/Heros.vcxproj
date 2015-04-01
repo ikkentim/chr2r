@@ -112,6 +112,7 @@
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameWindow.cpp" />
+    <ClCompile Include="Highscore.cpp" />
     <ClCompile Include="JumpAbility.cpp" />
     <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="LevelManager.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameWindow.h" />
+    <ClInclude Include="Highscore.h" />
     <ClInclude Include="IHUD.h" />
     <ClInclude Include="JumpAbility.h" />
     <ClInclude Include="Jumper.h" />

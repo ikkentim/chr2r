@@ -44,7 +44,8 @@ void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) 
 		if (scene->player()->velocity().y > 0 && scene->player()->position().y < position_.y){
 			state(Actor::DEAD);
 			isSolid_ = false;
-			scene->player()->add_velocity(Vector2(0, -(scene->player()->velocity().y )*2));
+            scene->player()->add_velocity(Vector2(0, -(scene->player()->velocity().y) * 2));
+            scene->add_score(5);
 		}
         else if (!scene->player()->is_sneaking()){
 			scene->player()->state(Actor::DEAD);
