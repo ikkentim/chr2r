@@ -51,14 +51,13 @@ void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) 
 		}
 	}
 	if (obj != scene->player()){
-		if (abs(velocity_.y) < abs(velocity_.x))
+        if (abs(vec.y) < abs(vec.x))
 		{
-		
-			 if (velocity_.x < 0){
-				go_right(0.6);
+            if (vec.x < 0){
+                go_right(1);
 			}
-			if (velocity_.x > 0){
-				go_left(0.60);
+            if (vec.x > 0){
+                go_left(1);
 			} 
 		}
 	}
