@@ -26,6 +26,13 @@ void MenuScene::start() {
 	sound->drop();
 
     Highscore::read();
+
+    window_->console()->register_command("clearhighscore", 
+        [](Console * const console, char * par) -> bool {
+        Highscore::score(0);
+        Highscore::write();
+        return true;
+    });
 }
 void MenuScene::update(double delta, Keys k) {
 
