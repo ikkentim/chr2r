@@ -1,4 +1,6 @@
 ;chr2r
+;
+;
 
 ;--------------------------------
 ;Include Modern UI
@@ -8,19 +10,24 @@
 ;--------------------------------
 ;General
 
-  RequestExecutionLevel admin
- 
-  Name "chr2r"
-  OutFile "setup.exe"
-  InstallDir "$PROGRAMFILES\chr2r"
-  
-  !define MUI_PRODUCT "chr2r"
+  !define MUI_PRODUCT "Classic Heroes Redefined 2: Revengeance"
   !define MUI_NAME "Classic Heroes Redefined 2: Revengeance"
   !define MUI_FILE "Heros"
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${MUI_FILE}.exe"
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${MUI_NAME}"
   
-  InstallDirRegKey HKCU "Software\chr2r" "$INSTDIR\${MUI_FILE}.exe"
+  ;Name and file
+  Name "${MUI_NAME}"
+  OutFile "setup.exe"
+
+  ;Default installation folder
+  InstallDir "$PROGRAMFILES\${MUI_PRODUCT}"
+  
+  ;Get installation folder from registry if available
+  InstallDirRegKey HKCU "Software\${MUI_PRODUCT}" "$INSTDIR\${MUI_FILE}.exe"
+  
+  ;Request application privileges for Windows Vista
+  RequestExecutionLevel user
 
 ;--------------------------------
 ;Variables
@@ -36,8 +43,8 @@
 ;Pages
 
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_LICENSE "dependencies\license.txt"
+  !insertmacro MUI_PAGE_DIRECTORY
   
   ;Start Menu Folder Page Configuration
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
@@ -63,15 +70,18 @@
 ;Installer Sections
 
 Section "Game" SecGame
-  ;SetShellVarContext all
 
   SetOutPath "$INSTDIR"
 
+  File "README.txt"
+  File "dependencies\license.txt"
+  File "dependencies\logo.ico"
+  
   File "Heros\Release\${MUI_FILE}.exe"
   File "Heros\Release\ikpFlac.dll"
   File "Heros\Release\ikpMP3.dll"
   File "Heros\Release\irrKlang.dll"
-  File "Heros\Release\logo.ico"
+  
   SetOutPath "$INSTDIR\lvl"
   File "Heros\Release\lvl\*.dat"
   SetOutPath "$INSTDIR\snd"
@@ -81,17 +91,21 @@ Section "Game" SecGame
   
   SetOutPath "$INSTDIR"
   
-  CreateShortCut "$DESKTOP\${MUI_NAME}.lnk" "$INSTDIR\${MUI_FILE}.exe" "" "$INSTDIR\logo.ico" 0
- 
-  CreateDirectory "$SMPROGRAMS\${MUI_NAME}"
-  CreateShortCut "$SMPROGRAMS\${MUI_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\${MUI_FILE}.exe" 0
-  CreateShortCut "$SMPROGRAMS\${MUI_NAME}\${MUI_NAME}.lnk" "$INSTDIR\${MUI_FILE}.exe" "" "$INSTDIR\logo.ico" 0
- 
+  ;Store installation folder
+  WriteRegStr HKCU "Software\Modern UI Test" "" $INSTDIR
+   
+  ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "DisplayName" "${MUI_NAME} (remove only)"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" "UninstallString" "$INSTDIR\Uninstall.exe"
-  WriteRegStr HKCU "Software\${MUI_PRODUCT}" "" $INSTDIR
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    
+    ;Create shortcuts
+    CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+    CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+    CreateShortcut "$SMPROGRAMS\$StartMenuFolder\${MUI_NAME}.lnk" "$INSTDIR\${MUI_FILE}.exe" "" "$INSTDIR\logo.ico" 0
+    CreateShortcut "$DESKTOP\${MUI_NAME}.lnk" "$INSTDIR\${MUI_FILE}.exe" "" "$INSTDIR\logo.ico" 0
+ 
+  !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
@@ -110,19 +124,6 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-  ;SetShellVarContext all
-  
-  !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-  
-  Delete "$DESKTOP\${MUI_NAME}.lnk"
-  
-  Delete "$SMPROGRAMS\${MUI_NAME}\Uninstall.lnk"
-  Delete "$SMPROGRAMS\${MUI_NAME}\${MUI_NAME}.lnk" 
-  RMDir "$SMPROGRAMS\${MUI_NAME}"
- 
-  DeleteRegKey /ifempty HKCU "Software\${MUI_PRODUCT}"
-  DeleteRegKey /ifempty HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MUI_PRODUCT}" 
-  
   Delete "$INSTDIR\${MUI_FILE}.exe"
   Delete "$INSTDIR\ikpFlac.dll"
   Delete "$INSTDIR\ikpMP3.dll"
@@ -137,4 +138,13 @@ Section "Uninstall"
   
   RMDir "$INSTDIR"
  
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+    
+  Delete "$DESKTOP\${MUI_NAME}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\${MUI_NAME}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder"
+  
+  DeleteRegKey /ifempty HKCU "Software\Modern UI Test"
+
 SectionEnd
