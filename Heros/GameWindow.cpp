@@ -49,6 +49,15 @@ void GameWindow::change_scene(IScene *scene) {
         gameWindow->change_scene(new EditorScene(gameWindow));
         return true;
     });
+    console_->register_command("togglefps", [gameWindow](Console * const console, const char * args) -> bool {
+        if (gameWindow->toggleDisplayFps()) {
+            console->log_notice("FPS counter is now visible.");
+        }
+        else {
+            console->log_notice("FPS counter is now invisible.");
+        }
+        return true;
+    });
 
 	scene_ = scene;
 	scene_->start();
@@ -118,15 +127,15 @@ bool GameWindow::game_loop(double delta) {
 
         timeSinceRender_ -= frameInterval_;
 
-#ifdef SHOW_FPS
-        TCHAR buf[16];
-        sprintf_s(buf, "FPS: %d", fps.fps());
-        TextOut(graphics_, 5, 5, buf, strlen(buf));
+        if (displayFps_) {
+            TCHAR buf[16];
+            sprintf_s(buf, "FPS: %d", fps.fps());
+            TextOut(graphics_, 5, 5, buf, strlen(buf));
 
-        sprintf_s(buf, "UPS: %d", ups.fps());
-        TextOut(graphics_, 5, 25, buf, strlen(buf));
-#endif
-
+            sprintf_s(buf, "UPS: %d", ups.fps());
+            TextOut(graphics_, 5, 25, buf, strlen(buf));
+        }
+        
         console_->render(graphics_);
 
         /* Tell the window to repaint. */
@@ -331,14 +340,20 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
          *  /  ^                0    \
          * | <   >            3   1   |
          *  \  v      8   9     2    /
-         *   \----------------------/ 
+         *   \----------------------/
          */
 
-        /* 'A'-key (jump) */
-        if (buttonStates[1])
-            joystickKeys_ |= KEY_JUMP;
-        else if (joystickKeys_ & KEY_JUMP)
-            joystickKeys_ ^= KEY_JUMP;
+        /* Make keys */
+#define MAP_BUTTON(num, key); if (buttonStates[num]) { \
+            joystickKeys_ |= key; } else if (joystickKeys_ & key) { \
+            joystickKeys_ ^= key; }
+
+        MAP_BUTTON(1, KEY_JUMP);
+        MAP_BUTTON(3, KEY_SPLASH);
+        MAP_BUTTON(4, KEY_DASH);
+        MAP_BUTTON(5, KEY_SNEAK);
+
+#undef MAP_BUTTON
 
         /* Free memory from heap. */
         delete[](char *)preparsedData;

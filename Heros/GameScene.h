@@ -75,6 +75,19 @@ public:
     // Unloads the loaded level
     void unload_level();
 
+    // Adds the specified amount of score
+    void add_score(int score);
+
+    // Gets the score
+    int score() {
+        return score_ + levelScore_;
+    }
+
+    // Gets the number of lives left
+    int lives() {
+        return lives_;
+    }
+
     /* TODO: make private */
     // The dialgue element
 	DialogHUD *dialog_;
@@ -82,6 +95,9 @@ private:
 	void update_viewport();
 	bool check_states();
 
+    int score_ = 0;
+    int lives_ = 3;
+    int levelScore_ = 0;
 	GameWindow *window_ = NULL;
     Player *player_ = NULL;
     HUDVector hud_;

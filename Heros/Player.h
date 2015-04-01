@@ -39,9 +39,6 @@ public:
     // Renders the graphics
 	void render(Viewport &) override;
 
-    // Die
-	int die();
-
     // Adds the specified value to the velocity
 	void add_velocity(Vector2 value);
 
@@ -68,16 +65,6 @@ public:
         return duckingAbility_ && duckingAbility_->is_active();
     }
 
-    // Gets the number of lives left
-    int lives() {
-        return lives_;
-    }
-
-    // Sets the number of lives left
-    void lives(int lives) {
-        lives_ = lives;
-    }
-
 private:
     Ability *sneakingAbility_ = NULL;
     Ability *jumpingAbility_ = NULL;
@@ -94,5 +81,4 @@ private:
     int animationFrames_ = 1;
     AnimationState state_;
     AnimationState get_animation_state(int &frames);
-	int lives_ = 3;
 };

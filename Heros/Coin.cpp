@@ -26,6 +26,7 @@ void Coin::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) {
     if (!pickedUp_ && obj == scene->player()){
         scene->sound_engine()->play2D("snd/smb_coin.wav");
 
+        scene->add_score(1);
         pickedUp_ = true;
     }
 }

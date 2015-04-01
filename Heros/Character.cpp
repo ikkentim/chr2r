@@ -15,6 +15,8 @@ void Character::update(GameScene* scene, double delta, Keys) {
 		scene->dialog_->engage_dialog(this);
 		finisheddialog = true;
 		//TODO: teach lesson
+        scene->sound_engine()->play2D("snd/smb_1-up.wav");
+
         if (ability) {
             scene->player()->give_ability(ability);
         }

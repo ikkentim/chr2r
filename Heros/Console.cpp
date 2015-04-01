@@ -138,6 +138,8 @@ bool Console::register_command(std::string name,
     assert(name.length() < 32);
 
     if (commands_.find(name) != commands_.end()) {
+        log_warn("Registration of %s command failed; Command exists already", 
+            name.c_str());
         return false;
     }
 

@@ -9,7 +9,6 @@
 
 class GameHUD : public IHUD {
 public:
-    int lives_ = 0;
 
     // Performs the update logic
     void update(GameScene*, double, Keys) override;
@@ -17,5 +16,6 @@ public:
     // Renders the graphics
     void render(HDC) override;
 private:
-    int hearths = 0;
+    int lives_ = 0;
+    int score_ = 0;
 };

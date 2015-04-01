@@ -73,4 +73,5 @@ private:
     int inputPos_ = 0;
     bool isOpen_ = false;
     std::map<std::string, ConsoleCommandHandler> commands_;
+    std::map<std::string, ConsoleCommandHandler> staticCommands_;
 };

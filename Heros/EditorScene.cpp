@@ -80,6 +80,7 @@ void EditorScene::load(const char *path) {
     playerX_ = header.player_x;
     playerY_ = header.player_y;
 
+    abilities_ = header.player_abilities;
     sound(header.sound);
     background(header.background_texture);
     background_overlay(header.background_overlay_texture);
