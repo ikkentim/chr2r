@@ -30,6 +30,10 @@ GameScene::~GameScene() {
 }
 
 void GameScene::start() {
+    score_ = 0;
+    levelScore_ = 0;
+    lives_ = 3;
+
     /* Load first level. */
     load_level("lvl/level01.dat");
 
@@ -157,11 +161,14 @@ void GameScene::update(double delta, Keys keys) {
 	case TALKING:
 		return;
     case PLAYER_DEAD: {
-        if (--lives_ > 0) {
+        lives_--;
+
+        if (lives_ > 0) {
             window()->console()
                 ->log_notice("Reloading with %d lives.", lives_);
             unload_level();
             load_level(lastLevelPath_);
+            sound_engine()->play2D("snd/smb_mariodie.wav");
             levelScore_ = 0;
         }
         else
