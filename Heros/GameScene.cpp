@@ -162,6 +162,7 @@ void GameScene::update(double delta, Keys keys) {
                 ->log_notice("Reloading with %d lives.", lives_);
             unload_level();
             load_level(lastLevelPath_);
+            sound_engine()->play2D("snd/smb_mariodie.wav");
             levelScore_ = 0;
         }
         else
