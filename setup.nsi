@@ -10,8 +10,8 @@
 ;--------------------------------
 ;General
 
-  !define MUI_PRODUCT "Classic Heroes Redefined 2: Revengeance"
-  !define MUI_NAME "Classic Heroes Redefined 2: Revengeance"
+  !define MUI_PRODUCT "Classic Heroes Redefined 2"
+  !define MUI_NAME "Classic Heroes Redefined 2"
   !define MUI_FILE "Heros"
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${MUI_FILE}.exe"
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${MUI_NAME}"
@@ -27,7 +27,7 @@
   InstallDirRegKey HKCU "Software\${MUI_PRODUCT}" "$INSTDIR\${MUI_FILE}.exe"
   
   ;Request application privileges for Windows Vista
-  RequestExecutionLevel user
+  RequestExecutionLevel admin
 
 ;--------------------------------
 ;Variables
@@ -124,6 +124,11 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
+
+  Delete "README.txt"
+  Delete "license.txt"
+  Delete "logo.ico"
+  
   Delete "$INSTDIR\${MUI_FILE}.exe"
   Delete "$INSTDIR\ikpFlac.dll"
   Delete "$INSTDIR\ikpMP3.dll"
@@ -139,7 +144,6 @@ Section "Uninstall"
   RMDir "$INSTDIR"
  
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-    
   Delete "$DESKTOP\${MUI_NAME}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\${MUI_NAME}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
