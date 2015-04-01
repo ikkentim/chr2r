@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 #include "Rectangle.h"
+#include "GameScene.h"
 #include <algorithm>
 #include <vector>
 #include <Windows.h>
@@ -75,15 +76,6 @@ void GameObject::check_for_collisions(GameScene *scene, GameObject** checks, int
             Vector2 collision =
                 offset_prevented - (position_ - check->position_);
 
-			/* Notify children. */
-			entered_collision(scene, check, collision);
-            check->entered_collision(scene, this, -collision);
-
-            /* If not solid, just notify children and don't modify velocity. */
-            if (!check->isSolid_) {
-                continue;
-            }
-
             /* Calculate the minimum distance required between both objects. */
             double min_distance_x = (size_.x + check->size_.x) / 2;
             double min_distance_y = (size_.y + check->size_.y) / 2;
@@ -91,8 +83,17 @@ void GameObject::check_for_collisions(GameScene *scene, GameObject** checks, int
             /* Find the culprit; the X or Y axis. This can be calculated by
              * finding the RELATIVELY longest axis of the offset between the 
              * objects */
-            if (abs((offset_before.x) / min_distance_x) >
-                abs((offset_before.y) / min_distance_y)) {
+            if (abs((offset_prevented.x) / min_distance_x) >
+                abs((offset_prevented.y) / min_distance_y)) {
+                /* Notify children. */
+                entered_collision(scene, check, collision);
+                check->entered_collision(scene, this, -collision);
+
+                /* If not solid, just notify children and don't modify velocity. */
+                if (!check->isSolid_) {
+                    continue;
+                }
+
                 /* Move the X axis to free worldspace. This is done by moving
                  * this object so that there is min_distance_x distance between
                  * the objects on the X axis. */
@@ -106,9 +107,19 @@ void GameObject::check_for_collisions(GameScene *scene, GameObject** checks, int
 					velocity_.x = 0;
             }
             else {
-                /* If this object is touching the top of the other object, 
-                 * remember this so  we know we are on the floor. */
-                has_touched_ground = has_touched_ground || offset_before.y <= 0;
+                /* Notify children. */
+                if (collision.y != 0) {
+                    entered_collision(scene, check, collision);
+                    check->entered_collision(scene, this, -collision);
+                }
+                /* If not solid, just notify children and don't modify velocity. */
+                if (!check->isSolid_) {
+                    continue;
+                }
+
+                /* If this object is touching the top of the other object,
+                * remember this so  we know we are on the floor. */
+                has_touched_ground = has_touched_ground || (offset_before.y <= 0 && velocity_.y >= 0);
 
                 /* Move the Y axis to free worldspace. This is done by moving
                  * this object so that there is min_distance_y distance between
