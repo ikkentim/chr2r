@@ -172,6 +172,9 @@ void EditorScene::start() {
     terrain("spr/terrain.bmp");
     background_width(727);
 
+    window_->console()->log_notice("Press O to switch object types, "
+        "press L to switch layers.");
+
     /* Register all level editor commands to the console. When the scene is
      * changed the commands will automatically be unregistered from the console
      * by the game window. */
