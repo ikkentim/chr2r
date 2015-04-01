@@ -50,7 +50,7 @@ void Ennemis::entered_collision(GameScene *scene, GameObject *obj, Vector2 vec) 
 			scene->player()->state(Actor::DEAD);
 		}
 	}
-	if (obj != scene->player()){
+	if (obj != scene->player() && obj->is_solid()){
         if (abs(vec.y) < abs(vec.x))
 		{
             if (vec.x < 0){

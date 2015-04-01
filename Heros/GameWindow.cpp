@@ -331,14 +331,20 @@ LRESULT GameWindow::msg_proc(HWND hWnd, UINT uMsg, WPARAM wParam,
          *  /  ^                0    \
          * | <   >            3   1   |
          *  \  v      8   9     2    /
-         *   \----------------------/ 
+         *   \----------------------/
          */
 
-        /* 'A'-key (jump) */
-        if (buttonStates[1])
-            joystickKeys_ |= KEY_JUMP;
-        else if (joystickKeys_ & KEY_JUMP)
-            joystickKeys_ ^= KEY_JUMP;
+        /* Make keys */
+#define MAP_BUTTON(num, key); if (buttonStates[num]) { \
+            joystickKeys_ |= key; } else if (joystickKeys_ & key) { \
+            joystickKeys_ ^= key; }
+
+        MAP_BUTTON(1, KEY_JUMP);
+        MAP_BUTTON(3, KEY_SPLASH);
+        MAP_BUTTON(4, KEY_DASH);
+        MAP_BUTTON(5, KEY_SNEAK);
+
+#undef MAP_BUTTON
 
         /* Free memory from heap. */
         delete[](char *)preparsedData;
